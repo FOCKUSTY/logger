@@ -17,7 +17,7 @@ class InitLogger {
         this._name = name;
         this._colors = colors;
 
-        this._log = new FileLogger(dir)
+        this._log = new FileLogger(dir);
     };
 
     public readonly execute = (text: string, color?: Colors): string => {
