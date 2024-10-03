@@ -1,5 +1,4 @@
 # My files
-*.bat
 .env
 .vscode/
 .vs/
