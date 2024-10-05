@@ -69,6 +69,8 @@ class Logger<T extends string> {
             loggers[key] = new InitLogger(this._dir, logger.name, logger.colors);
         };
 
+        loggers[this._name] = this._logger;
+
         if(!this._colors)
             this._colors = loggers[this._name].colors;
 
