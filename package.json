@@ -1,5 +1,5 @@
 {
-  "name": "@fockusty/f-logger",
+  "name": "fock-logger",
   "version": "0.0.3",
   "description": "Simple logger for your pet-project",
   "main": "index.js",
