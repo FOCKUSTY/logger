@@ -1,6 +1,6 @@
 {
-  "name": "f-logger",
-  "version": "0.0.2",
+  "name": "@fockusty/f-logger",
+  "version": "0.0.3",
   "description": "Simple logger for your pet-project",
   "main": "index.js",
   "scripts": {
@@ -12,11 +12,11 @@
     "test": "ts-mocha --paths ./test/**/*.test.ts"
   },
   "files": [
-    "loggers.names.ts",
-    "loggers.type.ts",
-    "index.logger.ts",
-    "file.logger.ts",
-    "index.ts"
+    "loggers.names.js",
+    "loggers.type.js",
+    "index.logger.js",
+    "file.logger.js",
+    "index.js"
   ],
   "keywords": [
     "logger",
