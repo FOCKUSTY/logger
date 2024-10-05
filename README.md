@@ -37,7 +37,7 @@ pnpm install --global --save f-logger --latest
 ## Примеры
 
 ```ts
-import Logger from 'f-logger';
+import Logger, { Colors } from 'f-logger';
 
 /* dir - Ваша рут-папка */
 /* loggerName - Название вашего логгера */

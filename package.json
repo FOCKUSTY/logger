@@ -1,6 +1,6 @@
 {
   "name": "f-logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple logger for your pet-project",
   "main": "index.js",
   "scripts": {
