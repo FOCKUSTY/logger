@@ -12,24 +12,24 @@
 
 1. Локально
 ```
-npm install --save f-logger --latest
+npm install --save fock-logger --latest
 ```
 
 или
 
 ```
-pnpm install --save f-logger --latest
+pnpm install --save fock-logger --latest
 ```
 
 2. Глобально
 ```
-npm install --global --save f-logger --latest
+npm install --global --save fock-logger --latest
 ```
 
 или
 
 ```
-pnpm install --global --save f-logger --latest
+pnpm install --global --save fock-logger --latest
 ```
 
 <hr>
