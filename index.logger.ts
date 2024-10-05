@@ -52,12 +52,14 @@ class Logger<T extends string> {
     private _colors: [Colors, Colors];
     private _logger: InitLogger;
     
-    constructor(dir: string, name: LoggerName<T>, colors?: [Colors, Colors]) {
-        this._dir = dir;
+    constructor(name: LoggerName<T>, dir?: string, colors?: [Colors, Colors]) {
+        this._dir = dir || './';
         this._name = name;
         this._colors = colors
             ? colors
-            : loggers[name].colors;
+            : loggers[name]
+                ? loggers[name].colors
+                : [Colors.reset, Colors.reset];
 
         this._logger = this.init();
     };
