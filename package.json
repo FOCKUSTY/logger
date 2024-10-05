@@ -12,6 +12,12 @@
     "test": "ts-mocha --paths ./test/**/*.test.ts"
   },
   "files": [
+    "loggers.names.d.ts",
+    "loggers.type.d.ts",
+    "index.logger.d.ts",
+    "file.logger.d.ts",
+    "index.d.ts",
+    
     "loggers.names.js",
     "loggers.type.js",
     "index.logger.js",
