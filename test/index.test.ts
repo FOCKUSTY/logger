@@ -1,7 +1,6 @@
-import { Colors as c } from "f-formatter/colors";
 import Test from './test.class';
 
-import Logger from "index.logger";
+import Logger, { Colors as c } from "index";
 
 const logger = new Logger('Tester');
 

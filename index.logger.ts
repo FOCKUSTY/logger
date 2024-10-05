@@ -27,11 +27,7 @@ class InitLogger {
                 : this._colors[1]
             ));
 
-        console.log(formatter.Color(this._name, this._colors[0]) + ':',
-            formatter.Color(text, color
-                ? color
-                : this._colors[1]
-            ));
+        console.log(txt);
 
         this._log.writeFile(text);
 
