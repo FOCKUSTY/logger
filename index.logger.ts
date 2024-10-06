@@ -21,11 +21,7 @@ class InitLogger {
     };
 
     public readonly execute = (text: string, color?: Colors): string => {
-        const txt = (formatter.Color(this._name, this._colors[0]) + ':',
-            formatter.Color(text, color
-                ? color
-                : this._colors[1]
-            ));
+        const txt = `${formatter.Color(this._name, this._colors[0])}: ${formatter.Color(text, color ? color : this._colors[1])}`;
 
         console.log(txt);
 
@@ -51,13 +47,14 @@ class Logger<T extends string> {
     constructor(name: LoggerName<T>, colors?: [Colors, Colors], dir?: string) {
         this._dir = dir || './';
         this._name = name;
+
+        this._logger = this.init();
+
         this._colors = colors
             ? colors
             : loggers[name]
                 ? loggers[name].colors
                 : [Colors.reset, Colors.reset];
-
-        this._logger = this.init();
     };
 
     private readonly init = (): InitLogger => {
