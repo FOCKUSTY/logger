@@ -48,7 +48,7 @@ class Logger<T extends string> {
     private _colors: [Colors, Colors];
     private _logger: InitLogger;
     
-    constructor(name: LoggerName<T>, dir?: string, colors?: [Colors, Colors]) {
+    constructor(name: LoggerName<T>, colors?: [Colors, Colors], dir?: string) {
         this._dir = dir || './';
         this._name = name;
         this._colors = colors
