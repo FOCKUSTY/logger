@@ -9,7 +9,7 @@ describe('Logger', () => {
         const tests: [string, string][] = [
             [c.reset + 'Привет, Мир !' + c.reset, logger.execute('Привет, Мир !')],
             [c.reset + 'Hello, World !' + c.reset, logger.execute('Hello, World !')],
-            [c.magenta + 'Saving...' + c.reset, new Logger('Saver', undefined, [c.magenta, c.magenta]).execute('Saving...')]
+            [c.magenta + 'Saving...' + c.reset, new Logger('Saver', [c.magenta, c.magenta]).execute('Saving...')]
         ];
 
         new Test('nocolor', tests).execute();
