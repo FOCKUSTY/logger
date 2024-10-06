@@ -23,9 +23,12 @@ class InitLogger {
     public readonly execute = (text: string, color?: Colors): string => {
         const txt = formatter.Color(text, color ? color : this._colors[1]);
 
-        console.log(formatter.Color(this._name, this._colors[0]) + ':', formatter.Color(text, color
+        console.log(formatter.Color(this._name, this._colors[0]) + ':',
+            formatter.Color(text, color
                 ? color
-                : this._colors[1]));
+                : this._colors[1]
+            )
+        );
 
         this._log.writeFile(text);
 
