@@ -13,6 +13,14 @@ class LoggersNames {
         Fail:     { name: 'Fail',     colors: [ Colors.red,          Colors.red     ]}
     };
 
+    constructor() {
+        try {
+            fs.readFileSync(path.join('./loggers.json'));
+        } catch {
+            fs.writeFileSync(path.join('./loggers.json'), JSON.stringify(this._standart, undefined, 4), 'utf-8');
+        }
+    };
+
     public readonly SetNames = (names: LoggersNameType) => {
         const existingNames = this.GetNames();
         const output: LoggersNameType = {};
@@ -25,7 +33,7 @@ class LoggersNames {
             output[key] = names[key];
         };
 
-        fs.writeFileSync(path.join('./loggers.json'), JSON.stringify(output, undefined, 4), 'utf-8');
+        fs.writeFileSync('./loggers.json', JSON.stringify(output, undefined, 4), 'utf-8');
 
         return names;
     };
