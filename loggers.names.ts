@@ -40,10 +40,6 @@ class LoggersNames {
             };
         };
 
-        for(const key in names) {
-            output[key] = names[key];
-        };
-
         fs.writeFileSync('./loggers.json', JSON.stringify(output, undefined, 4), 'utf-8');
 
         return names;
