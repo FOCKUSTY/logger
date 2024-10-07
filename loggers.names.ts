@@ -25,8 +25,19 @@ class LoggersNames {
         const existingNames = this.GetNames();
         const output: LoggersNameType = {};
 
+        for(const key in names) {
+            output[key] = names[key];
+        };
+
         for(const key in existingNames) {
-            output[key] = existingNames[key]
+            const existingValue = existingNames[key];
+            const value = names[key];
+
+            if(value && value.colors.toString() != [Colors.reset, Colors.reset].toString()) {
+                output[key] = value;
+            } else {
+                output[key] = existingValue;
+            };
         };
 
         for(const key in names) {
