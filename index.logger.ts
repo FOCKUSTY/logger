@@ -71,11 +71,11 @@ class Logger<T extends string> {
             loggers[key] = new InitLogger(this._dir, logger.name, logger.colors);
         };
 
-        if(!loggers[this._name])
+        if(loggers[this._name].colors.toString() === [Colors.reset, Colors.reset].toString())
             loggers[this._name] = this._logger;
 
         if(!this._colors)
-            this._colors = loggers[this._name].colors;
+            this._colors = this._logger.colors;
 
         return this._logger;
     };
