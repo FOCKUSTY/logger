@@ -1,12 +1,13 @@
 import Formatter from "f-formatter";
 import { Colors } from "f-formatter/colors";
 
-import type { LoggerName } from "./loggers.type";
+import type { LoggerName } from "./loggers.types";
 import LoggersNames from './loggers.names';
 
 import FileLogger from './file.logger';
 
 const formatter = new Formatter();
+const loggersNames = new LoggersNames();
 
 class InitLogger {
     private readonly _name: string;
@@ -23,12 +24,7 @@ class InitLogger {
     public readonly execute = (text: string, color?: Colors): string => {
         const txt = formatter.Color(text, color ? color : this._colors[1]);
 
-        console.log(formatter.Color(this._name, this._colors[0]) + ':',
-            formatter.Color(text, color
-                ? color
-                : this._colors[1]
-            )
-        );
+        console.log(formatter.Color(this._name, this._colors[0]) + ':', txt);
 
         this._log.writeFile(text);
 
@@ -37,6 +33,10 @@ class InitLogger {
 
     get colors(): [Colors, Colors] {
         return this._colors;
+    };
+
+    get name(): string {
+        return this._name;
     };
 };
 
@@ -65,15 +65,20 @@ class Logger<T extends string> {
     private readonly init = (): InitLogger => {
         this._logger = new InitLogger(this._dir, this._name, this._colors);
 
-        for(const key in LoggersNames) {
-            const logger = LoggersNames[key];
+        for(const key in loggersNames.GetNames()) {
+            const logger = loggersNames.GetNames()[key];
             
             loggers[key] = new InitLogger(this._dir, logger.name, logger.colors);
         };
 
-        if(loggers[this._name]?.colors.toString() === [Colors.reset, Colors.reset].toString())
-            loggers[this._name] = this._logger;
-
+        loggers[this._name] = this._logger;
+        loggersNames.SetNames({
+            [this._logger.name]: {
+                name: this._logger.name,
+                colors: this._colors
+            }}
+        );
+    
         if(!this._colors)
             this._colors = this._logger.colors;
 
