@@ -8,6 +8,8 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/fockusty/logger)
 ![GitHub issues](https://img.shields.io/github/issues/fockusty/logger)
 
+![Logotype](./assets/logger.logo.svg)
+
 ### Установка (Windows, npm/pnpm)
 
 1. Локально
@@ -63,3 +65,7 @@ loggerCOLOR.execute('Hello, World !', Colors.magenta);
 # Если
 - Если возникли проблемы или сложности, создайте [обсуждение](https://github.com/fockusty/logger/issues/new/choose) в репозитории
 - Если Вы заметили проблемы в коде, пишите мне в [Discord](https://discord.gg/5MJrRjzPec) или в [Telegram](https://t.me/FOCKUSTY)
+
+<div align="center">
+    <img src="./assets/logger.banner.svg" alt="banner">
+</div>
