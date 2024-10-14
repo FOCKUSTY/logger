@@ -16,6 +16,28 @@ type MiniPathType = {
 type PathType = { [key: string]: MiniPathType };
 
 const defaultFiles: PathType = {
+    'logger.banner.svg': {
+        build: {
+            name: "logger.banner.svg",
+            path: "../dist/assets"
+        },
+        source: {
+            name: "logger.banner.svg",
+            path: "./assets"
+        }
+    },
+
+    'logger.logo.svg': {
+        build: {
+            name: "logger.logo.svg",
+            path: "../dist/assets"
+        },
+        source: {
+            name: "logger.logo.svg",
+            path: "./assets"
+        }
+    },
+
     'package.json': {
         build: {
             name: 'package.json',
