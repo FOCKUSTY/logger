@@ -1,19 +1,19 @@
-import { exit } from "node:process"
-import path from "node:path"
-import fs from "node:fs"
+import { exit } from "node:process";
+import path from "node:path";
+import fs from "node:fs";
 
 type MiniPathType = {
 	source: {
-		name: string
-		path: string
-	}
+		name: string;
+		path: string;
+	};
 	build: {
-		name: string
-		path: string
-	}
-}
+		name: string;
+		path: string;
+	};
+};
 
-type PathType = { [key: string]: MiniPathType }
+type PathType = { [key: string]: MiniPathType };
 
 const defaultFiles: PathType = {
 	"logger.banner.svg": {
@@ -68,66 +68,66 @@ const defaultFiles: PathType = {
 			path: "./"
 		}
 	}
-}
+};
 
 class Build {
-	private readonly _files_paths: PathType
+	private readonly _files_paths: PathType;
 
 	constructor(filesPaths?: PathType) {
-		this._files_paths = filesPaths ? filesPaths : defaultFiles
+		this._files_paths = filesPaths ? filesPaths : defaultFiles;
 	}
 
 	private readonly GeneratePaths = (filePath: string) => {
-		const folders = filePath.split("/")
+		const folders = filePath.split("/");
 
-		let pastPath = ""
+		let pastPath = "";
 
 		for (const folder of folders) {
 			try {
-				pastPath += path.join(folder + "/")
-				fs.opendirSync(pastPath)
+				pastPath += path.join(folder + "/");
+				fs.opendirSync(pastPath);
 			} catch {
-				fs.mkdirSync(pastPath)
+				fs.mkdirSync(pastPath);
 			}
 		}
-	}
+	};
 
 	private readonly ReadFile = (filePath: string) => {
-		const file = fs.readFileSync(path.join(filePath), "utf-8")
+		const file = fs.readFileSync(path.join(filePath), "utf-8");
 
-		return file
-	}
+		return file;
+	};
 
 	private readonly WriteFile = (filePath: MiniPathType) => {
-		const build = path.join(filePath.build.path, filePath.build.name)
-		const source = this.ReadFile(filePath.source.path + "/" + filePath.source.name)
+		const build = path.join(filePath.build.path, filePath.build.name);
+		const source = this.ReadFile(filePath.source.path + "/" + filePath.source.name);
 
-		fs.writeFileSync(build, source, "utf-8")
+		fs.writeFileSync(build, source, "utf-8");
 
-		console.log(`Сгенерировал ${filePath.build.name}`)
-	}
+		console.log(`Сгенерировал ${filePath.build.name}`);
+	};
 
 	public readonly execute = () => {
-		console.log("Начало генерации")
+		console.log("Начало генерации");
 
 		for (const key in this._files_paths) {
-			const value: MiniPathType = this._files_paths[key]
+			const value: MiniPathType = this._files_paths[key];
 
-			this.GeneratePaths(value.build.path)
+			this.GeneratePaths(value.build.path);
 
-			console.log(`Генерирую ${value.source.name} в ${value.build.name}`)
+			console.log(`Генерирую ${value.source.name} в ${value.build.name}`);
 
-			this.WriteFile(value)
+			this.WriteFile(value);
 		}
 
-		console.log("Все файлы сгенерировались, выхожу")
+		console.log("Все файлы сгенерировались, выхожу");
 
-		return exit()
-	}
+		return exit();
+	};
 }
 
-;(() => {
-	new Build().execute()
-})()
+(() => {
+	new Build().execute();
+})();
 
-export default Build
+export default Build;

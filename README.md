@@ -41,26 +41,26 @@ pnpm install --global --save fock-logger --latest
 ## Примеры
 
 ```ts
-import Logger, { Colors } from "f-logger"
+import Logger, { Colors } from "f-logger";
 
 /* dir - Ваша рут-папка */
 /* loggerName - Название вашего логгера */
-const dir = "./"
-const loggerName = "The Void" /* MY-APP-NAME */
+const dir = "./";
+const loggerName = "The Void"; /* MY-APP-NAME */
 
 /* Первый logger - бесцветный */
 /* Второй logger - с цветами, первый цвет - цвет логгера, второй цвет - цвет сообщения */
-const loggerNO_COLOR = new Logger(loggerName, dir)
-const loggerCOLOR = new Logger(loggerName, dir, [Colors.magenta, Colors.reset])
+const loggerNO_COLOR = new Logger(loggerName, dir);
+const loggerCOLOR = new Logger(loggerName, dir, [Colors.magenta, Colors.reset]);
 
 /* Если вы хотите вывести бесцветное сообщение в чат, просто введите текст */
-loggerNO_COLOR.execute("Hello, World !")
+loggerNO_COLOR.execute("Hello, World !");
 // \u001B[35mThe Void\u001B[0m: \u001B[0mHello, World !\u001B[0m (The Void: Hello, World!)
 
-loggerCOLOR.execute("Hello, World !")
+loggerCOLOR.execute("Hello, World !");
 // \u001B[35mThe Void\u001B[0m: \u001B[0mHello, World!\u001B[0m (The Void: Hello, World!)
 
-loggerCOLOR.execute("Hello, World !", Colors.magenta)
+loggerCOLOR.execute("Hello, World !", Colors.magenta);
 // \u001B[35mThe Void\u001B[0m: \u001B[35m0mHello, World!\u001B[0m (The Void: Hello, World!)
 ```
 
