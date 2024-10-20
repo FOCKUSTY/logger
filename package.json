@@ -1,13 +1,11 @@
 {
 	"name": "fock-logger",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"description": "Simple logger for your pet-project",
 	"main": "index.js",
 	"scripts": {
-		"build": "tsc",
-		"build:types": "tsc --declaration",
-		"build:all": "pnpm run build && pnpm run build:types",
-		"build:file": "build.bat",
+		"build:file": "tsc && tsc --declaration",
+		"build": "pnpm run build:file && node ../dist/build.js",
 		"watch:build": "nodemon build.ts",
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
 	},
@@ -18,7 +16,7 @@
 		"file.logger.d.ts",
 		"index.d.ts",
 		"loggers.names.js",
-		"loggers.type.js",
+		"loggers.types.js",
 		"index.logger.js",
 		"file.logger.js",
 		"index.js"
