@@ -12,16 +12,12 @@
 	"files": [
 		"loggers.types.d.ts",
 		"loggers.types.js",
-
 		"loggers.names.d.ts",
 		"loggers.names.js",
-		
 		"file.logger.d.ts",
 		"file.logger.js",
-		
 		"index.logger.d.ts",
 		"index.logger.js",
-		
 		"index.d.ts",
 		"index.js"
 	],
@@ -56,7 +52,7 @@
 		"url": "https://github.com/FOCKUSTY/f-server/issues"
 	},
 	"dependencies": {
-		"f-formatter": "^0.2.3",
+		"f-formatter": "^0.2.9",
 		"node": "^22.9.0"
 	}
 }
