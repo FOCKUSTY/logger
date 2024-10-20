@@ -7,6 +7,7 @@
 		"build:file": "tsc && tsc --declaration",
 		"build": "pnpm run build:file && node ../dist/build.js",
 		"watch:build": "nodemon build.ts",
+		"format": "prettier ./**.ts --write",
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
 	},
 	"files": [

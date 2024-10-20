@@ -57,7 +57,7 @@ class Logger<T extends string> {
 			? colors
 			: loggers[name]
 				? loggers[name].colors
-				: loggersNames.GetNames()[name].colors || [Colors.reset, Colors.reset];
+				: loggersNames.GetNames()[name]?.colors || [Colors.reset, Colors.reset];
 
 		this._logger = this.init();
 	}
