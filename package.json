@@ -4,10 +4,7 @@
 	"description": "Simple logger for your pet-project",
 	"main": "index.js",
 	"scripts": {
-		"build": "tsc",
-		"build:types": "tsc --declaration",
-		"build:all": "pnpm run build && pnpm run build:types",
-		"build:file": "build.bat",
+		"build": "tsc && tsc --declaration && node ../dist/build.js",
 		"watch:build": "nodemon build.ts",
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
 	},
