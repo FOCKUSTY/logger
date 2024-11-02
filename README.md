@@ -64,6 +64,33 @@ loggerCOLOR.execute("Hello, World !", Colors.magenta);
 // \u001B[35mThe Void\u001B[0m: \u001B[35m0mHello, World!\u001B[0m (The Void: Hello, World!)
 ```
 
+# config-файл
+config-файл называется `.loggercfg`, его можно создать автоматически:
+
+```ts
+import Configurator from "fock-logger/configurator";
+
+new Configurator(true);
+```
+
+Стандартный файл выглядит так:
+```json
+{
+    "dir": "./",
+    "level": "all",
+    "colors": [
+        "\u001b[0m",
+        "\u001b[0m"
+    ]
+}
+```
+
+Рассмотрим подробнее
+
+`dir` - Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`
+`level` - Уровень логирования в консоли, `all` - Вся информация, `warn` - Предупреждения, `err` - Ошибки
+`colors` - Стандартные цвета для логгера
+
 # Если
 
 -   Если возникли проблемы или сложности, создайте [обсуждение](https://github.com/fockusty/logger/issues/new/choose) в репозитории

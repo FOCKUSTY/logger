@@ -1,6 +1,6 @@
 {
   "name": "fock-logger",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple logger for your pet-project",
   "main": "index.js",
   "scripts": {
@@ -13,16 +13,24 @@
   },
   "files": [
     "loggers.names.d.ts",
-    "loggers.type.d.ts",
-    "deleter.logger.d.ts",
-    "index.logger.d.ts",
-    "file.logger.d.ts",
-    "index.d.ts",
     "loggers.names.js",
+    
+    "loggers.type.d.ts",
     "loggers.type.js",
+    
+    "deleter.logger.d.ts",
     "deleter.logger.js",
+    
+    "index.logger.d.ts",
     "index.logger.js",
+    
+    "file.logger.d.ts",
     "file.logger.js",
+    
+    "configurator.d.ts",
+    "configurator.js"
+    
+    "index.d.ts",
     "index.js"
   ],
   "keywords": [

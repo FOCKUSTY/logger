@@ -1,16 +1,19 @@
 import Formatter from "f-formatter";
 import { Colors } from "f-formatter/colors";
 
-import type { LoggerName } from "./loggers.types";
+import Configurator from "./configurator";
+
+import { LevelType, LoggerName, Levels } from "./loggers.types";
 import LoggersNames from "./loggers.names";
 
 import FileLogger from "./file.logger";
 
 const formatter = new Formatter();
 const loggersNames = new LoggersNames();
+const { config } = new Configurator();
 
 class InitLogger {
-	private readonly _name: string;
+    private readonly _name: string;
 	private readonly _colors: [Colors, Colors];
 	private readonly _log: FileLogger;
 
@@ -21,10 +24,12 @@ class InitLogger {
 		this._log = new FileLogger(dir);
 	}
 
-	public readonly execute = (text: string, color?: Colors): string => {
+	public readonly execute = (text: string, color?: Colors, level: LevelType='info'): string => {
 		const txt = formatter.Color(text, color ? color : this._colors[1]);
 
-		console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
+        
+		if (Levels[config.level] <= Levels[level])
+            console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
 
 		this._log.writeFile(text);
 
@@ -50,14 +55,14 @@ class Logger<T extends string> {
 	private _logger: InitLogger;
 
 	constructor(name: LoggerName<T>, colors?: [Colors, Colors], dir?: string) {
-		this._dir = dir || "./";
+		this._dir = dir || config.dir;
 		this._name = name;
 
 		this._colors = colors
 			? colors
 			: loggers[name]
 				? loggers[name].colors
-				: loggersNames.GetNames()[name]?.colors || [Colors.reset, Colors.reset];
+				: loggersNames.GetNames()[name]?.colors || config.colors;
 
 		this._logger = this.init();
 	}
