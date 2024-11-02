@@ -1,71 +1,65 @@
 {
-  "name": "fock-logger",
-  "version": "0.3.1",
-  "description": "Simple logger for your pet-project",
-  "main": "index.js",
-  "scripts": {
-    "build": "tsc",
-    "build:types": "tsc --declaration",
-    "build:all": "pnpm run build && pnpm run build:types",
-    "build:file": "build.bat",
-    "watch:build": "nodemon build.ts",
-    "test": "ts-mocha --paths ./test/**/*.test.ts"
-  },
-  "files": [
-    "loggers.names.d.ts",
-    "loggers.names.js",
-    
-    "loggers.type.d.ts",
-    "loggers.type.js",
-    
-    "deleter.logger.d.ts",
-    "deleter.logger.js",
-    
-    "index.logger.d.ts",
-    "index.logger.js",
-    
-    "file.logger.d.ts",
-    "file.logger.js",
-    
-    "configurator.d.ts",
-    "configurator.js"
-    
-    "index.d.ts",
-    "index.js"
-  ],
-  "keywords": [
-    "logger",
-    "simple",
-    "simple logger"
-  ],
-  "author": "FOCKUSTY",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/expect": "^24.3.0",
-    "@types/mocha": "^10.0.8",
-    "@types/node": "^22.7.4",
-    "mocha": "^10.7.3",
-    "nodemon": "^3.1.7",
-    "prettier": "^3.3.3",
-    "ts-mocha": "^10.0.0",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.6.2"
-  },
-  "engines": {
-    "node": ">=7.6.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/FOCKUSTY/logger"
-  },
-  "bugs": {
-    "email": "wwddwwwd@mail.ru",
-    "url": "https://github.com/FOCKUSTY/logger/issues"
-  },
-  "dependencies": {
-    "f-formatter": "^0.2.3",
-    "formatter": "^0.4.2",
-    "node": "^22.9.0"
-  }
+	"name": "fock-logger",
+	"version": "0.3.1",
+	"description": "Simple logger for your pet-project",
+	"main": "index.js",
+	"scripts": {
+		"build": "tsc",
+		"build:types": "tsc --declaration",
+		"build:all": "pnpm run build && pnpm run build:types",
+		"build:file": "build.bat",
+		"watch:build": "nodemon build.ts",
+		"test": "ts-mocha --paths ./test/**/*.test.ts"
+	},
+	"files": [
+		"loggers.names.d.ts",
+		"loggers.names.js",
+		"loggers.type.d.ts",
+		"loggers.type.js",
+		"deleter.logger.d.ts",
+		"deleter.logger.js",
+		"index.logger.d.ts",
+		"index.logger.js",
+		"file.logger.d.ts",
+		"file.logger.js",
+		"configurator.d.ts",
+		"configurator.js",
+		"index.d.ts",
+		"index.js"
+	],
+	"keywords": [
+		"logger",
+		"simple",
+		"simple logger"
+	],
+	"author": "FOCKUSTY",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/expect": "^24.3.0",
+		"@types/mocha": "^10.0.8",
+		"@types/node": "^22.7.4",
+		"mocha": "^10.7.3",
+		"nodemon": "^3.1.7",
+		"prettier": "^3.3.3",
+		"ts-mocha": "^10.0.0",
+		"ts-node": "^10.9.2",
+		"tsconfig-paths": "^4.2.0",
+		"typescript": "^5.6.2"
+	},
+	"engines": {
+		"node": ">=7.6.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/FOCKUSTY/logger"
+	},
+	"bugs": {
+		"email": "wwddwwwd@mail.ru",
+		"url": "https://github.com/FOCKUSTY/logger/issues"
+	},
+	"dependencies": {
+		"f-formatter": "^0.2.3",
+		"formatter": "^0.4.2",
+		"node": "^22.9.0"
+	}
 }

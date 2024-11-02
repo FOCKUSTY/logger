@@ -13,7 +13,7 @@ const loggersNames = new LoggersNames();
 const { config } = new Configurator();
 
 class InitLogger {
-    private readonly _name: string;
+	private readonly _name: string;
 	private readonly _colors: [Colors, Colors];
 	private readonly _log: FileLogger;
 
@@ -24,12 +24,15 @@ class InitLogger {
 		this._log = new FileLogger(dir);
 	}
 
-	public readonly execute = (text: string, color?: Colors, level: LevelType='info'): string => {
+	public readonly execute = (
+		text: string,
+		color?: Colors,
+		level: LevelType = "info"
+	): string => {
 		const txt = formatter.Color(text, color ? color : this._colors[1]);
 
-        
 		if (Levels[config.level] <= Levels[level])
-            console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
+			console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
 
 		this._log.writeFile(text);
 
