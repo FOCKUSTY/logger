@@ -14,12 +14,13 @@
   "files": [
     "loggers.names.d.ts",
     "loggers.type.d.ts",
+    "deleter.logger.d.ts",
     "index.logger.d.ts",
     "file.logger.d.ts",
     "index.d.ts",
-
     "loggers.names.js",
     "loggers.type.js",
+    "deleter.logger.js",
     "index.logger.js",
     "file.logger.js",
     "index.js"
@@ -51,11 +52,12 @@
     "url": "https://github.com/FOCKUSTY/logger"
   },
   "bugs": {
-      "email": "wwddwwwd@mail.ru",
-      "url": "https://github.com/FOCKUSTY/logger/issues"
+    "email": "wwddwwwd@mail.ru",
+    "url": "https://github.com/FOCKUSTY/logger/issues"
   },
   "dependencies": {
     "f-formatter": "^0.2.3",
+    "formatter": "^0.4.2",
     "node": "^22.9.0"
   }
 }

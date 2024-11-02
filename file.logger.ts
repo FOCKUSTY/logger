@@ -1,18 +1,10 @@
 import Formatter from 'f-formatter';
+import Deleter from './deleter.logger';
 
 import path from 'node:path';
 import fs from 'node:fs';
 
 const cache = new Map();
-
-const format: any = '*&00.00.0000';
-const filter = new RegExp(
-    format
-        .replace('*', '[a-zA-Z]?')
-        .replace('&', '[!@#$%^&*()-+]?')
-        .replaceAll('0', '[0-9]'), 'gi'
-);
-
 const formatter = new Formatter();
 
 class Log {
@@ -20,10 +12,11 @@ class Log {
     private readonly _prefix: string = '';
     private readonly _date = formatter.date.Date(new Date(), 'dd.MM.yyyy');
     private readonly _file_path: string = '';
+    private readonly _deleter: Deleter;
 
     private _cache: string = '';
 
-    constructor(dir: string, filePath?: string, prefix?: string) {
+    public constructor(dir: string, filePath?: string, prefix?: string) {
         this._prefix = prefix
             ? prefix + '-'
             : '';
@@ -31,6 +24,9 @@ class Log {
         this._file_path = filePath
             ? filePath
             : path.join(dir, 'log', this._prefix + this._date) + '.log';
+
+        this._dir = path.join(dir);
+        this._deleter = new Deleter(dir);
 
         this.init();
 
@@ -62,28 +58,7 @@ class Log {
     
     private readonly init = () => {
         this.CreateFolder();
-
-        for(const log of fs.readdirSync(path.join(this._dir, 'log'))) {
-            const name = path.parse(path.join(this._dir, 'log', log)).name;
-            const date = name.match(filter);
-
-            if(!date) continue;
-
-            const currentTime = formatter.date.Date(new Date(), 'dd.MM.yyyy').split('.').reverse();
-            const time = date[0].split('.').reverse();
-
-            for(const index in currentTime) {
-                const currentDate = Number(currentTime[index]);
-                const date = Number(time[index]);
-
-                if(currentDate > date) {
-                    try {
-                        fs.unlinkSync(path.join(this._dir, 'log', log));
-                        continue;
-                    } catch {}
-                };
-            };
-        };
+        this._deleter.init();
     };
 
     public writeFile(text: string) {

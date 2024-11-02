@@ -11,13 +11,14 @@ const formatter = new Formatter();
 class InitLogger {
     private readonly _name: string;
     private readonly _colors: [Colors, Colors];
-    private readonly _log: FileLogger;
+
+    public readonly log: FileLogger;
 
     constructor(dir: string, name: string, colors: [Colors, Colors]) {
         this._name = name;
         this._colors = colors;
 
-        this._log = new FileLogger(dir);
+        this.log = new FileLogger(dir);
     };
 
     public readonly execute = (text: string, color?: Colors): string => {
@@ -29,7 +30,7 @@ class InitLogger {
 
         console.log(txt);
 
-        this._log.writeFile(text);
+        this.log.writeFile(text);
 
         return txt;
     };
@@ -80,6 +81,16 @@ class Logger<T extends string> {
     public readonly execute = (text: string, color?: Colors): string => {
         return this._logger.execute(text, color);
     };
+
+    public write(text: string) {
+        this._logger.log.writeFile(text);
+        
+        return text;
+    }
 };
+
+export {
+    InitLogger
+}
 
 export default Logger;
