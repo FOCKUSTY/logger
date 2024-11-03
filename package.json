@@ -11,8 +11,8 @@
 	"files": [
 		"loggers.names.d.ts",
 		"loggers.names.js",
-		"loggers.type.d.ts",
-		"loggers.type.js",
+		"loggers.types.d.ts",
+		"loggers.types.js",
 		"deleter.logger.d.ts",
 		"deleter.logger.js",
 		"index.logger.d.ts",
