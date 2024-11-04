@@ -10,3 +10,14 @@ export enum Levels {
 	"warn" = 2,
 	"err" = 3
 }
+
+export type Settings = string | null | [Colors, Colors] | LoggersNameType;
+
+export type Config = {
+	[key: string]: Settings;
+
+	dir: string;
+	level: "info" | "warn" | "err";
+	colors: [Colors, Colors];
+	loggers: LoggersNameType
+};

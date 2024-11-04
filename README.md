@@ -10,30 +10,10 @@
 
 ![Logotype](./assets/logger.logo.svg)
 
-### Установка (Windows, npm/pnpm)
-
-1. Локально
+### Установка (Windows, npm)
 
 ```
-npm install --save fock-logger --latest
-```
-
-или
-
-```
-pnpm install --save fock-logger --latest
-```
-
-2. Глобально
-
-```
-npm install --global --save fock-logger --latest
-```
-
-или
-
-```
-pnpm install --global --save fock-logger --latest
+npm install fock-logger@latest
 ```
 
 <hr>
@@ -77,24 +57,46 @@ new Configurator(true);
 ```json
 {
     "dir": "./",
-    "level": "all",
+    "level": "info",
     "colors": [
         "\u001b[0m",
         "\u001b[0m"
-    ]
+    ],
+    "loggers": {
+        "Success": {
+            "name": "Success",
+            "colors": [
+                "\u001b[31m",
+                "\u001b[32m"
+            ]
+        },
+        "Fail": {
+            "name": "Fail",
+            "colors": [
+                "\u001b[31m",
+                "\u001b[31m"
+            ]
+        }
+    }
 }
 ```
 
 Рассмотрим подробнее
 
-`dir` - Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`
-`level` - Уровень логирования в консоли, `all` - Вся информация, `warn` - Предупреждения, `err` - Ошибки
-`colors` - Стандартные цвета для логгера
+1. `dir` - Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`, принимает значения типа: `string`.
+2. `level` - Уровень логирования в консоли, `info` - Вся информация, `warn` - Предупреждения, `err` - Ошибки, принимает значения типа: `string`.
+3. `colors` - Стандартные цвета для логгера, принимает значения типа: `[Colors, Colors]`.
+4. `loggers` - Ваши логгеры, принимает значения типа: `LoggersNameType` (`{[key: string]: {name: string, colors: [Colors, Colors]}}`).
+
+## Внимание!
+- Если у Вас есть файл `loggers.json` логгеры не будут записываться в конфиг.
+- Чтобы их записывать в конфиг, удалите файл `loggers.json`.
+- Или иначе, если Вам конфиг не нужен и Вас устраивают стандартные значение, то ничего не делаете, `loggers.json` сам создаться с предустановленными настройками.
 
 # Если
 
--   Если возникли проблемы или сложности, создайте [обсуждение](https://github.com/fockusty/logger/issues/new/choose) в репозитории
--   Если Вы заметили проблемы в коде, пишите мне в [Discord](https://discord.gg/5MJrRjzPec) или в [Telegram](https://t.me/FOCKUSTY)
+- Если возникли проблемы или сложности, создайте [обсуждение](https://github.com/fockusty/logger/issues/new/choose) в репозитории
+- Если Вы заметили проблемы в коде, пишите мне в [Discord](https://discord.gg/5MJrRjzPec) или в [Telegram](https://t.me/FOCKUSTY)
 
 <div align="center">
     <img src="./assets/logger.banner.svg" alt="banner">

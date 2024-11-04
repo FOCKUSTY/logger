@@ -1,9 +1,19 @@
-import type { LoggersNameType } from "./loggers.types";
 import { Colors } from "f-formatter/colors";
 import Formatter from "f-formatter";
 
-import path from "path";
-import fs from "fs";
+import type {
+	Config,
+	LoggersNameType
+} from "./loggers.types";
+
+import {
+	join,
+	parse
+} from "path";
+import {
+	existsSync,
+	writeFileSync
+} from "fs";
 
 const formatter = new Formatter();
 
@@ -13,17 +23,30 @@ class LoggersNames {
 		Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
 	};
 
-	constructor() {
-		try {
-			fs.readFileSync(path.join("./loggers.json"));
-		} catch {
-			fs.writeFileSync(
-				path.join("./loggers.json"),
+	private readonly _default_path = join("./loggers.json");
+	private readonly _path = this._default_path;
+
+	public constructor() {
+		this._path = this.ChoosePath();
+	}
+
+	private readonly ChoosePath = (): string => {
+		if (existsSync(join("./.loggercfg")))
+			return join("./.loggercfg");
+
+		else if (existsSync(this._default_path))
+			return this._default_path;
+
+		else {
+			writeFileSync(
+				this._default_path,
 				JSON.stringify(this._standart, undefined, 4),
 				"utf-8"
 			);
-		}
-	}
+
+			return this._default_path;
+		};
+	};
 
 	public readonly SetNames = (names: LoggersNameType) => {
 		const existingNames = this.GetNames();
@@ -47,15 +70,28 @@ class LoggersNames {
 			}
 		}
 
-		fs.writeFileSync("./loggers.json", JSON.stringify(output, undefined, 4), "utf-8");
+		if (parse(this._path).base === '.loggercfg') {
+			const file: Config = formatter.FromJSONWithPath(this._path);
+			file.loggers = output;
+
+			writeFileSync(this._path, JSON.stringify(file, undefined, 4), "utf-8");
+		} else {
+			writeFileSync(this._path, JSON.stringify(output, undefined, 4), "utf-8");
+		};
 
 		return names;
 	};
 
 	public readonly GetNames = () => {
-		const file = formatter.FromJSONWithPath("./loggers.json");
+		if (parse(this._path).base === '.loggercfg') {
+			const file: Config = formatter.FromJSONWithPath(this._path);
 
-		return file;
+			return file.loggers || this._standart;
+		} else {
+			const file = formatter.FromJSONWithPath(this._path);
+	
+			return file;
+		}
 	};
 
 	get standart() {
