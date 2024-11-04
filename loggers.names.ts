@@ -1,19 +1,10 @@
 import { Colors } from "f-formatter/colors";
 import Formatter from "f-formatter";
 
-import type {
-	Config,
-	LoggersNameType
-} from "./loggers.types";
+import type { Config, LoggersNameType } from "./loggers.types";
 
-import {
-	join,
-	parse
-} from "path";
-import {
-	existsSync,
-	writeFileSync
-} from "fs";
+import { join, parse } from "path";
+import { existsSync, writeFileSync } from "fs";
 
 const formatter = new Formatter();
 
@@ -31,12 +22,8 @@ class LoggersNames {
 	}
 
 	private readonly ChoosePath = (): string => {
-		if (existsSync(join("./.loggercfg")))
-			return join("./.loggercfg");
-
-		else if (existsSync(this._default_path))
-			return this._default_path;
-
+		if (existsSync(join("./.loggercfg"))) return join("./.loggercfg");
+		else if (existsSync(this._default_path)) return this._default_path;
 		else {
 			writeFileSync(
 				this._default_path,
@@ -45,7 +32,7 @@ class LoggersNames {
 			);
 
 			return this._default_path;
-		};
+		}
 	};
 
 	public readonly SetNames = (names: LoggersNameType) => {
@@ -70,26 +57,26 @@ class LoggersNames {
 			}
 		}
 
-		if (parse(this._path).base === '.loggercfg') {
+		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);
 			file.loggers = output;
 
 			writeFileSync(this._path, JSON.stringify(file, undefined, 4), "utf-8");
 		} else {
 			writeFileSync(this._path, JSON.stringify(output, undefined, 4), "utf-8");
-		};
+		}
 
 		return names;
 	};
 
 	public readonly GetNames = () => {
-		if (parse(this._path).base === '.loggercfg') {
+		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);
 
 			return file.loggers || this._standart;
 		} else {
 			const file = formatter.FromJSONWithPath(this._path);
-	
+
 			return file;
 		}
 	};

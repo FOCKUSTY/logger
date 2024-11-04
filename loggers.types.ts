@@ -19,5 +19,5 @@ export type Config = {
 	dir: string;
 	level: "info" | "warn" | "err";
 	colors: [Colors, Colors];
-	loggers: LoggersNameType
+	loggers: LoggersNameType;
 };

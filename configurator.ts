@@ -1,10 +1,7 @@
 import Formatter from "f-formatter";
 import { Colors } from "f-formatter/colors";
 
-import type {
-	Config,
-	Settings
-} from "loggers.types";
+import type { Config, Settings } from "loggers.types";
 
 import path from "path";
 import fs from "fs";
@@ -52,20 +49,34 @@ class Validator {
 		console.log("To fixing error:");
 		console.log("Open .loggercfg");
 
-		if (allowed[key]) console.log(`Find key: "${key}" and replace your value (${value}) to ${allowed[key][0]} (Or another, see above)`);
-		else console.log(`Find key: "${key}" and replace your value (${value}) (Or see above)`);
+		if (allowed[key])
+			console.log(
+				`Find key: "${key}" and replace your value (${value}) to ${allowed[key][0]} (Or another, see above)`
+			);
+		else
+			console.log(
+				`Find key: "${key}" and replace your value (${value}) (Or see above)`
+			);
 
 		const start = this._file.indexOf(`"${key}"`);
 		const end = this._file.indexOf(`${value}`) + `${value}`.length;
 		const err = this._file.slice(start, end);
 
-		console.log(Colors.bgMagenta + "The line with the error is highlighted in magenta" + Colors.reset);
+		console.log(
+			Colors.bgMagenta +
+				"The line with the error is highlighted in magenta" +
+				Colors.reset
+		);
 
 		console.log("See your file:");
 		console.log(this._file.replace(err, Colors.bgBrightMagenta + err + Colors.reset));
 
-		console.log(Colors.bgMagenta + "The line with the error is highlighted in magenta" + Colors.reset);
-	}
+		console.log(
+			Colors.bgMagenta +
+				"The line with the error is highlighted in magenta" +
+				Colors.reset
+		);
+	};
 
 	private readonly ArrayValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
@@ -94,13 +105,14 @@ class Validator {
 	private readonly ObjectValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof(value) !== 'object' || !value) return this._default;
+		if (Array.isArray(value) || typeof value !== "object" || !value)
+			return this._default;
 
 		switch (key) {
 			case "loggers":
 				const output = value;
-				
-				Object.keys(value).forEach(k => {
+
+				Object.keys(value).forEach((k) => {
 					const colors = value[k].colors;
 
 					for (const i in colors) {
@@ -108,7 +120,7 @@ class Validator {
 							throw new Error(`${colors[i]} in enum Colors is not defined`);
 						} else {
 							output[k].colors = colors;
-						};
+						}
 					}
 				});
 
@@ -116,24 +128,26 @@ class Validator {
 
 			default:
 				return this._default;
-		};
+		}
 	};
 
 	private readonly AllowedValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
 		if (!value) return this._default;
-		if (!allowed[key]) throw new Error(`${key} in allowed settings is not defined (Library error)`);
+		if (!allowed[key])
+			throw new Error(`${key} in allowed settings is not defined (Library error)`);
 
 		if (Array.isArray(value)) return this.ArrayValidator();
-		if (typeof(value) === 'object') return this.ObjectValidator();
+		if (typeof value === "object") return this.ObjectValidator();
 
 		if (!allowed[key].includes(value.toString())) {
 			console.log(
-				Colors.red + `Value at key: "${key}" is not allowed, you can use:\r\n` +
-				Colors.cyan +
-				allowed[key].join(Colors.reset + " or" + Colors.cyan + "\r\n") +
-				Colors.reset
+				Colors.red +
+					`Value at key: "${key}" is not allowed, you can use:\r\n` +
+					Colors.cyan +
+					allowed[key].join(Colors.reset + " or" + Colors.cyan + "\r\n") +
+					Colors.reset
 			);
 
 			this.PrintErrorFixing();
@@ -149,11 +163,15 @@ class Validator {
 
 		if (!value) {
 			console.log(
-				Colors.brightYellow + `Value at key: "${key}" is not defined\r\nThis value can be:\r\n` +
-				JSON.stringify(settings[key], undefined, 2)
+				Colors.brightYellow +
+					`Value at key: "${key}" is not defined\r\nThis value can be:\r\n` +
+					JSON.stringify(settings[key], undefined, 2)
 			);
 			if (Object.keys(allowed).includes(key))
-				console.log("Or other allowed values:\r\n" + JSON.stringify(allowed[key], undefined, 2));
+				console.log(
+					"Or other allowed values:\r\n" +
+						JSON.stringify(allowed[key], undefined, 2)
+				);
 
 			console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
 
@@ -161,9 +179,9 @@ class Validator {
 		}
 
 		if (Object.keys(allowed).includes(key)) return this.AllowedValidator();
-		
+
 		if (Array.isArray(value)) return this.ArrayValidator();
-		if (typeof(value) === 'object') return this.ObjectValidator();
+		if (typeof value === "object") return this.ObjectValidator();
 
 		return value;
 	};
@@ -194,7 +212,11 @@ class Configurator {
 	}
 
 	private Validator(key: string, value: Settings): Settings {
-		return new Validator(key, value, JSON.stringify(JSON.parse(fs.readFileSync(this._path, "utf-8")), undefined, 0)).init();
+		return new Validator(
+			key,
+			value,
+			JSON.stringify(JSON.parse(fs.readFileSync(this._path, "utf-8")), undefined, 0)
+		).init();
 	}
 
 	private Validate(config: Config) {
