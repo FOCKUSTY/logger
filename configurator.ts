@@ -228,9 +228,15 @@ class Configurator {
 	}
 
 	private Read() {
-		fs.open(this._path, () => {
-			if (this._create_file) this.Create();
-		});
+		if (!fs.existsSync(this._path) && this._create_file)
+			this.Create()
+
+		if (fs.existsSync(this._path) && Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}")).length === 0) {
+			console.log(Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset);
+			
+			fs.unlinkSync(this._path);
+			this.Create();
+		};
 
 		try {
 			const config: Config = new Formatter().FromJSONWithPath(this._path);
