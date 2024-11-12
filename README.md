@@ -48,7 +48,7 @@ loggerCOLOR.execute("Hello, World !", Colors.magenta);
 config-файл называется `.loggercfg`, его можно создать автоматически:
 
 ```ts
-import Configurator from "fock-logger/configurator";
+import { Configurator } from "fock-logger";
 
 new Configurator(true);
 ```
