@@ -1,8 +1,10 @@
 import Formatter from "f-formatter";
+
 import path from "node:path";
 import fs from "node:fs";
 
 const week = 60 * 60 * 24 * 7;
+
 const format: any = "*&00.00.0000";
 const filter = new RegExp(
 	format
@@ -35,14 +37,14 @@ class Deleter {
 				year: Number(currentTime[0]),
 				month: Number(currentTime[1]),
 				day: Number(currentTime[2])
-			});
+			}, "seconds");
 
 			const fileTime =
 				formatter.date.Timestamp({
 					year: Number(time[0]),
 					month: Number(time[1]),
 					day: Number(time[2])
-				}) + week;
+				}, "seconds") + week;
 
 			try {
 				if (now > fileTime) {

@@ -1,20 +1,32 @@
-import Formatter from "f-formatter";
-import { Colors } from "f-formatter/colors";
+import Formatter, { Colors } from "f-formatter";
 
-import type { Config, Settings } from "loggers.types";
+import type {
+	Config,
+	SettingKeys,
+	Settings
+} from "loggers.types";
 
 import path from "path";
 import fs from "fs";
 
 const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
-const allowed: { [key: string]: string[] } = {
+const allowed: Partial<Record<SettingKeys, string[]>> = {
 	level: ["info", "warn", "err"]
+};
+
+const tutorials: Partial<Record<SettingKeys, string>> = {
+	dir: "this value is a your root dir",
+	level: "",
+	deletion_interval: "this value can be a rational number (0, 1, 2...) and this value is the number of days after which the file should be deleted",
+	colors: "this value is a tuple of two colors, first - logger color, second - text color",
+	loggers: "this a your loggers, you can don't have to touch it"
 };
 
 const settings: Config = {
 	dir: "./",
 	level: "info",
+	deletion_interval: 7,
 	colors: defaultColors,
 	loggers: {
 		"Fail": {
@@ -30,11 +42,11 @@ const settings: Config = {
 
 class Validator {
 	private readonly _file: string;
-	private readonly _key: string;
+	private readonly _key: SettingKeys;
 	private readonly _value: Settings;
 	private readonly _default: Settings;
 
-	public constructor(key: string, value: Settings, file: string) {
+	public constructor(key: SettingKeys, value: Settings, file: string) {
 		this._file = file;
 
 		this._key = key;
@@ -173,7 +185,9 @@ class Validator {
 						JSON.stringify(allowed[key], undefined, 2)
 				);
 
-			console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
+				if(tutorials[key])
+					console.log("\r" + tutorials[key]);
+				console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
 
 			return this._default;
 		}
@@ -211,7 +225,7 @@ class Configurator {
 		}
 	}
 
-	private Validator(key: string, value: Settings): Settings {
+	private Validator(key: SettingKeys, value: Settings): Settings {
 		return new Validator(
 			key,
 			value,
@@ -221,7 +235,7 @@ class Configurator {
 
 	private Validate(config: Config) {
 		for (const key in settings) {
-			const value = this.Validator(key, config[key]);
+			const value = this.Validator(key as SettingKeys, config[key]);
 
 			this._config[key] = value;
 		}

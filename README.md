@@ -58,6 +58,7 @@ new Configurator(true);
 {
     "dir": "./",
     "level": "info",
+    "deletion_interval": 7,
     "colors": [
         "\u001b[0m",
         "\u001b[0m"
@@ -85,8 +86,9 @@ new Configurator(true);
 
 1. `dir` - Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`, принимает значения типа: `string`.
 2. `level` - Уровень логирования в консоли, `info` - Вся информация, `warn` - Предупреждения, `err` - Ошибки, принимает значения типа: `string`.
-3. `colors` - Стандартные цвета для логгера, принимает значения типа: `[Colors, Colors]`.
-4. `loggers` - Ваши логгеры, принимает значения типа: `LoggersNameType` (`{[key: string]: {name: string, colors: [Colors, Colors]}}`).
+3. `deletion_interval` - Промежуток удаления лога, принимает значение типа `number`, отображает количесто дней (Количество дней, после которых лог удалится)
+4. `colors` - Стандартные цвета для логгера, принимает значения типа: `[Colors, Colors]`.
+5. `loggers` - Ваши логгеры, принимает значения типа: `LoggersNameType` (`{[key: string]: {name: string, colors: [Colors, Colors]}}`).
 
 ## Внимание!
 - Если у Вас есть файл `loggers.json` логгеры не будут записываться в конфиг.

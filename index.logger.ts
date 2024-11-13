@@ -1,5 +1,4 @@
-import Formatter from "f-formatter";
-import { Colors } from "f-formatter/colors";
+import Formatter, { Colors } from "f-formatter";
 
 import Configurator from "./configurator";
 

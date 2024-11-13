@@ -1,9 +1,10 @@
 {
 	"name": "fock-logger",
-	"version": "0.4.0-a",
+	"version": "0.4.1",
 	"description": "Simple logger for your pet-project",
 	"main": "index.js",
 	"scripts": {
+		"watch:conf": "nodemon configurator.ts",
 		"build": "tsc && tsc --declaration && node ../dist/build.js",
 		"watch:build": "nodemon build.ts",
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
@@ -55,7 +56,7 @@
 		"url": "https://github.com/FOCKUSTY/logger/issues"
 	},
 	"dependencies": {
-		"f-formatter": "^0.2.3",
+		"f-formatter": "^0.3.0-a",
 		"formatter": "^0.4.2",
 		"node": "^22.9.0"
 	}
