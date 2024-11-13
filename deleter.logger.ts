@@ -33,18 +33,24 @@ class Deleter {
 			const currentTime = formatter.date.Date(new Date(), "yyyy.MM.dd").split(".");
 			const time = date[0].split(".").reverse();
 
-			const now = formatter.date.Timestamp({
-				year: Number(currentTime[0]),
-				month: Number(currentTime[1]),
-				day: Number(currentTime[2])
-			}, "seconds");
+			const now = formatter.date.Timestamp(
+				{
+					year: Number(currentTime[0]),
+					month: Number(currentTime[1]),
+					day: Number(currentTime[2])
+				},
+				"seconds"
+			);
 
 			const fileTime =
-				formatter.date.Timestamp({
-					year: Number(time[0]),
-					month: Number(time[1]),
-					day: Number(time[2])
-				}, "seconds") + week;
+				formatter.date.Timestamp(
+					{
+						year: Number(time[0]),
+						month: Number(time[1]),
+						day: Number(time[2])
+					},
+					"seconds"
+				) + week;
 
 			try {
 				if (now > fileTime) {

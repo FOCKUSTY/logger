@@ -1,10 +1,6 @@
 import Formatter, { Colors } from "f-formatter";
 
-import type {
-	Config,
-	SettingKeys,
-	Settings
-} from "loggers.types";
+import type { Config, SettingKeys, Settings } from "loggers.types";
 
 import path from "path";
 import fs from "fs";
@@ -18,7 +14,8 @@ const allowed: Partial<Record<SettingKeys, string[]>> = {
 const tutorials: Partial<Record<SettingKeys, string>> = {
 	dir: "this value is a your root dir",
 	level: "",
-	deletion_interval: "this value can be a rational number (0, 1, 2...) and this value is the number of days after which the file should be deleted",
+	deletion_interval:
+		"this value can be a rational number (0, 1, 2...) and this value is the number of days after which the file should be deleted",
 	colors: "this value is a tuple of two colors, first - logger color, second - text color",
 	loggers: "this a your loggers, you can don't have to touch it"
 };
@@ -185,9 +182,8 @@ class Validator {
 						JSON.stringify(allowed[key], undefined, 2)
 				);
 
-				if(tutorials[key])
-					console.log("\r" + tutorials[key]);
-				console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
+			if (tutorials[key]) console.log("\r" + tutorials[key]);
+			console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
 
 			return this._default;
 		}

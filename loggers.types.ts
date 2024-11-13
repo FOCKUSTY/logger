@@ -19,7 +19,7 @@ export type Config = {
 
 	dir: string;
 	level: "info" | "warn" | "err";
-	deletion_interval: number,
+	deletion_interval: number;
 	colors: [Colors, Colors];
 	loggers: LoggersNameType;
 };
