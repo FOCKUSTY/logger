@@ -5,7 +5,47 @@ import type { Config, SettingKeys, Settings } from "loggers.types";
 import path from "path";
 import fs from "fs";
 
+type RequiredType = "function"|"array"|"object"|"number"|"string"|"undefined"
+
+class Types {
+	private readonly _required: RequiredType;
+
+	public constructor(required: RequiredType) {
+		this._required = required;
+	};
+
+	public execute(arg: any): [boolean, string, string] {
+		const argtype = typeof arg;
+
+		if (this._required === "array") {
+			return [
+				Array.isArray(arg),
+				argtype,
+				this._required
+			];
+		} else {
+			return [
+				argtype === this._required,
+				argtype,
+				this._required
+			];
+		}
+	}
+}
+
 const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
+
+const types: Required<Record<SettingKeys, Types>> = {
+	dir: new Types("string"),
+	level: new Types("string"),
+	deletion_interval: new Types("number"),
+	colors: new Types("array"),
+	loggers: new Types("object")
+};
+
+const numbers: Partial<Record<SettingKeys, [number, number]>> = {
+	deletion_interval: [0, 31]
+};
 
 const allowed: Partial<Record<SettingKeys, string[]>> = {
 	level: ["info", "warn", "err"]
@@ -13,7 +53,7 @@ const allowed: Partial<Record<SettingKeys, string[]>> = {
 
 const tutorials: Partial<Record<SettingKeys, string>> = {
 	dir: "this value is a your root dir",
-	level: "",
+	level: "this values is level of logging",
 	deletion_interval:
 		"this value can be a rational number (0, 1, 2...) and this value is the number of days after which the file should be deleted",
 	colors: "this value is a tuple of two colors, first - logger color, second - text color",
@@ -96,6 +136,12 @@ class Validator {
 			case "colors":
 				const values = value.map((v) => v);
 
+				if (value.length !== 2) {
+					this.PrintErrorFixing().then(() => {
+						throw new Error("colors must have two element");
+					});
+				};
+
 				for (const i in values) {
 					if (!Object.values(Colors).includes(values[i])) {
 						this.PrintErrorFixing().then(() => {
@@ -124,6 +170,9 @@ class Validator {
 				Object.keys(value).forEach((k) => {
 					const colors = value[k].colors;
 
+					if (colors.length !== 2)
+						throw new Error(`A logger "${k}" must have two colors`);
+
 					for (const i in colors) {
 						if (!Object.values(Colors).includes(colors[i])) {
 							throw new Error(`${colors[i]} in enum Colors is not defined`);
@@ -140,6 +189,29 @@ class Validator {
 		}
 	};
 
+	private readonly NumberValidator = () => {
+		const { key, value } = { key: this._key, value: this._value };
+
+		if (!value) return this._default;
+
+		if (Array.isArray(value)) return this.ArrayValidator();
+		if (typeof value === "object") return this.ObjectValidator();
+
+		if (!numbers[key])
+			throw new Error(`"${key}" in number settings is not defind (Library error)`);
+
+		if (Number.isNaN(Number(value)))
+			throw new Error(`Value at "${key}" is not a number`);
+
+		if (Number(value) < numbers[key][0])
+			throw new Error(`Value at "${key}" must be more than ${numbers[key][0]} (Your: ${value})`);
+
+		if (Number(value) > numbers[key][1])
+			throw new Error(`Value at "${key}" must be less than ${numbers[key][1]} (Your: ${value})`);
+
+		return value;
+	};
+
 	private readonly AllowedValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
@@ -149,6 +221,7 @@ class Validator {
 
 		if (Array.isArray(value)) return this.ArrayValidator();
 		if (typeof value === "object") return this.ObjectValidator();
+		if (typeof value === "number") return this.NumberValidator();
 
 		if (!allowed[key].includes(value.toString())) {
 			console.log(
@@ -170,6 +243,11 @@ class Validator {
 	public readonly init = (): Settings => {
 		const { key, value } = { key: this._key, value: this._value };
 
+		const valueType = types[key].execute(value);
+
+		if (!valueType[0])
+			throw new Error(`Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`);
+
 		if (!value) {
 			console.log(
 				Colors.brightYellow +
@@ -189,9 +267,10 @@ class Validator {
 		}
 
 		if (Object.keys(allowed).includes(key)) return this.AllowedValidator();
-
+		
 		if (Array.isArray(value)) return this.ArrayValidator();
 		if (typeof value === "object") return this.ObjectValidator();
+		if (typeof value === "number") return this.NumberValidator();
 
 		return value;
 	};

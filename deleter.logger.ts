@@ -3,7 +3,11 @@ import Formatter from "f-formatter";
 import path from "node:path";
 import fs from "node:fs";
 
-const week = 60 * 60 * 24 * 7;
+import Configurator from "./configurator";
+
+const { config } = new Configurator()
+
+const day = 60 * 60 * 24;
 
 const format: any = "*&00.00.0000";
 const filter = new RegExp(
@@ -50,7 +54,7 @@ class Deleter {
 						day: Number(time[2])
 					},
 					"seconds"
-				) + week;
+				) + day * config.deletion_interval;
 
 			try {
 				if (now > fileTime) {
