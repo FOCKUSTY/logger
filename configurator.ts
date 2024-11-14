@@ -243,11 +243,6 @@ class Validator {
 	public readonly init = (): Settings => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		const valueType = types[key].execute(value);
-
-		if (!valueType[0])
-			throw new Error(`Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`);
-
 		if (!value) {
 			console.log(
 				Colors.brightYellow +
@@ -265,6 +260,11 @@ class Validator {
 
 			return this._default;
 		}
+
+		const valueType = types[key].execute(value);
+
+		if (!valueType[0])
+			throw new Error(`Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`);
 
 		if (Object.keys(allowed).includes(key)) return this.AllowedValidator();
 		
