@@ -10,12 +10,13 @@ import { join, parse } from "path";
 import { existsSync, writeFileSync } from "fs";
 
 const formatter = new Formatter();
+const cache: LoggersNameType = {
+	Success: { name: "Success", colors: [Colors.red, Colors.green] },
+	Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
+};
 
 class LoggersNames {
-	private readonly _standart: LoggersNameType = {
-		Success: { name: "Success", colors: [Colors.red, Colors.green] },
-		Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
-	};
+	private readonly _standart: LoggersNameType = cache;
 
 	private readonly _default_path = join("./loggers.json");
 	private readonly _path = this._default_path;
@@ -47,6 +48,7 @@ class LoggersNames {
 
 		for (const key in names) {
 			output[key] = names[key];
+			cache[key] = names[key];
 		}
 
 		for (const key in existingNames) {
@@ -58,8 +60,10 @@ class LoggersNames {
 				value.colors.toString() != [Colors.reset, Colors.reset].toString()
 			) {
 				output[key] = value;
+				cache[key] = value;
 			} else {
 				output[key] = existingValue;
+				cache[key] = existingValue;
 			}
 		}
 
@@ -79,7 +83,7 @@ class LoggersNames {
 	};
 
 	public readonly GetNames = (): LoggersNameType => {
-		if (!existsSync(this._path)) return this._standart;
+		if (!existsSync(this._path)) return cache;
 
 		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);
