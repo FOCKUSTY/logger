@@ -1,7 +1,10 @@
 import { Colors } from "f-formatter/colors";
 import Formatter from "f-formatter";
 
-import type { Config, LoggersNameType } from "./loggers.types";
+import type {
+	Config,
+	LoggersNameType
+} from "./loggers.types";
 
 import { join, parse } from "path";
 import { existsSync, writeFileSync } from "fs";
@@ -9,15 +12,17 @@ import { existsSync, writeFileSync } from "fs";
 const formatter = new Formatter();
 
 class LoggersNames {
-	private readonly _standart = {
+	private readonly _standart: LoggersNameType = {
 		Success: { name: "Success", colors: [Colors.red, Colors.green] },
 		Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
 	};
 
 	private readonly _default_path = join("./loggers.json");
 	private readonly _path = this._default_path;
+	private readonly _create_file: boolean
 
-	public constructor() {
+	public constructor(createFile: boolean) {
+		this._create_file = createFile;
 		this._path = this.ChoosePath();
 	}
 
@@ -25,11 +30,12 @@ class LoggersNames {
 		if (existsSync(join("./.loggercfg"))) return join("./.loggercfg");
 		else if (existsSync(this._default_path)) return this._default_path;
 		else {
-			writeFileSync(
-				this._default_path,
-				JSON.stringify(this._standart, undefined, 4),
-				"utf-8"
-			);
+			if (this._create_file)
+				writeFileSync(
+					this._default_path,
+					JSON.stringify(this._standart, undefined, 4),
+					"utf-8"
+				);
 
 			return this._default_path;
 		}
@@ -57,6 +63,9 @@ class LoggersNames {
 			}
 		}
 
+		if (!this._create_file)
+			return names;
+
 		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);
 			file.loggers = output;
@@ -69,7 +78,9 @@ class LoggersNames {
 		return names;
 	};
 
-	public readonly GetNames = () => {
+	public readonly GetNames = (): LoggersNameType => {
+		if (!existsSync(this._path)) return this._standart;
+
 		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);
 

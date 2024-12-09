@@ -7,9 +7,10 @@ import LoggersNames from "./loggers.names";
 
 import FileLogger from "./file.logger";
 
-const formatter = new Formatter();
-const loggersNames = new LoggersNames();
 const { config } = new Configurator();
+
+const formatter = new Formatter();
+const loggersNames = new LoggersNames(config.logging);
 
 class InitLogger {
 	private readonly _name: string;
@@ -33,7 +34,8 @@ class InitLogger {
 		if (Levels[config.level] <= Levels[level])
 			console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
 
-		this._log.writeFile(text);
+		if (config.logging)
+			this._log.writeFile(text);
 
 		return txt;
 	};

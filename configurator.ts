@@ -5,7 +5,7 @@ import type { Config, SettingKeys, Settings } from "loggers.types";
 import path from "path";
 import fs from "fs";
 
-type RequiredType = "function"|"array"|"object"|"number"|"string"|"undefined"
+type RequiredType = "function"|"array"|"object"|"number"|"string"|"undefined"|"boolean"
 
 class Types {
 	private readonly _required: RequiredType;
@@ -36,6 +36,7 @@ class Types {
 const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
 const types: Required<Record<SettingKeys, Types>> = {
+	logging: new Types("boolean"),
 	dir: new Types("string"),
 	level: new Types("string"),
 	deletion_interval: new Types("number"),
@@ -61,6 +62,7 @@ const tutorials: Partial<Record<SettingKeys, string>> = {
 };
 
 const settings: Config = {
+	logging: false,
 	dir: "./",
 	level: "info",
 	deletion_interval: 7,
@@ -345,8 +347,19 @@ class Configurator {
 		}
 	}
 
+	private Permissions(): boolean {
+		if (this._create_file)
+			return true;
+
+		if (fs.existsSync(this._path))
+			return true;
+
+		return false;
+	};
+
 	private readonly init = () => {
-		this.Read();
+		if (this.Permissions())
+			this.Read();
 	};
 
 	get config(): Config {
