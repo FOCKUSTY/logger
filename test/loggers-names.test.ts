@@ -2,7 +2,7 @@ import type { LoggersNameType } from "loggers.types";
 import { Colors } from "f-formatter/colors";
 import LoggersNames from "loggers.names";
 
-const loggersNames = new LoggersNames();
+const loggersNames = new LoggersNames(true);
 
 describe("Loggers names", () => {
 	(() => {
