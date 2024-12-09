@@ -1,0 +1,26 @@
+{
+    "logging": false,
+    "dir": "./",
+    "level": "info",
+    "deletion_interval": 7,
+    "colors": [
+        "\u001b[0m",
+        "\u001b[0m"
+    ],
+    "loggers": {
+        "Fail": {
+            "name": "Fail",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        },
+        "Success": {
+            "name": "Success",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        }
+    }
+}
