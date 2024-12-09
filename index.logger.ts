@@ -21,8 +21,7 @@ class InitLogger {
 		this._name = name;
 		this._colors = colors;
 
-		if (config.logging)
-			this._log = new FileLogger(dir);
+		if (config.logging) this._log = new FileLogger(dir);
 	}
 
 	public readonly execute = (
@@ -35,8 +34,7 @@ class InitLogger {
 		if (Levels[config.level] <= Levels[level])
 			console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
 
-		if (config.logging && this._log)
-			this._log.writeFile(text);
+		if (config.logging && this._log) this._log.writeFile(text);
 
 		return txt;
 	};

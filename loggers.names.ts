@@ -1,10 +1,7 @@
 import { Colors } from "f-formatter/colors";
 import Formatter from "f-formatter";
 
-import type {
-	Config,
-	LoggersNameType
-} from "./loggers.types";
+import type { Config, LoggersNameType } from "./loggers.types";
 
 import { join, parse } from "path";
 import { existsSync, writeFileSync } from "fs";
@@ -20,7 +17,7 @@ class LoggersNames {
 
 	private readonly _default_path = join("./loggers.json");
 	private readonly _path = this._default_path;
-	private readonly _create_file: boolean
+	private readonly _create_file: boolean;
 
 	public constructor(createFile: boolean) {
 		this._create_file = createFile;
@@ -67,8 +64,7 @@ class LoggersNames {
 			}
 		}
 
-		if (!this._create_file && !existsSync(this._path))
-			return names;
+		if (!this._create_file && !existsSync(this._path)) return names;
 
 		if (parse(this._path).base === ".loggercfg") {
 			const file: Config = formatter.FromJSONWithPath(this._path);

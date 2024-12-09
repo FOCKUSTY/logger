@@ -11,13 +11,25 @@ export enum Levels {
 	"err" = 3
 }
 
-export type Settings = number | string | boolean | null | [Colors, Colors] | LoggersNameType;
-export type SettingKeys = "dir" | "level" | "deletion_interval" | "colors" | "loggers" | "logging";
+export type Settings =
+	| number
+	| string
+	| boolean
+	| null
+	| [Colors, Colors]
+	| LoggersNameType;
+export type SettingKeys =
+	| "dir"
+	| "level"
+	| "deletion_interval"
+	| "colors"
+	| "loggers"
+	| "logging";
 
 export type Config = {
 	[key: string]: Settings;
 
-	logging: boolean,
+	logging: boolean;
 	dir: string;
 	level: "info" | "warn" | "err";
 	deletion_interval: number;
