@@ -67,7 +67,7 @@ class LoggersNames {
 			}
 		}
 
-		if (!this._create_file)
+		if (!this._create_file && !existsSync(this._path))
 			return names;
 
 		if (parse(this._path).base === ".loggercfg") {
