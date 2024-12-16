@@ -1,7 +1,7 @@
 import Formatter from "f-formatter";
 
-import path from "node:path";
-import fs from "node:fs";
+import path from "path";
+import fs from "fs";
 
 import Configurator from "./configurator";
 

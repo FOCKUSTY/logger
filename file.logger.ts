@@ -1,8 +1,9 @@
 import Formatter from "f-formatter";
-import Deleter from "./deleter.logger";
 
-import path from "node:path";
-import fs from "node:fs";
+import path from "path";
+import fs from "fs";
+
+import Deleter from "./deleter.logger";
 
 const cache = new Map();
 const formatter = new Formatter();

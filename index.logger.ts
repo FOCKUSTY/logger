@@ -26,10 +26,10 @@ class InitLogger {
 
 	public readonly execute = (
 		text: string,
-		color?: Colors,
+		color: Colors = this._colors[1],
 		level: LevelType = "info"
 	): string => {
-		const txt = formatter.Color(text, color ? color : this._colors[1]);
+		const txt = formatter.Color(text, color);
 
 		if (Levels[config.level] <= Levels[level])
 			console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
