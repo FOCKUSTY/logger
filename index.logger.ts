@@ -119,7 +119,7 @@ class Logger<T extends string> {
 
 	public readonly execute = (
 		text: string,
-		data?: { color?: Colors; level: LevelType }
+		data?: { color?: Colors; level?: LevelType }
 	): string => {
 		return this._logger.execute(text, data?.color, data?.level);
 	};

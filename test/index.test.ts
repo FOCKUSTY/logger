@@ -1,9 +1,9 @@
 import Test from "./test.class";
 
-import Logger, { Colors as c } from "index";
+import Logger, { Colors as c } from "../index";
 
 const logger = new Logger("Tester");
-new Logger("Commands", [c.brightYellow, c.magenta]);
+new Logger("Commands", { colors: [c.brightYellow, c.magenta] });
 
 describe("Logger", () => {
 	(() => {
@@ -16,7 +16,7 @@ describe("Logger", () => {
 			],
 			[
 				c.magenta + "Saving..." + c.reset,
-				new Logger("Saver", [c.magenta, c.magenta]).execute("Saving...")
+				new Logger("Saver", {colors: [c.magenta, c.magenta]}).execute("Saving...")
 			]
 		];
 
@@ -24,9 +24,9 @@ describe("Logger", () => {
 	})();
 	(() => {
 		const tests: [string, string][] = [
-			[c.magenta + "Маджента" + c.reset, logger.execute("Маджента", c.magenta)],
-			[c.bgGreen + "ГринСкрин" + c.reset, logger.execute("ГринСкрин", c.bgGreen)],
-			[c.black + "Тоталблэк" + c.reset, logger.execute("Тоталблэк", c.black)],
+			[c.magenta + "Маджента" + c.reset, logger.execute("Маджента", { color: c.magenta })],
+			[c.bgGreen + "ГринСкрин" + c.reset, logger.execute("ГринСкрин", { color: c.bgGreen })],
+			[c.black + "Тоталблэк" + c.reset, logger.execute("Тоталблэк", { color: c.black })],
 			[
 				c.magenta + "Loading..." + c.reset,
 				new Logger("Saver").execute("Loading...")

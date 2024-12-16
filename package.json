@@ -1,6 +1,6 @@
 {
 	"name": "fock-logger",
-	"version": "1.0.0",
+	"version": "1.0.0a",
 	"description": "Simple logger for your pet-project",
 	"main": "index.js",
 	"scripts": {
