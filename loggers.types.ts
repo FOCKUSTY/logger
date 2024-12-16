@@ -38,28 +38,28 @@ export type Config = {
 };
 
 export type RequiredType =
-    | "function"
-    | "array"
-    | "object"
-    | "number"
-    | "string"
-    | "undefined"
-    | "boolean";
+	| "function"
+	| "array"
+	| "object"
+	| "number"
+	| "string"
+	| "undefined"
+	| "boolean";
 
 export class Types {
-    private readonly _required: RequiredType;
+	private readonly _required: RequiredType;
 
-    public constructor(required: RequiredType) {
-        this._required = required;
-    }
+	public constructor(required: RequiredType) {
+		this._required = required;
+	}
 
-    public execute(arg: any): [boolean, string, string] {
-        const argtype = typeof arg;
+	public execute(arg: any): [boolean, string, string] {
+		const argtype = typeof arg;
 
-        if (this._required === "array") {
-            return [Array.isArray(arg), argtype, this._required];
-        } else {
-            return [argtype === this._required, argtype, this._required];
-        }
-    }
+		if (this._required === "array") {
+			return [Array.isArray(arg), argtype, this._required];
+		} else {
+			return [argtype === this._required, argtype, this._required];
+		}
+	}
 }

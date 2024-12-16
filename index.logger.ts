@@ -17,7 +17,15 @@ class InitLogger {
 	private readonly _colors: [Colors, Colors];
 	private readonly _log?: FileLogger;
 
-	public constructor(dir: string, data: { name: string, colors: [Colors, Colors], filePath?: string, prefix?: string }) {
+	public constructor(
+		dir: string,
+		data: {
+			name: string;
+			colors: [Colors, Colors];
+			filePath?: string;
+			prefix?: string;
+		}
+	) {
 		this._name = data.name;
 		this._colors = data.colors;
 
@@ -53,12 +61,20 @@ const loggers: { [key: LoggerName<string>]: InitLogger } = {};
 class Logger<T extends string> {
 	private readonly _name: LoggerName<T>;
 	private readonly _dir: string;
-	private readonly _fileLog?: { filePath?: string, prefix?: string };
+	private readonly _fileLog?: { filePath?: string; prefix?: string };
 
 	private _colors: [Colors, Colors];
 	private _logger: InitLogger;
 
-	public constructor(name: LoggerName<T>, data?: { colors?: [Colors, Colors], dir?: string, filePath?: string, prefix?: string }) {
+	public constructor(
+		name: LoggerName<T>,
+		data?: {
+			colors?: [Colors, Colors];
+			dir?: string;
+			filePath?: string;
+			prefix?: string;
+		}
+	) {
 		this._dir = data?.dir || config.dir;
 		this._name = name;
 		this._fileLog = { filePath: data?.filePath, prefix: data?.prefix };
@@ -73,12 +89,19 @@ class Logger<T extends string> {
 	}
 
 	private readonly init = (): InitLogger => {
-		this._logger = new InitLogger(this._dir, { name: this._name, colors: this._colors, ...this._fileLog });
+		this._logger = new InitLogger(this._dir, {
+			name: this._name,
+			colors: this._colors,
+			...this._fileLog
+		});
 
 		for (const key in loggersNames.GetNames()) {
 			const logger = loggersNames.GetNames()[key];
 
-			loggers[key] = new InitLogger(this._dir, { name: logger.name, colors: logger.colors });
+			loggers[key] = new InitLogger(this._dir, {
+				name: logger.name,
+				colors: logger.colors
+			});
 		}
 
 		loggers[this._name] = this._logger;
@@ -94,7 +117,10 @@ class Logger<T extends string> {
 		return this._logger;
 	};
 
-	public readonly execute = (text: string, data?: { color?: Colors, level: LevelType }): string => {
+	public readonly execute = (
+		text: string,
+		data?: { color?: Colors; level: LevelType }
+	): string => {
 		return this._logger.execute(text, data?.color, data?.level);
 	};
 }
