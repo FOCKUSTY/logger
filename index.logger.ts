@@ -51,7 +51,7 @@ class InitLogger {
 
 		if (Levels[config.level] <= Levels[data.level]) {
 			if (typeof txt === "string") console.log(name, txt);
-			else console.log(data.color, ...txt, Colors.reset);
+			else console.log(name + data.color, ...txt, Colors.reset);
 		};
 
 		if ((config.logging && this._log) || data.write) {
