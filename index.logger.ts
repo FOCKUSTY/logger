@@ -15,7 +15,7 @@ const loggersNames = new LoggersNames(config.logging);
 class InitLogger {
 	private readonly _name: string;
 	private readonly _colors: [Colors, Colors];
-	private readonly _log?: FileLogger;
+	private readonly _log: FileLogger;
 
 	public constructor(
 		dir: string,
@@ -29,23 +29,33 @@ class InitLogger {
 		this._name = data.name;
 		this._colors = data.colors;
 
-		if (config.logging) this._log = new FileLogger(dir, data?.filePath, data?.prefix);
+		this._log = new FileLogger(dir, data?.filePath, data?.prefix, config.logging);
 	}
 
 	public readonly execute = (
-		text: string,
-		color: Colors = this._colors[1],
-		level: LevelType = "info"
+		text: string, data: {
+			color: Colors,
+			level: LevelType,
+			write: boolean
+		} = {
+			color: this._colors[1],
+			level: "info",
+			write: config.logging
+		}
 	): string => {
-		const txt = formatter.Color(text, color);
+		const txt = formatter.Color(text, data.color);
 
-		if (Levels[config.level] <= Levels[level])
+		if (Levels[config.level] <= Levels[data.level])
 			console.log(formatter.Color(this._name, this._colors[0]) + ":", txt);
 
-		if (config.logging && this._log) this._log.writeFile(text);
+		if ((config.logging && this._log) || data.write) this._log.writeFile(text);
 
 		return txt;
 	};
+
+	public get write() {
+		return this._log.writeFile;
+	}
 
 	public get colors(): [Colors, Colors] {
 		return this._colors;
@@ -61,6 +71,9 @@ const loggers: { [key: LoggerName<string>]: InitLogger } = {};
 class Logger<T extends string> {
 	private readonly _name: LoggerName<T>;
 	private readonly _dir: string;
+	private readonly _level: LevelType = "info";
+	private readonly _write: boolean = config.logging;
+	
 	private readonly _fileLog?: { filePath?: string; prefix?: string };
 
 	private _colors: [Colors, Colors];
@@ -68,16 +81,26 @@ class Logger<T extends string> {
 
 	public constructor(
 		name: LoggerName<T>,
-		data?: {
+		data: {
 			colors?: [Colors, Colors];
-			dir?: string;
 			filePath?: string;
 			prefix?: string;
+
+			dir?: string;
+			level?: LevelType;
+			write?: boolean
+		} = {
+			dir: config.dir,
+			level: "info",
+			write: config.logging
 		}
 	) {
-		this._dir = data?.dir || config.dir;
 		this._name = name;
-		this._fileLog = { filePath: data?.filePath, prefix: data?.prefix };
+		this._fileLog = data;
+
+		this._dir = data.dir || config.dir;
+		this._level = data.level || "info";
+		this._write = data.write || config.logging;
 
 		this._colors = data?.colors
 			? data?.colors
@@ -119,9 +142,17 @@ class Logger<T extends string> {
 
 	public readonly execute = (
 		text: string,
-		data?: { color?: Colors; level?: LevelType }
+		data?: {
+			color?: Colors;
+			level?: LevelType;
+			write?: boolean
+		}
 	): string => {
-		return this._logger.execute(text, data?.color, data?.level);
+		return this._logger.execute(text, {
+			color: data?.color || this._colors[1],
+			level: data?.level || this._level,
+			write: data?.write || this._write
+		});
 	};
 }
 

@@ -14,23 +14,29 @@ class Log {
 	private readonly _date = formatter.date.Date(new Date(), "dd.MM.yyyy");
 	private readonly _file_path: string = "";
 	private readonly _deleter: Deleter;
+	private readonly _hello: string;
+	private readonly _init: boolean = true;
 
 	private _cache: string = "";
 
-	public constructor(dir: string, filePath?: string, prefix?: string) {
+	public constructor(dir: string, filePath?: string, prefix?: string, init: boolean = true) {
 		this._prefix = prefix ? prefix + "-" : "";
 
 		this._file_path = filePath
 			? filePath
 			: path.join(dir, "log", this._prefix + this._date) + ".log";
 
+		this._init = init;
 		this._dir = path.join(dir);
 		this._deleter = new Deleter(dir);
+		this._hello = `====---- Hello! This is log file of ${this._date} ! ----====`;
 
-		this.init();
+		if (init) {
+			this.init();
 
-		this._cache = this.ReadFile();
-		cache.set(this._file_path, this._cache);
+			this._cache = this.ReadFile();
+			cache.set(this._file_path, this._cache);
+		}
 	}
 
 	private CreateFile() {
@@ -39,10 +45,7 @@ class Log {
 				.readdirSync(path.join(this._dir, "log"))
 				.includes(this._prefix + this._date + ".log")
 		) {
-			fs.writeFileSync(
-				this._file_path,
-				`====---- Hello! This is log file of ${this._date} ! ----====`
-			);
+			fs.writeFileSync(this._file_path, this._hello);
 		}
 	}
 
@@ -73,9 +76,16 @@ class Log {
 	};
 
 	public writeFile(text: string) {
+		if (!this._init) {
+			this.init();
+
+			this._cache = this.ReadFile();
+			cache.set(this._file_path, this._cache);
+		};
+
 		cache.set(
 			this._file_path,
-			cache.get(this._file_path) +
+			(cache.get(this._file_path) || this._hello) +
 				"\n" +
 				"[" +
 				formatter.date.Date(new Date(), "HH:mm:ss") +
