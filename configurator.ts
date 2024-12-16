@@ -364,7 +364,7 @@ class Configurator {
 		if (this.HasPermissions()) this.Read();
 	};
 
-	get config(): Config {
+	public get config(): Config {
 		return this._config;
 	}
 }

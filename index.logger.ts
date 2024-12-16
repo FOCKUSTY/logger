@@ -17,7 +17,7 @@ class InitLogger {
 	private readonly _colors: [Colors, Colors];
 	private readonly _log?: FileLogger;
 
-	constructor(dir: string, name: string, colors: [Colors, Colors]) {
+	public constructor(dir: string, name: string, colors: [Colors, Colors]) {
 		this._name = name;
 		this._colors = colors;
 
@@ -39,11 +39,11 @@ class InitLogger {
 		return txt;
 	};
 
-	get colors(): [Colors, Colors] {
+	public get colors(): [Colors, Colors] {
 		return this._colors;
 	}
 
-	get name(): string {
+	public get name(): string {
 		return this._name;
 	}
 }
@@ -57,7 +57,7 @@ class Logger<T extends string> {
 	private _colors: [Colors, Colors];
 	private _logger: InitLogger;
 
-	constructor(name: LoggerName<T>, colors?: [Colors, Colors], dir?: string) {
+	public constructor(name: LoggerName<T>, colors?: [Colors, Colors], dir?: string) {
 		this._dir = dir || config.dir;
 		this._name = name;
 
