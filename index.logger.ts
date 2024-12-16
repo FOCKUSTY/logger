@@ -141,6 +141,10 @@ class Logger<T extends string> {
 		return this._logger;
 	};
 
+	public get write() {
+		return this._logger.write;
+	};
+
 	public readonly execute = (
 		text: string,
 		data?: {
