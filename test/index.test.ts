@@ -16,7 +16,9 @@ describe("Logger", () => {
 			],
 			[
 				c.magenta + "Saving..." + c.reset,
-				new Logger("Saver", {colors: [c.magenta, c.magenta]}).execute("Saving...")
+				new Logger("Saver", { colors: [c.magenta, c.magenta] }).execute(
+					"Saving..."
+				)
 			]
 		];
 
@@ -24,9 +26,18 @@ describe("Logger", () => {
 	})();
 	(() => {
 		const tests: [string, string][] = [
-			[c.magenta + "Маджента" + c.reset, logger.execute("Маджента", { color: c.magenta })],
-			[c.bgGreen + "ГринСкрин" + c.reset, logger.execute("ГринСкрин", { color: c.bgGreen })],
-			[c.black + "Тоталблэк" + c.reset, logger.execute("Тоталблэк", { color: c.black })],
+			[
+				c.magenta + "Маджента" + c.reset,
+				logger.execute("Маджента", { color: c.magenta })
+			],
+			[
+				c.bgGreen + "ГринСкрин" + c.reset,
+				logger.execute("ГринСкрин", { color: c.bgGreen })
+			],
+			[
+				c.black + "Тоталблэк" + c.reset,
+				logger.execute("Тоталблэк", { color: c.black })
+			],
 			[
 				c.magenta + "Loading..." + c.reset,
 				new Logger("Saver").execute("Loading...")
@@ -40,7 +51,6 @@ describe("Logger", () => {
 		// Working:
 		// const fileLog = new FileLog("./", undefined, undefined, false);
 		// fileLog.writeFile("Hello!");
-
 		// Working:
 		// const log = new Logger("Tester1", { dir: "./", write: true, level: "info" });
 		// log.execute("Hello1");

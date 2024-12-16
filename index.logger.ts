@@ -33,10 +33,11 @@ class InitLogger {
 	}
 
 	public readonly execute = (
-		text: string, data: {
-			color: Colors,
-			level: LevelType,
-			write: boolean
+		text: string,
+		data: {
+			color: Colors;
+			level: LevelType;
+			write: boolean;
 		} = {
 			color: this._colors[1],
 			level: "info",
@@ -73,7 +74,7 @@ class Logger<T extends string> {
 	private readonly _dir: string;
 	private readonly _level: LevelType = "info";
 	private readonly _write: boolean = config.logging;
-	
+
 	private readonly _fileLog?: { filePath?: string; prefix?: string };
 
 	private _colors: [Colors, Colors];
@@ -88,7 +89,7 @@ class Logger<T extends string> {
 
 			dir?: string;
 			level?: LevelType;
-			write?: boolean
+			write?: boolean;
 		} = {
 			dir: config.dir,
 			level: "info",
@@ -145,7 +146,7 @@ class Logger<T extends string> {
 		data?: {
 			color?: Colors;
 			level?: LevelType;
-			write?: boolean
+			write?: boolean;
 		}
 	): string => {
 		return this._logger.execute(text, {

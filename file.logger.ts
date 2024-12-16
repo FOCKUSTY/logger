@@ -19,7 +19,12 @@ class Log {
 
 	private _cache: string = "";
 
-	public constructor(dir: string, filePath?: string, prefix?: string, init: boolean = true) {
+	public constructor(
+		dir: string,
+		filePath?: string,
+		prefix?: string,
+		init: boolean = true
+	) {
 		this._prefix = prefix ? prefix + "-" : "";
 
 		this._file_path = filePath
@@ -81,7 +86,7 @@ class Log {
 
 			this._cache = this.ReadFile();
 			cache.set(this._file_path, this._cache);
-		};
+		}
 
 		cache.set(
 			this._file_path,
