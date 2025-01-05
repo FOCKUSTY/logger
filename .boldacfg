@@ -1,0 +1,33 @@
+{
+    "dirs": [
+        "assets"
+    ],
+    
+    "fsource": [
+        ".prettierrc",
+        ".gitignore",
+        "README.md",
+        "package.json",
+        "LICENSE",
+
+        [ "assets", "logger.banner.png" ],
+        [ "assets", "logger.banner.svg" ],
+        [ "assets", "logger.logo.svg" ],
+        [ "assets", "logger.logo.png" ]
+    ],
+    "fbuild": [
+        ".prettierrc",
+        ".gitignore",
+        "README.md",
+        "package.json",
+        "LICENSE",
+        
+        [ "assets", "logger.banner.png" ],
+        [ "assets", "logger.banner.svg" ],
+        [ "assets", "logger.logo.svg" ],
+        [ "assets", "logger.logo.png" ]
+    ],
+    
+    "build": "../dist/",
+    "source": "./"
+}

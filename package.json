@@ -1,27 +1,39 @@
 {
 	"name": "fock-logger",
-	"version": "0.4.2-a",
+	"version": "2.0.5",
 	"description": "Simple logger for your pet-project",
 	"main": "index.js",
 	"scripts": {
 		"watch:conf": "nodemon configurator.ts",
-		"build": "tsc && tsc --declaration && node ../dist/build.js",
+		"build": "tsc && tsc --declaration",
 		"watch:build": "nodemon build.ts",
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
 	},
 	"files": [
+		"data.d.ts",
+		"data.js",
+		
+		"validator.d.ts",
+		"validator.js",
+		
 		"loggers.names.d.ts",
 		"loggers.names.js",
+		
 		"loggers.types.d.ts",
 		"loggers.types.js",
+		
 		"deleter.logger.d.ts",
 		"deleter.logger.js",
+		
 		"index.logger.d.ts",
 		"index.logger.js",
+		
 		"file.logger.d.ts",
 		"file.logger.js",
+		
 		"configurator.d.ts",
 		"configurator.js",
+		
 		"index.d.ts",
 		"index.js"
 	],
@@ -57,7 +69,7 @@
 	},
 	"dependencies": {
 		"f-formatter": "^0.3.0-a",
-		"formatter": "^0.4.2",
+		"fock-builder": "^0.2.1",
 		"node": "^22.9.0"
 	}
 }
