@@ -5,30 +5,22 @@ import type { Config, SettingKeys, Settings } from "loggers.types";
 import path from "path";
 import fs from "fs";
 
-type RequiredType = "function"|"array"|"object"|"number"|"string"|"undefined"
+type RequiredType = "function" | "array" | "object" | "number" | "string" | "undefined";
 
 class Types {
 	private readonly _required: RequiredType;
 
 	public constructor(required: RequiredType) {
 		this._required = required;
-	};
+	}
 
 	public execute(arg: any): [boolean, string, string] {
 		const argtype = typeof arg;
 
 		if (this._required === "array") {
-			return [
-				Array.isArray(arg),
-				argtype,
-				this._required
-			];
+			return [Array.isArray(arg), argtype, this._required];
 		} else {
-			return [
-				argtype === this._required,
-				argtype,
-				this._required
-			];
+			return [argtype === this._required, argtype, this._required];
 		}
 	}
 }
@@ -140,7 +132,7 @@ class Validator {
 					this.PrintErrorFixing().then(() => {
 						throw new Error("colors must have two element");
 					});
-				};
+				}
 
 				for (const i in values) {
 					if (!Object.values(Colors).includes(values[i])) {
@@ -204,10 +196,14 @@ class Validator {
 			throw new Error(`Value at "${key}" is not a number`);
 
 		if (Number(value) < numbers[key][0])
-			throw new Error(`Value at "${key}" must be more than ${numbers[key][0]} (Your: ${value})`);
+			throw new Error(
+				`Value at "${key}" must be more than ${numbers[key][0]} (Your: ${value})`
+			);
 
 		if (Number(value) > numbers[key][1])
-			throw new Error(`Value at "${key}" must be less than ${numbers[key][1]} (Your: ${value})`);
+			throw new Error(
+				`Value at "${key}" must be less than ${numbers[key][1]} (Your: ${value})`
+			);
 
 		return value;
 	};
@@ -264,10 +260,12 @@ class Validator {
 		const valueType = types[key].execute(value);
 
 		if (!valueType[0])
-			throw new Error(`Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`);
+			throw new Error(
+				`Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`
+			);
 
 		if (Object.keys(allowed).includes(key)) return this.AllowedValidator();
-		
+
 		if (Array.isArray(value)) return this.ArrayValidator();
 		if (typeof value === "object") return this.ObjectValidator();
 		if (typeof value === "number") return this.NumberValidator();

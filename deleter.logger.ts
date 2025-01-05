@@ -5,7 +5,7 @@ import fs from "node:fs";
 
 import Configurator from "./configurator";
 
-const { config } = new Configurator()
+const { config } = new Configurator();
 
 const day = 60 * 60 * 24;
 
@@ -54,7 +54,8 @@ class Deleter {
 						day: Number(time[2])
 					},
 					"seconds"
-				) + day * config.deletion_interval;
+				) +
+				day * config.deletion_interval;
 
 			try {
 				if (now > fileTime) {
