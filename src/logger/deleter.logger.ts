@@ -3,7 +3,7 @@ import Formatter from "f-formatter";
 import path from "path";
 import fs from "fs";
 
-import Configurator from "./configurator";
+import Configurator from "../config/configurator";
 
 const { config } = new Configurator();
 

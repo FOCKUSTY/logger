@@ -1,4 +1,4 @@
-import type { LoggersNameType } from "loggers.types";
+import type { LoggersNameType } from "src/data/loggers.types";
 import { Colors } from "f-formatter/colors";
 import LoggersNames from "loggers.names";
 

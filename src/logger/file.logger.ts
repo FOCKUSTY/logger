@@ -3,7 +3,7 @@ import Formatter from "f-formatter";
 import path from "path";
 import fs from "fs";
 
-import Deleter from "./deleter.logger";
+import Deleter from "./src/utility/deleter.logger";
 
 const cache = new Map();
 const formatter = new Formatter();

@@ -15,13 +15,6 @@
                 "\u001b[42m"
             ]
         },
-        "Tester1": {
-            "name": "Tester1",
-            "colors": [
-                "\u001b[0m",
-                "\u001b[0m"
-            ]
-        },
         "Saver": {
             "name": "Saver",
             "colors": [
@@ -38,6 +31,13 @@
         },
         "Tester": {
             "name": "Tester",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        },
+        "Tester1": {
+            "name": "Tester1",
             "colors": [
                 "\u001b[0m",
                 "\u001b[0m"

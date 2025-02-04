@@ -1,9 +1,9 @@
 import Formatter, { Colors } from "f-formatter";
 
-import Configurator from "./configurator";
+import Configurator from "../config/configurator";
 
-import { LevelType, LoggerName, Levels } from "./loggers.types";
-import LoggersNames from "./loggers.names";
+import { LevelType, LoggerName, Levels } from "../data/loggers.types";
+import LoggersNames from "../data/loggers.names";
 
 import FileLogger from "./file.logger";
 

@@ -1,8 +1,8 @@
 import { Colors } from "f-formatter";
 
-import type { SettingKeys, Settings } from "./loggers.types";
+import type { SettingKeys, Settings } from "../data/loggers.types";
 
-import { allowed, numbers, settings, tutorials, types } from "./data";
+import { allowed, numbers, settings, tutorials, types } from "../data/data";
 
 class Validator {
 	private readonly _file: string;

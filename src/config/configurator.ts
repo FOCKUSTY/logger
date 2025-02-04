@@ -3,9 +3,9 @@ import Formatter, { Colors } from "f-formatter";
 import path from "path";
 import fs from "fs";
 
-import type { Config, SettingKeys, Settings } from "./loggers.types";
+import type { Config, SettingKeys, Settings } from "../data/loggers.types";
 
-import { settings } from "./data";
+import { settings } from "../data/data";
 import Validator from "./validator";
 
 class Configurator {
