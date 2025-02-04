@@ -10,29 +10,31 @@
 		"test": "ts-mocha --paths ./test/**/*.test.ts"
 	},
 	"files": [
-		"data.d.ts",
-		"data.js",
+		"src/data/data.d.ts",
+		"src/data/data.js",
+
+		"src/data/loggers.names.d.ts",
+		"src/data/loggers.names.js",
 		
-		"validator.d.ts",
-		"validator.js",
+		"src/data/loggers.types.d.ts",
+		"src/data/loggers.types.js",
 		
-		"loggers.names.d.ts",
-		"loggers.names.js",
 		
-		"loggers.types.d.ts",
-		"loggers.types.js",
+		"src/logger/deleter.logger.d.ts",
+		"src/logger/deleter.logger.js",
 		
-		"deleter.logger.d.ts",
-		"deleter.logger.js",
+		"src/logger/index.logger.d.ts",
+		"src/logger/index.logger.js",
 		
-		"index.logger.d.ts",
-		"index.logger.js",
+		"src/logger/file.logger.d.ts",
+		"src/logger/file.logger.js",
+
+
+		"src/config/validator.d.ts",
+		"src/config/validator.js",
 		
-		"file.logger.d.ts",
-		"file.logger.js",
-		
-		"configurator.d.ts",
-		"configurator.js",
+		"src/config/configurator.d.ts",
+		"src/config/configurator.js",
 		
 		"index.d.ts",
 		"index.js"
