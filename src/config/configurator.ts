@@ -38,11 +38,14 @@ class Configurator {
 
 			if (!Object.keys(settings).includes(key)) {
 				const str = `"${key}": ${config[key]}`;
-				const err = JSON
-					.stringify(config, undefined, 4)
-					.replaceAll(str, new Formatter().Color(str, Colors.bgMagenta));
+				const err = JSON.stringify(config, undefined, 4).replaceAll(
+					str,
+					new Formatter().Color(str, Colors.bgMagenta)
+				);
 
-				throw new Error("Unknown key: " + key + " change or delete it\nAt your file:\n" + err);
+				throw new Error(
+					"Unknown key: " + key + " change or delete it\nAt your file:\n" + err
+				);
 			}
 
 			this._config[key] = new Validator(
