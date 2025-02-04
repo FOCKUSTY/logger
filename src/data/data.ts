@@ -1,9 +1,9 @@
 import { Colors } from "f-formatter";
 
-import type { Config, SettingKeys } from "./loggers.types";
+import type { Config, ExtraneousConfig, SettingKeys } from "./loggers.types";
 import { Types } from "./loggers.types";
 
-const types: Required<Record<SettingKeys, Types>> = {
+export const types: Required<Record<SettingKeys, Types>> = {
 	logging: new Types("boolean"),
 	dir: new Types("string"),
 	level: new Types("string"),
@@ -12,15 +12,15 @@ const types: Required<Record<SettingKeys, Types>> = {
 	loggers: new Types("object")
 };
 
-const numbers: Partial<Record<SettingKeys, [number, number]>> = {
+export const numbers: Partial<Record<SettingKeys, [number, number]>> = {
 	deletion_interval: [0, 31]
 };
 
-const allowed: Partial<Record<SettingKeys, string[]>> = {
+export const allowed: Partial<Record<SettingKeys, string[]>> = {
 	level: ["info", "warn", "err"]
 };
 
-const tutorials: Partial<Record<SettingKeys, string>> = {
+export const tutorials: Partial<Record<SettingKeys, string>> = {
 	dir: "this value is a your root dir",
 	level: "this values is level of logging",
 	deletion_interval:
@@ -29,9 +29,13 @@ const tutorials: Partial<Record<SettingKeys, string>> = {
 	loggers: "this a your loggers, you can don't have to touch it"
 };
 
-const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
+export const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
-const settings: Config = {
+export const extraSettings: ExtraneousConfig = {
+	create_file: false
+};
+
+export const settings: Config = {
 	logging: false,
 	dir: "./",
 	level: "info",
@@ -48,5 +52,3 @@ const settings: Config = {
 		}
 	}
 };
-
-export { types, numbers, allowed, tutorials, defaultColors, settings };

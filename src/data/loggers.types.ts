@@ -11,6 +11,13 @@ export enum Levels {
 	"err" = 3
 }
 
+export type ExtraneousKeys = "create_file";
+export type ExtraneousSettings<Settings = null> = boolean | Settings;
+export type ExtraneousConfig<Settings = null> = {
+	[key: string]: ExtraneousSettings<Settings>;
+	create_file: boolean;
+}
+
 export type Settings =
 	| number
 	| string

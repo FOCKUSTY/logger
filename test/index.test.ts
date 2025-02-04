@@ -46,15 +46,4 @@ describe("Logger", () => {
 
 		new Test("colors", tests).execute();
 	})();
-	(() => {
-		/* Writing file */
-		// Working:
-		// const fileLog = new FileLog("./", undefined, undefined, false);
-		// fileLog.writeFile("Hello!");
-		// Working:
-		// const log = new Logger("Tester1", { dir: "./", write: true, level: "info" });
-		// log.execute("Hello1");
-		// log.execute("Hello2");
-		// log.execute("Hello3");
-	})();
 });

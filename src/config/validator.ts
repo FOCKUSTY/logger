@@ -174,7 +174,7 @@ class Validator {
 	public readonly init = (): Settings => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (!value) {
+		if (!value && value !== false) {
 			console.log(
 				Colors.brightYellow +
 					`Value at key: "${key}" is not defined\r\nThis value can be:\r\n` +

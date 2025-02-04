@@ -3,30 +3,52 @@ import Formatter, { Colors } from "f-formatter";
 import path from "path";
 import fs from "fs";
 
-import type { Config, SettingKeys, Settings } from "../data/loggers.types";
+import type {
+	Config,
+	SettingKeys,
+	Settings,
 
-import { settings } from "../data/data";
+	ExtraneousConfig as ExtraConfig
+} from "../data/loggers.types";
+
+import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
 class Configurator {
-	private readonly _dir: string = path.join("./");
+	private readonly _extra_config: ExtraConfig = extraSettings;
 	private readonly _config: Config = settings;
 	private readonly _path: string;
-	private readonly _create_file;
 
-	public constructor(createFile: boolean = false) {
-		this._path = path.join(this._dir, ".loggercfg");
-		this._create_file = createFile;
+	public constructor(config?: Partial<Config> & Partial<ExtraConfig>) {
+		this.Paste(config);
 
+		this._path = path.join(this._config.dir, ".loggercfg");
 		this.init();
+	}
+
+	private Paste(config?: Partial<Config> & Partial<ExtraConfig>) {
+		if (!config)
+			return;
+
+		for (const key in config) {
+			if (!config[key])
+				continue;
+
+			if (Object.keys(extraSettings).includes(key)) {
+				this._extra_config[key] = config[key];
+				continue;
+			};
+
+			this._config[key] = new Validator(key as SettingKeys, config[key], JSON.stringify(config, undefined, 4)).init();
+		};
 	}
 
 	private Create() {
 		try {
-			const file = JSON.stringify(settings, undefined, 4);
+			const file = JSON.stringify(this._config, undefined, 4);
 			fs.writeFileSync(this._path, file, "utf-8");
 
-			return settings;
+			return this._config;
 		} catch (err: any) {
 			throw new Error(err);
 		}
@@ -49,7 +71,7 @@ class Configurator {
 	}
 
 	private Read() {
-		if (!fs.existsSync(this._path) && this._create_file) this.Create();
+		if (!fs.existsSync(this._path) && this._extra_config.create_file) this.Create();
 
 		if (
 			fs.existsSync(this._path) &&
@@ -78,8 +100,7 @@ class Configurator {
 	}
 
 	private HasPermissions(): boolean {
-		if (this._create_file) return true;
-
+		if (this._extra_config.create_file) return true;
 		if (fs.existsSync(this._path)) return true;
 
 		return false;
