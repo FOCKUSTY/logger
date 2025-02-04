@@ -7,7 +7,6 @@ import type {
 	Config,
 	SettingKeys,
 	Settings,
-
 	ExtraneousConfig as ExtraConfig
 } from "../data/loggers.types";
 
@@ -27,20 +26,22 @@ class Configurator {
 	}
 
 	private Paste(config?: Partial<Config> & Partial<ExtraConfig>) {
-		if (!config)
-			return;
+		if (!config) return;
 
 		for (const key in config) {
-			if (!config[key])
-				continue;
+			if (!config[key]) continue;
 
 			if (Object.keys(extraSettings).includes(key)) {
 				this._extra_config[key] = config[key];
 				continue;
-			};
+			}
 
-			this._config[key] = new Validator(key as SettingKeys, config[key], JSON.stringify(config, undefined, 4)).init();
-		};
+			this._config[key] = new Validator(
+				key as SettingKeys,
+				config[key],
+				JSON.stringify(config, undefined, 4)
+			).init();
+		}
 	}
 
 	private Create() {
