@@ -50,6 +50,5 @@
                 "\u001b[0m"
             ]
         }
-    },
-    "createFile": true
+    }
 }
