@@ -7,7 +7,7 @@ new Logger("Commands", { colors: [c.brightYellow, c.magenta] });
 
 describe("Logger", () => {
 	(() => {
-		const tests: [string, string|any[]][] = [
+		const tests: [string, string | any[]][] = [
 			[c.reset + "Привет, Мир !" + c.reset, logger.execute("Привет, Мир !")],
 			[c.reset + "Hello, World !" + c.reset, logger.execute("Hello, World !")],
 			[
@@ -25,7 +25,7 @@ describe("Logger", () => {
 		new Test("nocolor", tests).execute();
 	})();
 	(() => {
-		const tests: [string, string|any[]][] = [
+		const tests: [string, string | any[]][] = [
 			[
 				c.magenta + "Маджента" + c.reset,
 				logger.execute("Маджента", { color: c.magenta })

@@ -45,19 +45,17 @@ class InitLogger {
 		}
 	): string | any[] => {
 		const name = formatter.Color(this._name, this._colors[0]) + ":";
-		const txt = typeof text === "string"
-			? formatter.Color(text, data.color)
-			: text;
+		const txt = typeof text === "string" ? formatter.Color(text, data.color) : text;
 
 		if (Levels[config.level] <= Levels[data.level]) {
 			if (typeof txt === "string") console.log(name, txt);
 			else console.log(name + data.color, ...txt, Colors.reset);
-		};
+		}
 
 		if ((config.logging && this._log) || data.write) {
 			if (typeof text === "string") this._log.writeFile(text);
 			else for (const msg of text) this._log.writeFile(msg);
-		};
+		}
 
 		return txt;
 	};
@@ -151,7 +149,7 @@ class Logger<T extends string> {
 
 	public get write() {
 		return this._logger.write;
-	};
+	}
 
 	public readonly execute = (
 		text: string | any[],
