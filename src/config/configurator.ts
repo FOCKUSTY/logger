@@ -14,18 +14,18 @@ import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
 class Configurator {
-	private readonly _extra_config: ExtraConfig = extraSettings;
+	private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
 	private readonly _config: Config = settings;
 	private readonly _path: string;
 
-	public constructor(config?: Partial<Config> & Partial<ExtraConfig>) {
+	public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
 		this.Paste(config);
 
 		this._path = path.join(this._config.dir, ".loggercfg");
 		this.init();
 	}
 
-	private Paste(config?: Partial<Config> & Partial<ExtraConfig>) {
+	private Paste(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
 		if (!config) return;
 
 		for (const key in config) {
