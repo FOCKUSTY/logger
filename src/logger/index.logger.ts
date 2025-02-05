@@ -165,6 +165,14 @@ class Logger<T extends string> {
 			write: data?.write || this._write
 		});
 	};
+
+	public get colors(): [Colors, Colors] {
+		return this._colors;
+	}
+
+	public get name(): LoggerName<T> {
+		return this._name;
+	};
 }
 
 export default Logger;
