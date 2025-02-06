@@ -26,7 +26,7 @@ class LoggersNames {
 	public constructor(createFile: boolean, dir: string = config.dir) {
 		this._dir = dir;
 		this._default_path = join(dir, "loggers.json");
-		
+
 		this._create_file = createFile;
 		this._path = this.ChoosePath();
 	}

@@ -54,7 +54,7 @@ class Log {
 			colors: data.colors || config.colors,
 			loggers: data.loggers || config.loggers
 		};
-		
+
 		this._init = init;
 		this._dir = path.join(dir);
 		this._deleter = new Deleter(dir);
@@ -88,7 +88,11 @@ class Log {
 
 	private ReadFile() {
 		return fs.readFileSync(
-			path.join(this._dir, "./log", this._config.prefix + this._date_string + ".log"),
+			path.join(
+				this._dir,
+				"./log",
+				this._config.prefix + this._date_string + ".log"
+			),
 			"utf-8"
 		);
 	}
@@ -115,7 +119,8 @@ class Log {
 		cache.set(
 			this._config.file_path,
 			(cache.get(this._config.file_path) || this._hello) +
-				`\n[${this._date.toISOString()}]: ` + text
+				`\n[${this._date.toISOString()}]: ` +
+				text
 		);
 
 		this.WriteFile();

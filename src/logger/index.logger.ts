@@ -65,9 +65,7 @@ class InitLogger {
 		const txt = typeof text === "string" ? formatter.Color(text, data.color) : text;
 		const date = `[${new Date().toISOString()}]`;
 
-		const start = this._config.date
-			? date + " "
-			: "";
+		const start = this._config.date ? date + " " : "";
 
 		if (Levels[config.level] <= Levels[data.level]) {
 			if (typeof txt === "string") console.log(start + name, txt);
@@ -194,7 +192,7 @@ class Logger<T extends string> {
 
 	public get name(): LoggerName<T> {
 		return this._name;
-	};
+	}
 }
 
 export default Logger;

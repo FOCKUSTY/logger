@@ -39,7 +39,7 @@ export type Config = {
 
 	logging: boolean;
 	dir: string;
-	date: boolean,
+	date: boolean;
 	level: "info" | "warn" | "err";
 	deletion_interval: number;
 	colors: [Colors, Colors];

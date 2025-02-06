@@ -26,7 +26,7 @@ class Configurator {
 		if (!(this._config.dir === "./" && filePath === "./")) {
 			if (this._config.dir !== "./") filePath = this._config.dir;
 			else this._config.dir = filePath;
-		};
+		}
 
 		this._path = path.join(this._config.dir, ".loggercfg");
 
