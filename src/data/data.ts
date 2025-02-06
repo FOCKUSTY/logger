@@ -7,6 +7,7 @@ export const types: Required<Record<SettingKeys, Types>> = {
 	logging: new Types("boolean"),
 	dir: new Types("string"),
 	level: new Types("string"),
+	date: new Types("boolean"),
 	deletion_interval: new Types("number"),
 	colors: new Types("array"),
 	loggers: new Types("object")
@@ -40,6 +41,7 @@ export const settings: Config = {
 	dir: "./",
 	level: "info",
 	deletion_interval: 7,
+	date: true,
 	colors: defaultColors,
 	loggers: {
 		"Fail": {

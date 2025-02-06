@@ -3,6 +3,7 @@
     "dir": "./",
     "level": "info",
     "deletion_interval": 7,
+    "date": true,
     "colors": [
         "\u001b[0m",
         "\u001b[0m"

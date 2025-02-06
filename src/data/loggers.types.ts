@@ -30,6 +30,7 @@ export type SettingKeys =
 	| "level"
 	| "deletion_interval"
 	| "colors"
+	| "date"
 	| "loggers"
 	| "logging";
 
@@ -38,6 +39,7 @@ export type Config = {
 
 	logging: boolean;
 	dir: string;
+	date: boolean,
 	level: "info" | "warn" | "err";
 	deletion_interval: number;
 	colors: [Colors, Colors];

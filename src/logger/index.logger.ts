@@ -15,6 +15,12 @@ class InitLogger {
 	private readonly _name: string;
 	private readonly _colors: [Colors, Colors];
 	private readonly _log: FileLogger;
+	private readonly _config: {
+		name: string;
+		colors: [Colors, Colors];
+		filePath?: string;
+		prefix?: string;
+	} & Config;
 
 	public constructor(
 		dir: string,
@@ -28,7 +34,19 @@ class InitLogger {
 		this._name = data.name;
 		this._colors = data.colors;
 
-		this._log = new FileLogger(dir, data?.filePath, data?.prefix, config.logging);
+		this._config = {
+			...data,
+			logging: data.logging || config.logging,
+			dir: data.dir || config.dir,
+			level: data.level || config.level,
+			deletion_interval: data.deletion_interval || config.deletion_interval,
+			date: data.date || config.date,
+			date_format: data.date_format || config.date_format,
+			colors: data.colors || config.colors,
+			loggers: data.loggers || config.loggers
+		};
+
+		this._log = new FileLogger(dir, this._config, config.logging);
 	}
 
 	public readonly execute = (
@@ -45,10 +63,15 @@ class InitLogger {
 	): string | any[] => {
 		const name = formatter.Color(this._name, this._colors[0]) + ":";
 		const txt = typeof text === "string" ? formatter.Color(text, data.color) : text;
+		const date = `[${new Date().toISOString()}]`;
+
+		const start = this._config.date
+			? date + " "
+			: "";
 
 		if (Levels[config.level] <= Levels[data.level]) {
-			if (typeof txt === "string") console.log(name, txt);
-			else console.log(name + data.color, ...txt, Colors.reset);
+			if (typeof txt === "string") console.log(start + name, txt);
+			else console.log(start + name + data.color, ...txt, Colors.reset);
 		}
 
 		if ((config.logging && this._log) || data.write) {

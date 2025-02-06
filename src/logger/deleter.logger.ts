@@ -7,7 +7,7 @@ import path from "path";
 import fs from "fs";
 
 const day = 60 * 60 * 24;
-const format: any = "*&00.00.0000";
+const format: any = "*&0000.00.00";
 const filter = new RegExp(
 	format
 		.replace("*", "[a-zA-Z]?")
@@ -32,7 +32,7 @@ class Deleter {
 
 			if (!date) continue;
 
-			const currentTime = formatter.date.Date(new Date(), "yyyy.MM.dd").split(".");
+			const currentTime = formatter.date.Date(new Date(), "dd.MM.yyyy").split(".");
 			const time = date[0].split(".").reverse();
 
 			const now = formatter.date.Timestamp(
