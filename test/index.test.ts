@@ -1,6 +1,3 @@
-import Configurator from "../src/config/configurator";
-new Configurator({dir: "../", create_file: true});
-
 import Test from "./test.class";
 
 import Logger, { Colors as c } from "../index";
