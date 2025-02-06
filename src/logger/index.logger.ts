@@ -1,13 +1,12 @@
+import Configurator from "../config/configurator";
+const { config } = new Configurator();
+
 import Formatter, { Colors } from "f-formatter";
 
-import Configurator from "../config/configurator";
-
-import { LevelType, LoggerName, Levels } from "../data/loggers.types";
+import { LevelType, LoggerName, Levels, Config } from "../data/loggers.types";
 import LoggersNames from "../data/loggers.names";
 
 import FileLogger from "./file.logger";
-
-const { config } = new Configurator();
 
 const formatter = new Formatter();
 const loggersNames = new LoggersNames(config.logging);
@@ -24,7 +23,7 @@ class InitLogger {
 			colors: [Colors, Colors];
 			filePath?: string;
 			prefix?: string;
-		}
+		} & Partial<Config>
 	) {
 		this._name = data.name;
 		this._colors = data.colors;
@@ -81,7 +80,7 @@ class Logger<T extends string> {
 	private readonly _level: LevelType = "info";
 	private readonly _write: boolean = config.logging;
 
-	private readonly _fileLog?: { filePath?: string; prefix?: string };
+	private readonly _file_log?: { filePath?: string; prefix?: string };
 
 	private _colors: [Colors, Colors];
 	private _logger: InitLogger;
@@ -103,7 +102,7 @@ class Logger<T extends string> {
 		}
 	) {
 		this._name = name;
-		this._fileLog = data;
+		this._file_log = data;
 
 		this._dir = data.dir || config.dir;
 		this._level = data.level || "info";
@@ -122,7 +121,7 @@ class Logger<T extends string> {
 		this._logger = new InitLogger(this._dir, {
 			name: this._name,
 			colors: this._colors,
-			...this._fileLog
+			...this._file_log
 		});
 
 		for (const key in loggersNames.GetNames()) {

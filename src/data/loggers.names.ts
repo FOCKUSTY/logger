@@ -6,6 +6,9 @@ import type { Config, LoggersNameType } from "./loggers.types";
 import { join, parse } from "path";
 import { existsSync, writeFileSync } from "fs";
 
+import Configurator from "../config/configurator";
+
+const { config } = new Configurator();
 const formatter = new Formatter();
 const cache: LoggersNameType = {
 	Success: { name: "Success", colors: [Colors.red, Colors.green] },
@@ -15,17 +18,21 @@ const cache: LoggersNameType = {
 class LoggersNames {
 	private readonly _standart: LoggersNameType = cache;
 
-	private readonly _default_path = join("./loggers.json");
+	private readonly _dir: string = config.dir;
+	private readonly _default_path = join(config.dir, "loggers.json");
 	private readonly _path = this._default_path;
 	private readonly _create_file: boolean;
 
-	public constructor(createFile: boolean) {
+	public constructor(createFile: boolean, dir: string = config.dir) {
+		this._dir = dir;
+		this._default_path = join(dir, "loggers.json");
+		
 		this._create_file = createFile;
 		this._path = this.ChoosePath();
 	}
 
 	private readonly ChoosePath = (): string => {
-		if (existsSync(join("./.loggercfg"))) return join("./.loggercfg");
+		if (existsSync(join("./.loggercfg"))) return join(this._dir, ".loggercfg");
 		else if (existsSync(this._default_path)) return this._default_path;
 		else {
 			if (this._create_file)

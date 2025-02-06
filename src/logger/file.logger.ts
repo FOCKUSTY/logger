@@ -1,3 +1,6 @@
+import Configurator from "../config/configurator";
+const { config } = new Configurator();
+
 import Formatter from "f-formatter";
 
 import path from "path";
@@ -9,7 +12,7 @@ const cache = new Map();
 const formatter = new Formatter();
 
 class Log {
-	private readonly _dir: string = path.join("./");
+	private readonly _dir: string = config.dir;
 	private readonly _prefix: string = "";
 	private readonly _date = formatter.date.Date(new Date(), "dd.MM.yyyy");
 	private readonly _file_path: string = "";
@@ -64,7 +67,7 @@ class Log {
 
 	private ReadFile() {
 		return fs.readFileSync(
-			path.join("./log", this._prefix + this._date + ".log"),
+			path.join(this._dir, "./log", this._prefix + this._date + ".log"),
 			"utf-8"
 		);
 	}

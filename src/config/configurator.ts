@@ -13,15 +13,23 @@ import type {
 import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
+let filePath: string = "./";
+
 class Configurator {
 	private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
 	private readonly _config: Config = settings;
-	private readonly _path: string;
+	private readonly _path: string = path.join(settings.dir, ".loggercfg");
 
 	public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
 		this.Paste(config);
 
+		if (!(this._config.dir === "./" && filePath === "./")) {
+			if (this._config.dir !== "./") filePath = this._config.dir;
+			else this._config.dir = filePath;
+		};
+
 		this._path = path.join(this._config.dir, ".loggercfg");
+
 		this.init();
 	}
 
@@ -124,12 +132,8 @@ class Configurator {
 	};
 
 	public get config(): Config {
-		return this._config;
+		return { ...this._config, ...this._extra_config };
 	}
 }
-
-(() => {
-	new Configurator();
-})();
 
 export default Configurator;

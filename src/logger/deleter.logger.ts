@@ -1,14 +1,12 @@
+import Configurator from "../config/configurator";
+const { config } = new Configurator();
+
 import Formatter from "f-formatter";
 
 import path from "path";
 import fs from "fs";
 
-import Configurator from "../config/configurator";
-
-const { config } = new Configurator();
-
 const day = 60 * 60 * 24;
-
 const format: any = "*&00.00.0000";
 const filter = new RegExp(
 	format
@@ -21,7 +19,7 @@ const filter = new RegExp(
 const formatter = new Formatter();
 
 class Deleter {
-	private readonly _dir: string = path.join("./");
+	private readonly _dir: string = config.dir;
 
 	public constructor(dir: string) {
 		this._dir = path.join(dir);
