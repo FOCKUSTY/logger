@@ -34,7 +34,7 @@ class LoggersNames {
 	}
 
 	private readonly ChoosePath = (): string => {
-		if (existsSync(join("./.loggercfg"))) return join(this._dir, ".loggercfg");
+		if (existsSync(join(this._dir, ".loggercfg"))) return join(this._dir, ".loggercfg");
 		else if (existsSync(this._default_path)) return this._default_path;
 		else {
 			if (this._create_file)
