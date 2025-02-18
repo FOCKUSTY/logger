@@ -3,7 +3,7 @@ import Formatter from "f-formatter";
 
 import type { Config, LoggersNameType } from "./loggers.types";
 
-import { join, parse } from "path";
+import { join as pJoin, parse, toNamespacedPath } from "path";
 import { existsSync, writeFileSync } from "fs";
 
 import Configurator from "../config/configurator";
@@ -14,6 +14,8 @@ const cache: LoggersNameType = {
 	Success: { name: "Success", colors: [Colors.red, Colors.green] },
 	Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
 };
+
+const join = (...p: string[]) => toNamespacedPath(pJoin(...p)).replace("\\\\?\\", "");
 
 class LoggersNames {
 	private readonly _standart: LoggersNameType = cache;
