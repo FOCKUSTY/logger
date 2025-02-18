@@ -14,11 +14,12 @@ import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
 let filePath: string = "./";
+const pathFormat = (...p: string[]) => path.toNamespacedPath(path.join(...p)).replace("\\\\?\\", "");
 
 class Configurator {
 	private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
 	private readonly _config: Config = settings;
-	private readonly _path: string = path.join(settings.dir, ".loggercfg");
+	private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
 
 	public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
 		this.Paste(config);
@@ -28,7 +29,7 @@ class Configurator {
 			else this._config.dir = filePath;
 		}
 
-		this._path = path.join(this._config.dir, ".loggercfg");
+		this._path = pathFormat(this._config.dir, ".loggercfg");
 
 		this.init();
 	}

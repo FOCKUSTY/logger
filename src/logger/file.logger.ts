@@ -11,6 +11,7 @@ import Deleter from "./deleter.logger";
 
 const cache = new Map();
 const formatter = new Formatter();
+const pathFormat = (...p: string[]) => path.toNamespacedPath(path.join(...p)).replace("\\\\?\\", "");
 
 class Log {
 	private readonly _date: Date;
@@ -44,7 +45,7 @@ class Log {
 			prefix: data.prefix ? data.prefix + "-" : "",
 			file_path: data.filePath
 				? data.filePath
-				: path.join(dir, "log", prefix + this._date_string) + ".log",
+				: pathFormat(dir, "log", prefix + this._date_string) + ".log",
 			logging: data.logging || config.logging,
 			dir: data.dir || config.dir,
 			level: data.level || config.level,
@@ -56,7 +57,7 @@ class Log {
 		};
 
 		this._init = init;
-		this._dir = path.join(dir);
+		this._dir = pathFormat(dir);
 		this._deleter = new Deleter(dir);
 		this._hello = `====---- Hello! This is log file of ${this._date_string} ! ----====`;
 
@@ -71,7 +72,7 @@ class Log {
 	private CreateFile() {
 		if (
 			!fs
-				.readdirSync(path.join(this._dir, "log"))
+				.readdirSync(pathFormat(this._dir, "log"))
 				.includes(this._config.prefix + this._date_string + ".log")
 		) {
 			fs.writeFileSync(this._config.file_path, this._hello);
@@ -80,7 +81,7 @@ class Log {
 
 	private CreateFolder() {
 		if (!fs.readdirSync(this._dir).includes("log")) {
-			fs.mkdirSync(path.join(this._dir, "log"));
+			fs.mkdirSync(pathFormat(this._dir, "log"));
 		}
 
 		this.CreateFile();
@@ -88,7 +89,7 @@ class Log {
 
 	private ReadFile() {
 		return fs.readFileSync(
-			path.join(
+			pathFormat(
 				this._dir,
 				"./log",
 				this._config.prefix + this._date_string + ".log"

@@ -17,17 +17,18 @@ const filter = new RegExp(
 );
 
 const formatter = new Formatter();
+const pathFormat = (...p: string[]) => path.toNamespacedPath(path.join(...p)).replace("\\\\?\\", "");
 
 class Deleter {
 	private readonly _dir: string = config.dir;
 
 	public constructor(dir: string) {
-		this._dir = path.join(dir);
+		this._dir = pathFormat(dir);
 	}
 
 	public init() {
-		for (const log of fs.readdirSync(path.join(this._dir, "log"))) {
-			const name = path.parse(path.join(this._dir, "log", log)).name;
+		for (const log of fs.readdirSync(pathFormat(this._dir, "log"))) {
+			const name = path.parse(pathFormat(this._dir, "log", log)).name;
 			const date = name.match(filter);
 
 			if (!date) continue;
@@ -57,7 +58,7 @@ class Deleter {
 
 			try {
 				if (now > fileTime) {
-					fs.unlinkSync(path.join(this._dir, "log", log));
+					fs.unlinkSync(pathFormat(this._dir, "log", log));
 
 					continue;
 				}
