@@ -58,11 +58,13 @@ class Validator {
 		const { key, value } = { key: this._key, value: this._value };
 
 		this.PrintErrorFixing().then(() => {
-			throw new Error(`your value ${JSON.stringify(value)} at key ${key} is must be array`);
+			throw new Error(
+				`your value ${JSON.stringify(value)} at key ${key} is must be array`
+			);
 		});
 
-		return this._default
-	}
+		return this._default;
+	};
 
 	private readonly ColorsValidator = () => {
 		const { value } = { value: this._value };
@@ -98,30 +100,35 @@ class Validator {
 		const levels = value as unknown as LevelType[];
 
 		if (
-			levels.length < 3 || !(
-				levels.includes("info")
-				&& levels.includes("warn")
-				&& levels.includes("err")
+			levels.length < 3 ||
+			!(
+				levels.includes("info") &&
+				levels.includes("warn") &&
+				levels.includes("err")
 			)
 		) {
 			this.PrintErrorFixing().then(() => {
-				throw new Error(`your value at key ${key} must includes 3 options: info, warn, err`);
+				throw new Error(
+					`your value at key ${key} must includes 3 options: info, warn, err`
+				);
 			});
-			
+
 			return this._default;
-		};
+		}
 
 		for (const v of levels) {
 			if (typeof v !== "string") {
 				this.PrintErrorFixing().then(() => {
-					throw new Error(`in your value at key ${key} all values must be a string`);
+					throw new Error(
+						`in your value at key ${key} all values must be a string`
+					);
 				});
 
 				return this._default;
-			};
+			}
 
 			continue;
-		};
+		}
 
 		return value;
 	};

@@ -43,7 +43,7 @@ export type Config = {
 	dir: string;
 	date: boolean;
 	level: "info" | "warn" | "err";
-	levels: LevelType[]
+	levels: LevelType[];
 	deletion_interval: number;
 	colors: [Colors, Colors];
 	loggers: LoggersNameType;
