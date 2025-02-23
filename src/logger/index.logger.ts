@@ -59,26 +59,36 @@ class InitLogger {
 		} = {
 			color: this._colors[1],
 			level: "info",
-			write: config.logging
+			write: config.logging,
 		}
-	): string | any[] => {
+	): [string, string][] => {
+		text = typeof text === "string" ? [text] : text;
+		
 		const name = formatter.Color(this._name, this._colors[0]) + ":";
-		const txt = typeof text === "string" ? formatter.Color(text, data.color) : text;
 		const date = `[${new Date().toISOString()}]`;
 
+		const output: [string, string][] = text.map(t => {
+			const txt = typeof t !== "string"
+				? t instanceof Error
+					? (t.stack||"undefined error")
+					: JSON.stringify(t, undefined, 4)
+				: t;
+				
+			return [formatter.Color(txt, data.color), txt];
+		});
 		const start = this._config.date ? date + " " : "";
 
 		if (this._config.levels[config.level] <= this._config.levels[data.level]) {
-			if (typeof txt === "string") console.log(start + name, txt);
-			else console.log(start + name + data.color, ...txt, Colors.reset);
+			if (typeof text === "string") console.log(start + name, ...(output.map(o => o[0])));
+			else console.log(start + name + data.color, ...(output.map(o => o[0])), Colors.reset);
 		}
 
 		if ((config.logging && this._log) || data.write) {
 			if (typeof text === "string") this._log.writeFile(text);
-			else for (const msg of text) this._log.writeFile(msg);
+			else for (const msg of output) this._log.writeFile(msg[1]);
 		}
 
-		return txt;
+		return output;
 	};
 
 	public get write() {
@@ -179,7 +189,7 @@ class Logger<T extends string> {
 			level?: LevelKeys;
 			write?: boolean;
 		}
-	): string | any[] => {
+	) => {
 		return this._logger.execute(text, {
 			color: data?.color || this._colors[1],
 			level: data?.level || this._level,
