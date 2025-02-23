@@ -1,6 +1,6 @@
 import { Colors } from "f-formatter";
 
-import type { LevelType, SettingKeys, Settings } from "../data/loggers.types";
+import type { SettingKeys, Settings } from "../data/loggers.types";
 
 import { allowed, numbers, settings, tutorials, types } from "../data/data";
 
@@ -57,6 +57,16 @@ class Validator {
 		return this._default;
 	};
 
+	private readonly ErrorNotObject = () => {
+		const { key, value } = { key: this._key, value: this._value };
+
+		this.PrintErrorFixing().then(() => {
+			throw new Error(`your value ${JSON.stringify(value)} at key ${key} is must be object`);
+		});
+
+		return this._default;
+	}
+
 	private readonly ColorsValidator = () => {
 		const { value } = { value: this._value };
 
@@ -83,16 +93,30 @@ class Validator {
 		return value;
 	};
 
-	private readonly LevelsValidator = () => {
+	private readonly ArrayValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
 		if (!Array.isArray(value)) return this.ErrorNotArray();
 
-		const levels = value as unknown as LevelType[];
+		switch (key) {
+			case "colors":
+				return this.ColorsValidator();
+
+			default:
+				return this._default;
+		}
+	};
+
+	private readonly LevelsValidator = () => {
+		const { key, value } = { key: this._key, value: this._value };
+
+		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
+
+		const keys = Object.keys(value);
 
 		if (
-			levels.length < 3 ||
-			!(levels.includes("info") && levels.includes("warn") && levels.includes("err"))
+			keys.length < 3 ||
+			!(keys.includes("info") && keys.includes("warn") && keys.includes("err"))
 		) {
 			this.PrintErrorFixing().then(() => {
 				throw new Error(
@@ -103,63 +127,71 @@ class Validator {
 			return this._default;
 		}
 
-		for (const v of levels) {
-			if (typeof v !== "string") {
+		Object.keys(value).forEach((k) => {
+			if (typeof k !== "string") {
 				this.PrintErrorFixing().then(() => {
 					throw new Error(`in your value at key ${key} all values must be a string`);
 				});
 
 				return this._default;
-			}
+			};
 
-			continue;
-		}
+			if (typeof value[k] !== "number") {
+				this.PrintErrorFixing().then(() => {
+					throw new Error(`your value at key ${key} in object at key ${k} must be a number`);
+				});
 
+				return this._default;
+			};
+		});
+		
 		return value;
 	};
 
-	private readonly ArrayValidator = () => {
+	private readonly LoggersValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (!Array.isArray(value)) return this.ErrorNotArray();
+		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
 
-		switch (key) {
-			case "colors":
-				return this.ColorsValidator();
+		const output = value;
 
-			case "levels":
-				return this.LevelsValidator();
+		Object.keys(value).forEach((k) => {
+			if (typeof value[k] === "number" || typeof output[k] === "number") {
+				this.PrintErrorFixing().then(() => {
+					throw new Error(`your value at key ${key} in object at key ${k} must be a LoggersNameType`);
+				});
 
-			default:
 				return this._default;
-		}
-	};
+			};
+
+			const colors = value[k].colors;
+
+			if (colors.length !== 2)
+				throw new Error(`A logger "${k}" must have two colors`);
+
+			for (const i in colors) {
+				if (!Object.values(Colors).includes(colors[i])) {
+					throw new Error(`${colors[i]} in enum Colors is not defined`);
+				} else {
+					output[k].colors = colors;
+				}
+			}
+		});
+
+		return output;
+	}
 
 	private readonly ObjectValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof value !== "object" || !value) return this._default;
+		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
 
 		switch (key) {
 			case "loggers":
-				const output = value;
+				return this.LoggersValidator();
 
-				Object.keys(value).forEach((k) => {
-					const colors = value[k].colors;
-
-					if (colors.length !== 2)
-						throw new Error(`A logger "${k}" must have two colors`);
-
-					for (const i in colors) {
-						if (!Object.values(Colors).includes(colors[i])) {
-							throw new Error(`${colors[i]} in enum Colors is not defined`);
-						} else {
-							output[k].colors = colors;
-						}
-					}
-				});
-
-				return output;
+			case "levels":
+				return this.LevelsValidator();
 
 			default:
 				return this._default;

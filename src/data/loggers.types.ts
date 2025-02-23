@@ -4,11 +4,19 @@ export type LoggerName<T extends string> = "Fail" | "Success" | T;
 
 export type LoggerNameType = { name: string; colors: [Colors, Colors] };
 export type LoggersNameType = { [key: LoggerName<string>]: LoggerNameType };
-export type LevelType<T extends string = "info"> = "info" | "warn" | "err" | T;
-export enum Levels {
-	"info" = 1,
-	"warn" = 2,
-	"err" = 3
+export type LevelKeys<T extends string = "info"> = "info" | "warn" | "err" | T;
+export type LevelType = {
+	[key: string]: number,
+
+	"info": 1,
+	"warn": 2,
+	"err": 3
+}
+
+export const Levels = {
+	"info": 1,
+	"warn": 2,
+	"err": 3
 }
 
 export type ExtraneousKeys = "create_file";
@@ -23,7 +31,7 @@ export type Settings =
 	| string
 	| boolean
 	| null
-	| string[]
+	| { [key: string]: number }
 	| [Colors, Colors]
 	| LoggersNameType;
 export type SettingKeys =
@@ -43,7 +51,7 @@ export type Config = {
 	dir: string;
 	date: boolean;
 	level: "info" | "warn" | "err";
-	levels: LevelType[];
+	levels: { [key: string]: number };
 	deletion_interval: number;
 	colors: [Colors, Colors];
 	loggers: LoggersNameType;
@@ -56,7 +64,9 @@ export type RequiredType =
 	| "number"
 	| "string"
 	| "undefined"
-	| "boolean";
+	| "boolean"
+	| "bigint"
+	| "symbol";
 
 export class Types {
 	private readonly _required: RequiredType;
@@ -65,8 +75,12 @@ export class Types {
 		this._required = required;
 	}
 
-	public execute(arg: any): [boolean, string, string] {
+	public execute(arg: any): [boolean, RequiredType, RequiredType] {
 		const argtype = typeof arg;
+
+		if (Array.isArray(arg) && this._required !== "array") {
+			return [false, "array", this._required];
+		}
 
 		if (this._required === "array") {
 			return [Array.isArray(arg), argtype, this._required];

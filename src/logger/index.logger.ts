@@ -3,7 +3,7 @@ const { config } = new Configurator();
 
 import Formatter, { Colors } from "f-formatter";
 
-import { LevelType, LoggerName, Levels, Config } from "../data/loggers.types";
+import { LevelKeys, LoggerName, Config } from "../data/loggers.types";
 import LoggersNames from "../data/loggers.names";
 
 import FileLogger from "./file.logger";
@@ -54,7 +54,7 @@ class InitLogger {
 		text: string | any[],
 		data: {
 			color: Colors;
-			level: LevelType;
+			level: LevelKeys;
 			write: boolean;
 		} = {
 			color: this._colors[1],
@@ -68,7 +68,7 @@ class InitLogger {
 
 		const start = this._config.date ? date + " " : "";
 
-		if (Levels[config.level] <= Levels[data.level]) {
+		if (this._config.levels[config.level] <= this._config.levels[data.level]) {
 			if (typeof txt === "string") console.log(start + name, txt);
 			else console.log(start + name + data.color, ...txt, Colors.reset);
 		}
@@ -99,7 +99,7 @@ const loggers: { [key: LoggerName<string>]: InitLogger } = {};
 class Logger<T extends string> {
 	private readonly _name: LoggerName<T>;
 	private readonly _dir: string;
-	private readonly _level: LevelType = "info";
+	private readonly _level: LevelKeys = "info";
 	private readonly _write: boolean = config.logging;
 
 	private readonly _file_log?: { filePath?: string; prefix?: string };
@@ -115,7 +115,7 @@ class Logger<T extends string> {
 			prefix?: string;
 
 			dir?: string;
-			level?: LevelType;
+			level?: LevelKeys;
 			write?: boolean;
 		} = {
 			dir: config.dir,
@@ -176,7 +176,7 @@ class Logger<T extends string> {
 		text: string | any[],
 		data?: {
 			color?: Colors;
-			level?: LevelType;
+			level?: LevelKeys;
 			write?: boolean;
 		}
 	): string | any[] => {
