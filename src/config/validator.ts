@@ -29,28 +29,21 @@ class Validator {
 			console.log(
 				`Find key: "${key}" and replace your value (${value}) to ${allowed[key][0]} (Or another, see above)`
 			);
-		else
-			console.log(
-				`Find key: "${key}" and replace your value (${value}) (Or see above)`
-			);
+		else console.log(`Find key: "${key}" and replace your value (${value}) (Or see above)`);
 
 		const start = this._file.indexOf(`"${key}"`);
 		const end = this._file.indexOf(`${value}`) + `${value}`.length;
 		const err = this._file.slice(start, end);
 
 		console.log(
-			Colors.bgMagenta +
-				"The line with the error is highlighted in magenta" +
-				Colors.reset
+			Colors.bgMagenta + "The line with the error is highlighted in magenta" + Colors.reset
 		);
 
 		console.log("See your file:");
 		console.log(this._file.replace(err, Colors.bgBrightMagenta + err + Colors.reset));
 
 		console.log(
-			Colors.bgMagenta +
-				"The line with the error is highlighted in magenta" +
-				Colors.reset
+			Colors.bgMagenta + "The line with the error is highlighted in magenta" + Colors.reset
 		);
 	};
 
@@ -58,9 +51,7 @@ class Validator {
 		const { key, value } = { key: this._key, value: this._value };
 
 		this.PrintErrorFixing().then(() => {
-			throw new Error(
-				`your value ${JSON.stringify(value)} at key ${key} is must be array`
-			);
+			throw new Error(`your value ${JSON.stringify(value)} at key ${key} is must be array`);
 		});
 
 		return this._default;
@@ -101,11 +92,7 @@ class Validator {
 
 		if (
 			levels.length < 3 ||
-			!(
-				levels.includes("info") &&
-				levels.includes("warn") &&
-				levels.includes("err")
-			)
+			!(levels.includes("info") && levels.includes("warn") && levels.includes("err"))
 		) {
 			this.PrintErrorFixing().then(() => {
 				throw new Error(
@@ -119,9 +106,7 @@ class Validator {
 		for (const v of levels) {
 			if (typeof v !== "string") {
 				this.PrintErrorFixing().then(() => {
-					throw new Error(
-						`in your value at key ${key} all values must be a string`
-					);
+					throw new Error(`in your value at key ${key} all values must be a string`);
 				});
 
 				return this._default;
@@ -153,8 +138,7 @@ class Validator {
 	private readonly ObjectValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof value !== "object" || !value)
-			return this._default;
+		if (Array.isArray(value) || typeof value !== "object" || !value) return this._default;
 
 		switch (key) {
 			case "loggers":
@@ -193,8 +177,7 @@ class Validator {
 		if (!numbers[key])
 			throw new Error(`"${key}" in number settings is not defind (Library error)`);
 
-		if (Number.isNaN(Number(value)))
-			throw new Error(`Value at "${key}" is not a number`);
+		if (Number.isNaN(Number(value))) throw new Error(`Value at "${key}" is not a number`);
 
 		if (Number(value) < numbers[key][0])
 			throw new Error(
@@ -248,8 +231,7 @@ class Validator {
 			);
 			if (Object.keys(allowed).includes(key))
 				console.log(
-					"Or other allowed values:\r\n" +
-						JSON.stringify(allowed[key], undefined, 2)
+					"Or other allowed values:\r\n" + JSON.stringify(allowed[key], undefined, 2)
 				);
 
 			if (tutorials[key]) console.log("\r" + tutorials[key]);

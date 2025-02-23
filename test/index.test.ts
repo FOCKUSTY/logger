@@ -16,9 +16,7 @@ describe("Logger", () => {
 			],
 			[
 				c.magenta + "Saving..." + c.reset,
-				new Logger("Saver", { colors: [c.magenta, c.magenta] }).execute(
-					"Saving..."
-				)
+				new Logger("Saver", { colors: [c.magenta, c.magenta] }).execute("Saving...")
 			]
 		];
 
@@ -26,22 +24,10 @@ describe("Logger", () => {
 	})();
 	(() => {
 		const tests: [string, string | any[]][] = [
-			[
-				c.magenta + "Маджента" + c.reset,
-				logger.execute("Маджента", { color: c.magenta })
-			],
-			[
-				c.bgGreen + "ГринСкрин" + c.reset,
-				logger.execute("ГринСкрин", { color: c.bgGreen })
-			],
-			[
-				c.black + "Тоталблэк" + c.reset,
-				logger.execute("Тоталблэк", { color: c.black })
-			],
-			[
-				c.magenta + "Loading..." + c.reset,
-				new Logger("Saver").execute("Loading...")
-			]
+			[c.magenta + "Маджента" + c.reset, logger.execute("Маджента", { color: c.magenta })],
+			[c.bgGreen + "ГринСкрин" + c.reset, logger.execute("ГринСкрин", { color: c.bgGreen })],
+			[c.black + "Тоталблэк" + c.reset, logger.execute("Тоталблэк", { color: c.black })],
+			[c.magenta + "Loading..." + c.reset, new Logger("Saver").execute("Loading...")]
 		];
 
 		new Test("colors", tests).execute();

@@ -97,13 +97,10 @@ class Configurator {
 
 		if (
 			fs.existsSync(this._path) &&
-			Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}"))
-				.length === 0
+			Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}")).length === 0
 		) {
 			console.log(
-				Colors.brightYellow +
-					"Your config is empty, returning to default" +
-					Colors.reset
+				Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset
 			);
 
 			fs.unlinkSync(this._path);

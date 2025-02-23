@@ -89,11 +89,7 @@ class Log {
 
 	private ReadFile() {
 		return fs.readFileSync(
-			pathFormat(
-				this._dir,
-				"./log",
-				this._config.prefix + this._date_string + ".log"
-			),
+			pathFormat(this._dir, "./log", this._config.prefix + this._date_string + ".log"),
 			"utf-8"
 		);
 	}

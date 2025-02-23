@@ -34,8 +34,7 @@ class LoggersNames {
 	}
 
 	private readonly ChoosePath = (): string => {
-		if (existsSync(join(this._dir, ".loggercfg")))
-			return join(this._dir, ".loggercfg");
+		if (existsSync(join(this._dir, ".loggercfg"))) return join(this._dir, ".loggercfg");
 		else if (existsSync(this._default_path)) return this._default_path;
 		else {
 			if (this._create_file)
@@ -62,10 +61,7 @@ class LoggersNames {
 			const existingValue = existingNames[key];
 			const value = names[key];
 
-			if (
-				value &&
-				value.colors.toString() != [Colors.reset, Colors.reset].toString()
-			) {
+			if (value && value.colors.toString() != [Colors.reset, Colors.reset].toString()) {
 				output[key] = value;
 				cache[key] = value;
 			} else {

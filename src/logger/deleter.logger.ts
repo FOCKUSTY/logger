@@ -9,10 +9,7 @@ import fs from "fs";
 const day = 60 * 60 * 24;
 const format: any = "*&0000.00.00";
 const filter = new RegExp(
-	format
-		.replace("*", "[a-zA-Z]?")
-		.replace("&", "[!@#$%^&*()-+]?")
-		.replaceAll("0", "[0-9]"),
+	format.replace("*", "[a-zA-Z]?").replace("&", "[!@#$%^&*()-+]?").replaceAll("0", "[0-9]"),
 	"gi"
 );
 
