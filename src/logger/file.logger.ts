@@ -11,7 +11,7 @@ import Deleter from "./deleter.logger";
 
 const cache = new Map();
 const formatter = new Formatter();
-const pathFormat = (...p: string[]) => path.toNamespacedPath(path.join(...p)).replace("\\\\?\\", "");
+const pathFormat = (...p: string[]) => path.resolve(path.join(...p)).replace("\\\\?\\", "");
 
 class Log {
 	private readonly _date: Date;

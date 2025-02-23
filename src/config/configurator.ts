@@ -14,7 +14,7 @@ import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
 let filePath: string = "./";
-const pathFormat = (...p: string[]) => path.toNamespacedPath(path.join(...p)).replace("\\\\?\\", "");
+const pathFormat = (...p: string[]) => path.resolve(path.join(...p)).replace("\\\\?\\", "");
 
 class Configurator {
 	private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
