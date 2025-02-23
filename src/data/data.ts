@@ -7,6 +7,7 @@ export const types: Required<Record<SettingKeys, Types>> = {
 	logging: new Types("boolean"),
 	dir: new Types("string"),
 	level: new Types("string"),
+	levels: new Types("array"),
 	date: new Types("boolean"),
 	deletion_interval: new Types("number"),
 	colors: new Types("array"),
@@ -23,10 +24,11 @@ export const allowed: Partial<Record<SettingKeys, string[]>> = {
 
 export const tutorials: Partial<Record<SettingKeys, string>> = {
 	dir: "this value is a your root dir",
-	level: "this values is level of logging",
+	level: "this value is level of logging",
+	levels: "this value shows the possible logging options",
 	deletion_interval:
 		"this value can be a rational number (0, 1, 2...) and this value is the number of days after which the file should be deleted",
-	colors: "this value is a tuple of two colors, first - logger color, second - text color",
+	colors: "this value is a tuple of two colors, first - logger name color, second - text color",
 	loggers: "this a your loggers, you can don't have to touch it"
 };
 
@@ -40,6 +42,7 @@ export const settings: Config = {
 	logging: false,
 	dir: "./",
 	level: "info",
+	levels: ["info", "warn", "err"],
 	deletion_interval: 7,
 	date: true,
 	colors: defaultColors,

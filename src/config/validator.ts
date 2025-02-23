@@ -1,6 +1,6 @@
 import { Colors } from "f-formatter";
 
-import type { SettingKeys, Settings } from "../data/loggers.types";
+import type { LevelType, SettingKeys, Settings } from "../data/loggers.types";
 
 import { allowed, numbers, settings, tutorials, types } from "../data/data";
 
@@ -54,30 +54,89 @@ class Validator {
 		);
 	};
 
-	private readonly ArrayValidator = () => {
+	private readonly ErrorNotArray = () => {
 		const { key, value } = { key: this._key, value: this._value };
+
+		this.PrintErrorFixing().then(() => {
+			throw new Error(`your value ${JSON.stringify(value)} at key ${key} is must be array`);
+		});
+
+		return this._default
+	}
+
+	private readonly ColorsValidator = () => {
+		const { value } = { value: this._value };
 
 		if (!Array.isArray(value)) return this._default;
 
+		const values = value.map((v) => v);
+
+		if (value.length !== 2) {
+			this.PrintErrorFixing().then(() => {
+				throw new Error("colors must have two element");
+			});
+		}
+
+		for (const i in values) {
+			if (!Object.values(Colors).includes(values[i] as any)) {
+				this.PrintErrorFixing().then(() => {
+					throw new Error(`${values[i]} in enum Colors is not defined`);
+				});
+
+				return this._default;
+			}
+		}
+
+		return value;
+	};
+
+	private readonly LevelsValidator = () => {
+		const { key, value } = { key: this._key, value: this._value };
+
+		if (!Array.isArray(value)) return this.ErrorNotArray();
+
+		const levels = value as unknown as LevelType[];
+
+		if (
+			levels.length < 3 || !(
+				levels.includes("info")
+				&& levels.includes("warn")
+				&& levels.includes("err")
+			)
+		) {
+			this.PrintErrorFixing().then(() => {
+				throw new Error(`your value at key ${key} must includes 3 options: info, warn, err`);
+			});
+			
+			return this._default;
+		};
+
+		for (const v of levels) {
+			if (typeof v !== "string") {
+				this.PrintErrorFixing().then(() => {
+					throw new Error(`in your value at key ${key} all values must be a string`);
+				});
+
+				return this._default;
+			};
+
+			continue;
+		};
+
+		return value;
+	};
+
+	private readonly ArrayValidator = () => {
+		const { key, value } = { key: this._key, value: this._value };
+
+		if (!Array.isArray(value)) return this.ErrorNotArray();
+
 		switch (key) {
 			case "colors":
-				const values = value.map((v) => v);
+				return this.ColorsValidator();
 
-				if (value.length !== 2) {
-					this.PrintErrorFixing().then(() => {
-						throw new Error("colors must have two element");
-					});
-				}
-
-				for (const i in values) {
-					if (!Object.values(Colors).includes(values[i])) {
-						this.PrintErrorFixing().then(() => {
-							throw new Error(`${values[i]} in enum Colors is not defined`);
-						});
-					}
-				}
-
-				return value;
+			case "levels":
+				return this.LevelsValidator();
 
 			default:
 				return this._default;

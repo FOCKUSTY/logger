@@ -2,6 +2,11 @@
     "logging": true,
     "dir": "./",
     "level": "info",
+    "levels": [
+        "info",
+        "warn",
+        "err"
+    ],
     "deletion_interval": 7,
     "date": true,
     "colors": [

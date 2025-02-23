@@ -4,7 +4,7 @@ export type LoggerName<T extends string> = "Fail" | "Success" | T;
 
 export type LoggerNameType = { name: string; colors: [Colors, Colors] };
 export type LoggersNameType = { [key: LoggerName<string>]: LoggerNameType };
-export type LevelType = "info" | "warn" | "err";
+export type LevelType<T extends string = "info"> = "info" | "warn" | "err" | T;
 export enum Levels {
 	"info" = 1,
 	"warn" = 2,
@@ -23,6 +23,7 @@ export type Settings =
 	| string
 	| boolean
 	| null
+	| string[]
 	| [Colors, Colors]
 	| LoggersNameType;
 export type SettingKeys =
@@ -31,6 +32,7 @@ export type SettingKeys =
 	| "deletion_interval"
 	| "colors"
 	| "date"
+	| "levels"
 	| "loggers"
 	| "logging";
 
@@ -41,6 +43,7 @@ export type Config = {
 	dir: string;
 	date: boolean;
 	level: "info" | "warn" | "err";
+	levels: LevelType[]
 	deletion_interval: number;
 	colors: [Colors, Colors];
 	loggers: LoggersNameType;
