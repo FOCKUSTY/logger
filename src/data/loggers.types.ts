@@ -6,18 +6,18 @@ export type LoggerNameType = { name: string; colors: [Colors, Colors] };
 export type LoggersNameType = { [key: LoggerName<string>]: LoggerNameType };
 export type LevelKeys<T extends string = "info"> = "info" | "warn" | "err" | T;
 export type LevelType = {
-	[key: string]: number,
+	[key: string]: number;
 
-	"info": 1,
-	"warn": 2,
-	"err": 3
-}
+	"info": 1;
+	"warn": 2;
+	"err": 3;
+};
 
 export const Levels = {
 	"info": 1,
 	"warn": 2,
 	"err": 3
-}
+};
 
 export type ExtraneousKeys = "create_file";
 export type ExtraneousSettings<Settings = null> = boolean | Settings;

@@ -65,7 +65,7 @@ class Validator {
 		});
 
 		return this._default;
-	}
+	};
 
 	private readonly ColorsValidator = () => {
 		const { value } = { value: this._value };
@@ -110,7 +110,8 @@ class Validator {
 	private readonly LevelsValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
+		if (Array.isArray(value) || typeof value !== "object" || !value)
+			return this.ErrorNotObject();
 
 		const keys = Object.keys(value);
 
@@ -134,40 +135,44 @@ class Validator {
 				});
 
 				return this._default;
-			};
+			}
 
 			if (typeof value[k] !== "number") {
 				this.PrintErrorFixing().then(() => {
-					throw new Error(`your value at key ${key} in object at key ${k} must be a number`);
+					throw new Error(
+						`your value at key ${key} in object at key ${k} must be a number`
+					);
 				});
 
 				return this._default;
-			};
+			}
 		});
-		
+
 		return value;
 	};
 
 	private readonly LoggersValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
+		if (Array.isArray(value) || typeof value !== "object" || !value)
+			return this.ErrorNotObject();
 
 		const output = value;
 
 		Object.keys(value).forEach((k) => {
 			if (typeof value[k] === "number" || typeof output[k] === "number") {
 				this.PrintErrorFixing().then(() => {
-					throw new Error(`your value at key ${key} in object at key ${k} must be a LoggersNameType`);
+					throw new Error(
+						`your value at key ${key} in object at key ${k} must be a LoggersNameType`
+					);
 				});
 
 				return this._default;
-			};
+			}
 
 			const colors = value[k].colors;
 
-			if (colors.length !== 2)
-				throw new Error(`A logger "${k}" must have two colors`);
+			if (colors.length !== 2) throw new Error(`A logger "${k}" must have two colors`);
 
 			for (const i in colors) {
 				if (!Object.values(Colors).includes(colors[i])) {
@@ -179,12 +184,13 @@ class Validator {
 		});
 
 		return output;
-	}
+	};
 
 	private readonly ObjectValidator = () => {
 		const { key, value } = { key: this._key, value: this._value };
 
-		if (Array.isArray(value) || typeof value !== "object" || !value) return this.ErrorNotObject();
+		if (Array.isArray(value) || typeof value !== "object" || !value)
+			return this.ErrorNotObject();
 
 		switch (key) {
 			case "loggers":
