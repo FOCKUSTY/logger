@@ -17,7 +17,7 @@ const filter = new RegExp(
 );
 
 const formatter = new Formatter();
-const pathFormat = (...p: string[]) => path.resolve(path.join(...p)).replace("\\\\?\\", "");
+const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 class Deleter {
 	private readonly _dir: string = config.dir;

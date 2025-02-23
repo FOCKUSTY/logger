@@ -15,7 +15,7 @@ const cache: LoggersNameType = {
 	Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
 };
 
-const join = (...p: string[]) => resolve(pJoin(...p)).replace("\\\\?\\", "");
+const join = (...p: string[]) => resolve(pJoin(...p));
 
 class LoggersNames {
 	private readonly _standart: LoggersNameType = cache;
