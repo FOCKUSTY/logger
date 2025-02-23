@@ -24,9 +24,18 @@ describe("Logger", () => {
 	})();
 	(() => {
 		const tests: [string, string][] = [
-			[c.magenta + "Маджента" + c.reset, logger.execute("Маджента", { color: c.magenta })[0][0]],
-			[c.bgGreen + "ГринСкрин" + c.reset, logger.execute("ГринСкрин", { color: c.bgGreen })[0][0]],
-			[c.black + "Тоталблэк" + c.reset, logger.execute("Тоталблэк", { color: c.black })[0][0]],
+			[
+				c.magenta + "Маджента" + c.reset,
+				logger.execute("Маджента", { color: c.magenta })[0][0]
+			],
+			[
+				c.bgGreen + "ГринСкрин" + c.reset,
+				logger.execute("ГринСкрин", { color: c.bgGreen })[0][0]
+			],
+			[
+				c.black + "Тоталблэк" + c.reset,
+				logger.execute("Тоталблэк", { color: c.black })[0][0]
+			],
 			[c.magenta + "Loading..." + c.reset, new Logger("Saver").execute("Loading...")[0][0]]
 		];
 

@@ -59,28 +59,29 @@ class InitLogger {
 		} = {
 			color: this._colors[1],
 			level: "info",
-			write: config.logging,
+			write: config.logging
 		}
 	): [string, string][] => {
 		text = typeof text === "string" ? [text] : text;
-		
+
 		const name = formatter.Color(this._name, this._colors[0]) + ":";
 		const date = `[${new Date().toISOString()}]`;
 
-		const output: [string, string][] = text.map(t => {
-			const txt = typeof t !== "string"
-				? t instanceof Error
-					? (t.stack||"undefined error")
-					: JSON.stringify(t, undefined, 4)
-				: t;
-				
+		const output: [string, string][] = text.map((t) => {
+			const txt =
+				typeof t !== "string"
+					? t instanceof Error
+						? t.stack || "undefined error"
+						: JSON.stringify(t, undefined, 4)
+					: t;
+
 			return [formatter.Color(txt, data.color), txt];
 		});
 		const start = this._config.date ? date + " " : "";
 
 		if (this._config.levels[config.level] <= this._config.levels[data.level]) {
-			if (typeof text === "string") console.log(start + name, ...(output.map(o => o[0])));
-			else console.log(start + name + data.color, ...(output.map(o => o[0])), Colors.reset);
+			if (typeof text === "string") console.log(start + name, ...output.map((o) => o[0]));
+			else console.log(start + name + data.color, ...output.map((o) => o[0]), Colors.reset);
 		}
 
 		if ((config.logging && this._log) || data.write) {
