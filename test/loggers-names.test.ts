@@ -5,11 +5,11 @@ import LoggersNames from "../src/data/loggers.names";
 const loggersNames = new LoggersNames(false);
 
 describe("Loggers names", () => {
-	(() => {
-		const tests: LoggersNameType = {
-			test: { name: "Test", colors: [Colors.red, Colors.bgGreen] }
-		};
+  (() => {
+    const tests: LoggersNameType = {
+      test: { name: "Test", colors: [Colors.red, Colors.bgGreen] }
+    };
 
-		loggersNames.SetNames(tests);
-	})();
+    loggersNames.SetNames(tests);
+  })();
 });

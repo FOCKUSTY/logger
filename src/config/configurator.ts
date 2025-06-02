@@ -4,10 +4,10 @@ import path from "path";
 import fs from "fs";
 
 import type {
-	Config,
-	SettingKeys,
-	Settings,
-	ExtraneousConfig as ExtraConfig
+  Config,
+  SettingKeys,
+  Settings,
+  ExtraneousConfig as ExtraConfig
 } from "../data/loggers.types";
 
 import { extraSettings, settings } from "../data/data";
@@ -17,121 +17,121 @@ let filePath: string = "./";
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 class Configurator {
-	private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
-	private readonly _config: Config = settings;
-	private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
+  private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
+  private readonly _config: Config = settings;
+  private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
 
-	public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
-		this.Paste(config);
+  public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
+    this.Paste(config);
 
-		if (!(this._config.dir === "./" && filePath === "./")) {
-			if (this._config.dir !== "./") filePath = this._config.dir;
-			else this._config.dir = filePath;
-		}
+    if (!(this._config.dir === "./" && filePath === "./")) {
+      if (this._config.dir !== "./") filePath = this._config.dir;
+      else this._config.dir = filePath;
+    }
 
-		this._path = pathFormat(this._config.dir, ".loggercfg");
+    this._path = pathFormat(this._config.dir, ".loggercfg");
 
-		this.init();
-	}
+    this.init();
+  }
 
-	private Paste(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
-		if (!config) return;
+  private Paste(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
+    if (!config) return;
 
-		for (const key in config) {
-			if (!config[key]) continue;
+    for (const key in config) {
+      if (!config[key]) continue;
 
-			if (Object.keys(extraSettings).includes(key)) {
-				this._extra_config[key] = config[key];
-				continue;
-			}
+      if (Object.keys(extraSettings).includes(key)) {
+        this._extra_config[key] = config[key];
+        continue;
+      }
 
-			if (!Object.keys(settings).includes(key)) {
-				const str = `"${key}": ${config[key]}`;
-				const err = JSON.stringify(config, undefined, 4).replaceAll(
-					str,
-					new Formatter().Color(str, Colors.bgMagenta)
-				);
+      if (!Object.keys(settings).includes(key)) {
+        const str = `"${key}": ${config[key]}`;
+        const err = JSON.stringify(config, undefined, 4).replaceAll(
+          str,
+          new Formatter().Color(str, Colors.bgMagenta)
+        );
 
-				throw new Error(
-					"Unknown key: " + key + " change or delete it\nAt your file:\n" + err
-				);
-			}
+        throw new Error("Unknown key: " + key + " change or delete it\nAt your file:\n" + err);
+      }
 
-			this._config[key] = new Validator(
-				key as SettingKeys,
-				config[key],
-				JSON.stringify(config, undefined, 4)
-			).init();
-		}
-	}
+      this._config[key] = new Validator(
+        key as SettingKeys,
+        config[key],
+        JSON.stringify(config, undefined, 4)
+      ).init();
+    }
 
-	private Create() {
-		try {
-			const file = JSON.stringify(this._config, undefined, 4);
-			fs.writeFileSync(this._path, file, "utf-8");
+    return this;
+  }
 
-			return this._config;
-		} catch (err: any) {
-			throw new Error(err);
-		}
-	}
+  private Create() {
+    try {
+      const file = JSON.stringify(this._config, undefined, 4);
+      fs.writeFileSync(this._path, file, "utf-8");
 
-	private Validator(key: SettingKeys, value: Settings): Settings {
-		return new Validator(
-			key,
-			value,
-			JSON.stringify(JSON.parse(fs.readFileSync(this._path, "utf-8")), undefined, 0)
-		).init();
-	}
+      return this._config;
+    } catch (err: any) {
+      throw new Error(err);
+    }
+  }
 
-	private Validate(config: Config) {
-		for (const key in settings) {
-			const value = this.Validator(key as SettingKeys, config[key]);
+  private Validator(key: SettingKeys, value: Settings): Settings {
+    return new Validator(
+      key,
+      value,
+      JSON.stringify(JSON.parse(fs.readFileSync(this._path, "utf-8")), undefined, 0)
+    ).init();
+  }
 
-			this._config[key] = value;
-		}
-	}
+  private Validate(config: Config) {
+    for (const key in settings) {
+      const value = this.Validator(key as SettingKeys, config[key]);
 
-	private Read() {
-		if (!fs.existsSync(this._path) && this._extra_config.create_file) this.Create();
+      this._config[key] = value;
+    }
+  }
 
-		if (
-			fs.existsSync(this._path) &&
-			Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}")).length === 0
-		) {
-			console.log(
-				Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset
-			);
+  private Read() {
+    if (!fs.existsSync(this._path) && this._extra_config.create_file) this.Create();
 
-			fs.unlinkSync(this._path);
-			this.Create();
-		}
+    if (
+      fs.existsSync(this._path) &&
+      Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}")).length === 0
+    ) {
+      console.log(
+        Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset
+      );
 
-		try {
-			const config: Config = new Formatter().FromJSONWithPath(this._path);
+      fs.unlinkSync(this._path);
+      this.Create();
+    }
 
-			this.Validate(config);
-		} catch (err: any) {
-			if (!fs.existsSync(this._path)) return;
+    try {
+      const config: Config = new Formatter().FromJSONWithPath(this._path);
 
-			throw new Error(err);
-		}
-	}
+      this.Validate(config);
+    } catch (err: any) {
+      if (!fs.existsSync(this._path)) return;
 
-	private HasPermissions(): boolean {
-		if (this._extra_config.create_file) return true;
-		if (fs.existsSync(this._path)) return true;
+      throw new Error(err);
+    }
+  }
 
-		return false;
-	}
+  private HasPermissions(): boolean {
+    if (this._extra_config.create_file) return true;
+    if (fs.existsSync(this._path)) return true;
 
-	private readonly init = () => {
-		if (this.HasPermissions()) this.Read();
-	};
+    return false;
+  }
 
-	public get config(): Config {
-		return { ...this._config, ...this._extra_config };
-	}
+  private readonly init = () => {
+    if (this.HasPermissions()) this.Read();
+  };
+
+  public get config(): Config {
+    return { ...this._config, ...this._extra_config };
+  }
 }
 
 export default Configurator;
