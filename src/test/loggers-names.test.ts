@@ -1,6 +1,6 @@
 import type { LoggersNameType } from "src/data/loggers.types";
 import { Colors } from "f-formatter/colors";
-import LoggersNames from "../src/data/loggers.names";
+import LoggersNames from "../data/loggers.names";
 
 const loggersNames = new LoggersNames(false);
 
