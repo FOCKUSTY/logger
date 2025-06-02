@@ -7,7 +7,7 @@
     "watch:conf": "nodemon configurator.ts",
     "build": "tsc && tsc --declaration",
     "watch:build": "nodemon build.ts",
-    "test": "ts-mocha --paths ./test/**/*.test.ts"
+    "test": "ts-mocha --paths ./src/test/**/*.test.ts"
   },
   "files": [
     "./package.json",
@@ -20,6 +20,7 @@
     "./**/*.d.ts.map",
     "./**/*.svg",
 
+    "!./**/test/",
     "!./**/*.ts"
   ],
   "keywords": [
