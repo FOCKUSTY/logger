@@ -2,7 +2,8 @@
   "name": "fock-logger",
   "version": "3.0.0",
   "description": "Simple logger for your pet-project",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "watch:conf": "nodemon configurator.ts",
     "build": "tsc && tsc --declaration",
