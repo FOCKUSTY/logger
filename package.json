@@ -1,13 +1,13 @@
 {
   "name": "fock-logger",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Simple logger for your pet-project",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
     "watch:conf": "nodemon configurator.ts",
     "build": "tsc && fockbuilder",
-    "watch:build": "nodemon build.ts",
+    "test:prod": "cd dist && mocha --extension test.js",
     "test": "ts-mocha --paths ./src/test/**/*.test.ts"
   },
   "files": [
