@@ -30,8 +30,8 @@ class Deleter {
 
       if (!date) continue;
 
-      const currentTime = formatter.date.Date(new Date(), "dd.MM.yyyy").split(".");
-      const time = date[0].split(".").reverse();
+      const currentTime = formatter.date.Date(new Date(), "dd.MM.yyyy").split(".").toReversed();
+      const time = date[0].split(".");
 
       const now = formatter.date.Timestamp(
         {
