@@ -50,11 +50,11 @@ class InitLogger {
     this._log = new FileLogger(dir, this._config, config.logging);
   }
 
-  public readonly execute = (
+  public readonly execute = <Level extends string>(
     text: string | any[],
     data: {
       color: Colors;
-      level: LevelKeys;
+      level: LevelKeys<Level>;
       write: boolean;
     } = {
       color: this._colors[1],
