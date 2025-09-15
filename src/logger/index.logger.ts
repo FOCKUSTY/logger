@@ -183,11 +183,11 @@ class Logger<T extends string> {
     return this._logger.write;
   }
 
-  public readonly execute = (
+  public readonly execute = <T extends string>(
     text: string | any[],
     data?: {
       color?: Colors;
-      level?: LevelKeys;
+      level?: LevelKeys<T>;
       write?: boolean;
     }
   ) => {
