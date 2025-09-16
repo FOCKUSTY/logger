@@ -17,12 +17,15 @@ import Validator from "./validator";
 let filePath: string = "./";
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
+let i = 0;
+
 class Configurator {
   private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
   private readonly _config: Config = settings;
   private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
 
   public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
+    console.log(i++, config);
     this.Paste(config);
 
     if (!(this._config.dir === "./" && filePath === "./")) {

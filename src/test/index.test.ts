@@ -1,16 +1,18 @@
 import Test from "./test.class";
 
-import Logger, { Colors as c, Configurator } from "../index";
+import { Configurator } from "../config";
 import { join } from "path";
 
 new Configurator({
-  dir: join(__dirname, "..", ".."),
+  dir: join(__dirname, ".."),
   logging: true,
   create_file: true,
   overwrite_file: true,
   level: "warn",
   date: false,
 });
+
+import Logger, { Colors as c } from "../index";
 
 const logger = new Logger("Tester");
 new Logger("Commands", { colors: [c.brightYellow, c.magenta] });

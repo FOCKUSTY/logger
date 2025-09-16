@@ -10,6 +10,30 @@
 
 ![Logotype](./assets/logger.logo.svg)
 
+## Предисловие
+
+Обязательно импортируйте конфиг `fock-logger/config` первым, если хотите его настраивать (чтобы изменения всегда были актуальны)
+
+```ts
+import { Configurator } from "fock-logger/config";
+import { join } from "path";
+
+new Configurator({
+  dir: join(__dirname, "fock-logger"),
+  logging: true,
+  create_file: true,
+  overwrite_file: true,
+  level: "warn",
+  date: false,
+});
+
+import Logger from "fock-logger";
+
+const logger = new Logger("Tester");
+
+/* ... */
+```
+
 ### Установка (Windows, npm)
 
 ```
