@@ -70,6 +70,8 @@ class Configurator {
   }
 
   private Overwrite() {
+    if (!fs.existsSync(this._path)) return;
+
     const json = fs.readFileSync(this._path, "utf-8");    
     const file = JSON.parse(json);
     
