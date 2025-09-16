@@ -47,7 +47,8 @@ class InitLogger {
       prefix?: string;
     } & Partial<Config>,
 
-    protected readonly out: typeof process.stdout = process.stdout
+    protected readonly out: typeof process.stdout = process.stdout,
+    protected readonly input: typeof process.stdin = process.stdin
   ) {
     this._name = data.name;
     this._colors = data.colors;
@@ -118,8 +119,9 @@ class InitLogger {
     const logEnabled = (config.logging && this._log) || data.write;
     if (logEnabled) {
       if (typeof text === "string") {
-        this._log.writeFile(text)
+        this._log.writeFile(this._name + ": " + text);
       } else {
+        this._log.writeFile(this._name + ":");
         for (const msg of output) {
           this._log.writeFile(msg[1])
         }
@@ -131,6 +133,55 @@ class InitLogger {
       base: out
     };
   };
+
+  public readonly readLine = <Level extends string>(
+    text: string | any[],
+    data: ExecuteData<Level> = {
+      ...defaultExecuteData,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Level>
+  ) => {
+    return new Promise<string|Error>((resolve, reject) => {
+      this.input.resume();
+      this.input.setEncoding("utf8");
+
+      const cleanup = () => {
+        this.input.removeListener("readable", onReadable);
+        this.input.removeListener("error", onError);
+        this.input.removeListener("end", onEnd);
+      };
+
+      const onReadable = () => {
+        this.execute(text, data);
+
+        const userInput: string = this.input.read();
+        if (!userInput) {
+          cleanup();
+          reject(new Error());
+        }
+        
+        cleanup();
+        const input = text.slice(0, text.indexOf("\r\n")) as string;
+        this.write("User: " + input);
+        resolve(input);
+      };
+
+      const onError = (err: unknown) => {
+        cleanup();
+        reject(err);
+      };
+
+      const onEnd = () => {
+        cleanup();
+        reject(new Error("Stream ended without data"));
+      };
+
+      this.input.on("readable", onReadable);
+      this.input.on("error", onError);
+      this.input.on("end", onEnd);
+    });
+  }
 
   public get write() {
     return this._log.writeFile;
