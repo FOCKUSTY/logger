@@ -55,7 +55,7 @@ class InitLogger {
     text: string | any[],
     data: {
       color: Colors;
-      level: LevelKeys<Level>;
+      level?: LevelKeys<Level>;
       write: boolean;
     } = {
       color: this._colors[1],
@@ -80,7 +80,7 @@ class InitLogger {
     });
     const start = this._config.date ? date + " " : "";
 
-    const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level]; 
+    const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
       if (typeof text === "string") {
         console.log(start + name, ...output.map((o) => o[0]))
