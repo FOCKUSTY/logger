@@ -10,6 +10,7 @@ import type {
   ExtraneousConfig as ExtraConfig
 } from "../data/loggers.types";
 
+import { alphabetize } from "../utils/object-alphabet-sorter";
 import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
@@ -25,8 +26,11 @@ class Configurator {
     this.Paste(config);
 
     if (!(this._config.dir === "./" && filePath === "./")) {
-      if (this._config.dir !== "./") filePath = this._config.dir;
-      else this._config.dir = filePath;
+      if (this._config.dir !== "./") {
+        filePath = this._config.dir
+      } else {
+        this._config.dir = filePath
+      };
     }
 
     this._path = pathFormat(this._config.dir, ".loggercfg");
@@ -65,15 +69,29 @@ class Configurator {
     return this;
   }
 
-  private Create() {
-    try {
-      const file = JSON.stringify(this._config, undefined, 4);
-      fs.writeFileSync(this._path, file, "utf-8");
+  private Overwrite() {
+    const json = fs.readFileSync(this._path, "utf-8");    
+    const file = JSON.parse(json);
+    
+    const config = alphabetize({
+      ...file,
+      ...this._config
+    });
 
-      return this._config;
-    } catch (err: any) {
-      throw new Error(err);
-    }
+    console.log({config});
+
+    fs.writeFileSync(this._path, JSON.stringify(config, undefined, 2), "utf-8");
+
+    return config;
+  }
+
+  private Create() {
+    const config = alphabetize(this._config);
+    
+    const file = JSON.stringify(config, undefined, 2);
+    fs.writeFileSync(this._path, file, "utf-8");
+
+    return config;
   }
 
   private Validator(key: SettingKeys, value: Settings): Settings {
@@ -126,7 +144,13 @@ class Configurator {
   }
 
   private readonly init = () => {
-    if (this.HasPermissions()) this.Read();
+    if (this.HasPermissions()) {
+      if (this._extra_config.overwrite_file) {
+        this.Overwrite();
+      }
+
+      this.Read();
+    };
   };
 
   public get config(): Config {

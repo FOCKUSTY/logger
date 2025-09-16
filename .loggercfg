@@ -1,17 +1,18 @@
 {
-    "logging": true,
-    "level": "warn",
-    "levels": {
-        "info": 1,
-        "warn": 2,
-        "error": 3
-    },
-    "deletion_interval": 7,
-    "date": true,
     "colors": [
         "\u001b[0m",
         "\u001b[0m"
     ],
+    "date": true,
+    "defaultLevel": "info",
+    "deletion_interval": 7,
+    "dir": "D:\\projects\\me\\logger",
+    "level": "warn",
+    "levels": {
+        "error": 3,
+        "info": 1,
+        "warn": 2
+    },
     "loggers": {
         "test": {
             "name": "Test",
@@ -42,18 +43,19 @@
             ]
         },
         "Fail": {
-            "name": "Fail",
             "colors": [
                 "\u001b[0m",
                 "\u001b[0m"
-            ]
+            ],
+            "name": "Fail"
         },
         "Success": {
-            "name": "Success",
             "colors": [
                 "\u001b[0m",
                 "\u001b[0m"
-            ]
+            ],
+            "name": "Success"
         }
-    }
+    },
+    "logging": true
 }
