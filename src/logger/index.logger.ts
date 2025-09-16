@@ -40,6 +40,7 @@ class InitLogger {
       dir: data.dir || config.dir,
       level: data.level || config.level,
       levels: data.levels || config.levels,
+      defaultLevel: data.defaultLevel || config.defaultLevel,
       deletion_interval: data.deletion_interval || config.deletion_interval,
       date: data.date || config.date,
       date_format: data.date_format || config.date_format,
