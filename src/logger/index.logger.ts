@@ -291,6 +291,20 @@ class Logger<T extends string, Levels extends string> {
     });
   };
 
+  public readonly read = (
+    text: string | any[],
+    data: ExecuteData<Levels> = {
+      ...defaultExecuteData,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Levels>
+  ) => {
+    return this._logger.readLine(text, {
+      ...this._data,
+      ...data
+    });
+  }
+
   public get colors(): [Colors, Colors] {
     return this._colors;
   }
