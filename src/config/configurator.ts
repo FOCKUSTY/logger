@@ -10,7 +10,7 @@ import type {
   ExtraneousConfig as ExtraConfig
 } from "../data/loggers.types";
 
-import { alphabetize } from "../utils/object-alphabet-sorter";
+import { sort } from "../utils/object-sorter";
 import { extraSettings, settings } from "../data/data";
 import Validator from "./validator";
 
@@ -73,7 +73,7 @@ class Configurator {
     const json = fs.readFileSync(this._path, "utf-8");    
     const file = JSON.parse(json);
     
-    const config = alphabetize({
+    const config = sort({
       ...file,
       ...this._config
     });
@@ -86,7 +86,7 @@ class Configurator {
   }
 
   private Create() {
-    const config = alphabetize(this._config);
+    const config = sort(this._config);
     
     const file = JSON.stringify(config, undefined, 2);
     fs.writeFileSync(this._path, file, "utf-8");
