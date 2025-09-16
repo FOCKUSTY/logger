@@ -36,8 +36,8 @@ export const tutorials: Partial<Record<SettingKeys, string>> = {
 export const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
 export const extraSettings: ExtraneousConfig = {
-  create_file: true,
-  overwrite_file: true
+  create_file: false,
+  overwrite_file: false
 };
 
 export const settings: Config = {

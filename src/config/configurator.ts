@@ -42,7 +42,7 @@ class Configurator {
     if (!config) return;
 
     for (const key in config) {
-      if (!config[key]) continue;
+      if (!config[key] && typeof config[key] !== "boolean") continue;
 
       if (Object.keys(extraSettings).includes(key)) {
         this._extra_config[key] = config[key];
@@ -71,6 +71,7 @@ class Configurator {
 
   private Overwrite() {
     if (!fs.existsSync(this._path)) return;
+    if (!this._extra_config.create_file) return;
 
     const json = fs.readFileSync(this._path, "utf-8");    
     const file = JSON.parse(json);
@@ -79,8 +80,6 @@ class Configurator {
       ...file,
       ...this._config
     });
-
-    console.log({config});
 
     fs.writeFileSync(this._path, JSON.stringify(config, undefined, 2), "utf-8");
 
@@ -146,11 +145,11 @@ class Configurator {
   }
 
   private readonly init = () => {
+    if (this._extra_config.overwrite_file) {
+      this.Overwrite();
+    }
+    
     if (this.HasPermissions()) {
-      if (this._extra_config.overwrite_file) {
-        this.Overwrite();
-      }
-
       this.Read();
     };
   };

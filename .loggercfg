@@ -9,7 +9,7 @@
         "error": 3
     },
     "deletion_interval": 7,
-    "date": true,
+    "date": false,
     "colors": [
         "\u001b[0m",
         "\u001b[0m"

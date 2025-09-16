@@ -7,7 +7,9 @@ new Configurator({
   dir: join(__dirname, "..", ".."),
   logging: true,
   create_file: true,
+  overwrite_file: true,
   level: "warn",
+  date: false,
 });
 
 const logger = new Logger("Tester");
