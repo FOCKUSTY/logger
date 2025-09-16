@@ -79,14 +79,24 @@ class InitLogger {
     });
     const start = this._config.date ? date + " " : "";
 
-    if (this._config.levels[config.level] <= this._config.levels[data.level]) {
-      if (typeof text === "string") console.log(start + name, ...output.map((o) => o[0]));
-      else console.log(start + name + data.color, ...output.map((o) => o[0]), Colors.reset);
+    const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level]; 
+    if (isLevelEqualsOrLess) {
+      if (typeof text === "string") {
+        console.log(start + name, ...output.map((o) => o[0]))
+      } else {
+        console.log(start + name + data.color, ...output.map((o) => o[0]), Colors.reset);
+      }
     }
 
-    if ((config.logging && this._log) || data.write) {
-      if (typeof text === "string") this._log.writeFile(text);
-      else for (const msg of output) this._log.writeFile(msg[1]);
+    const logEnabled = (config.logging && this._log) || data.write;
+    if (logEnabled) {
+      if (typeof text === "string") {
+        this._log.writeFile(text)
+      } else {
+        for (const msg of output) {
+          this._log.writeFile(msg[1])
+        }
+      };
     }
 
     return output;
@@ -142,7 +152,7 @@ class Logger<T extends string> {
     this._write = data.write || config.logging;
 
     this._colors = data?.colors
-      ? data?.colors
+      ? data.colors
       : loggers[name]
         ? loggers[name].colors
         : loggersNames.GetNames()[name]?.colors || config.colors;

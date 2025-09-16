@@ -18,7 +18,7 @@ export const numbers: Partial<Record<SettingKeys, [number, number]>> = {
   deletion_interval: [0, 31]
 };
 
-export const allowed: Partial<Record<SettingKeys, string[]>> = {
+export const allowed: Partial<Record<SettingKeys, string[]>> & Pick<Required<Record<SettingKeys, string[]>>, "level"> = {
   level: ["info", "warn", "error"]
 };
 

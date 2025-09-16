@@ -34,11 +34,15 @@ class LoggersNames {
   }
 
   private readonly ChoosePath = (): string => {
-    if (existsSync(join(this._dir, ".loggercfg"))) return join(this._dir, ".loggercfg");
-    else if (existsSync(this._default_path)) return this._default_path;
-    else {
-      if (this._create_file)
+    const loggercfg = join(this._dir, ".loggercfg");
+    if (existsSync(loggercfg)) {
+      return loggercfg
+    } else if (existsSync(this._default_path)) {
+      return this._default_path;
+    } else {
+      if (this._create_file) {
         writeFileSync(this._default_path, JSON.stringify(this._standart, undefined, 4), "utf-8");
+      }
 
       return this._default_path;
     }
@@ -66,7 +70,9 @@ class LoggersNames {
       }
     }
 
-    if (!this._create_file && !existsSync(this._path)) return names;
+    if (!this._create_file && !existsSync(this._path)) {
+      return names;
+    };
 
     if (parse(this._path).base === ".loggercfg") {
       const file: Config = formatter.FromJSONWithPath(this._path);
@@ -94,7 +100,7 @@ class LoggersNames {
     }
   };
 
-  get standart() {
+  public get standart() {
     return this._standart;
   }
 }

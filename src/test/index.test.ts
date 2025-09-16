@@ -3,8 +3,11 @@ import Test from "./test.class";
 import Logger, { Colors as c, Configurator } from "../index";
 import { join } from "path";
 
-const { config } = new Configurator({
-  dir: join(__dirname, "../")
+new Configurator({
+  dir: join(__dirname, "..", ".."),
+  logging: true,
+  create_file: true,
+  level: "warn",
 });
 
 const logger = new Logger("Tester");
@@ -13,7 +16,7 @@ new Logger("Commands", { colors: [c.brightYellow, c.magenta] });
 describe("Logger", () => {
   (() => {
     const tests: [string, string][] = [
-      [c.reset + "Привет, Мир !" + c.reset, logger.execute("Привет, Мир !")[0][0]],
+      [c.reset + "Привет, Мир !" + c.reset, logger.execute("Привет, Мир !", { level: "warn" })[0][0]],
       [c.reset + "Hello, World !" + c.reset, logger.execute("Hello, World !")[0][0]],
       [
         c.magenta + "Hello, World !" + c.reset,

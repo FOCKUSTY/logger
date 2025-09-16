@@ -1,11 +1,10 @@
 {
     "logging": true,
-    "dir": "./",
-    "level": "info",
+    "level": "warn",
     "levels": {
         "info": 1,
         "warn": 2,
-        "err": 3
+        "error": 3
     },
     "deletion_interval": 7,
     "date": true,

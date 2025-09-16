@@ -115,8 +115,7 @@ class Validator {
     const keys = Object.keys(value);
 
     if (
-      keys.length < 3 ||
-      !(keys.includes("info") && keys.includes("warn") && keys.includes("err"))
+      keys.length < 3 || !allowed.level.every(level => keys.includes(level))
     ) {
       this.PrintErrorFixing().then(() => {
         throw new Error(`your value at key ${key} must includes 3 options: info, warn, err`);
