@@ -1,7 +1,7 @@
 {
     "logging": true,
     "dir": "D:\\projects\\me\\logger",
-    "level": "warn",
+    "level": "info",
     "defaultLevel": "info",
     "levels": {
         "info": 1,

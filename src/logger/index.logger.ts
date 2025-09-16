@@ -11,6 +11,22 @@ import FileLogger from "./file.logger";
 const formatter = new Formatter();
 const loggersNames = new LoggersNames(config.logging);
 
+type ExecuteData<Level extends string> = Partial<{
+  color: Colors;
+  level: LevelKeys<Level>;
+  sign: boolean;
+  write: boolean;
+  end: string;
+  join: string;
+}>
+
+const defaultExecuteData: Required<Pick<ExecuteData<string>, "level"|"end"|"join"|"sign">> = {
+  level: "info",
+  end: "\n",
+  join: " ",
+  sign: true
+}
+
 class InitLogger {
   private readonly _name: string;
   private readonly _colors: [Colors, Colors];
@@ -29,7 +45,9 @@ class InitLogger {
       colors: [Colors, Colors];
       filePath?: string;
       prefix?: string;
-    } & Partial<Config>
+    } & Partial<Config>,
+
+    protected readonly out: typeof process.stdout = process.stdout
   ) {
     this._name = data.name;
     this._colors = data.colors;
@@ -53,39 +71,47 @@ class InitLogger {
 
   public readonly execute = <Level extends string>(
     text: string | any[],
-    data: {
-      color: Colors;
-      level?: LevelKeys<Level>;
-      write: boolean;
-    } = {
+    data: ExecuteData<Level> = {
+      ...defaultExecuteData,
       color: this._colors[1],
-      level: "info",
-      write: config.logging
-    }
-  ): [string, string][] => {
-    text = typeof text === "string" ? [text] : text;
+      write: config.logging,
+    } as ExecuteData<Level>
+  ): {
+    colored: string[],
+    base: unknown[]
+  } => {
+    const out = typeof text === "string"
+      ? [text]
+      : text;
 
     const name = formatter.Color(this._name, this._colors[0]) + ":";
     const date = `[${new Date().toISOString()}]`;
 
-    const output: [string, string][] = text.map((t) => {
-      const txt =
-        typeof t !== "string"
-          ? t instanceof Error
-            ? t.stack || "undefined error"
-            : JSON.stringify(t, undefined, 4)
-          : t;
+    const output: string[] = out.map(text => formatter.Color(
+      typeof text !== "string"
+        ? text instanceof Error
+          ? text.stack || text.message
+          : JSON.stringify(text, undefined, 4)
+        : text,
+      data.color || this._colors[1]
+    ));
 
-      return [formatter.Color(txt, data.color), txt];
-    });
-    const start = this._config.date ? date + " " : "";
+    const start = `${this._config.date
+      ? date + " "
+      : ""
+    } ${data.sign !== false
+      ? `${name} `
+      : ""
+    }`;
 
+    const end = data.end || defaultExecuteData.end;
+    const join = data.join || defaultExecuteData.join
     const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
       if (typeof text === "string") {
-        console.log(start + name, ...output.map((o) => o[0]))
+        this.out.write(start + output.join(join) + end);
       } else {
-        console.log(start + name + data.color, ...output.map((o) => o[0]), Colors.reset);
+        this.out.write(start + formatter.Color(output.join(join), data.color || this._colors[1]) + end);
       }
     }
 
@@ -100,7 +126,10 @@ class InitLogger {
       };
     }
 
-    return output;
+    return {
+      colored: output,
+      base: out
+    };
   };
 
   public get write() {
@@ -118,13 +147,13 @@ class InitLogger {
 
 const loggers: { [key: LoggerName<string>]: InitLogger } = {};
 
-class Logger<T extends string> {
+class Logger<T extends string, Levels extends string> {
   private readonly _name: LoggerName<T>;
   private readonly _dir: string;
-  private readonly _level: LevelKeys = "info";
-  private readonly _write: boolean = config.logging;
 
   private readonly _file_log?: { filePath?: string; prefix?: string };
+
+  private readonly _data: ExecuteData<Levels>;
 
   private _colors: [Colors, Colors];
   private _logger: InitLogger;
@@ -135,11 +164,9 @@ class Logger<T extends string> {
       colors?: [Colors, Colors];
       filePath?: string;
       prefix?: string;
-
-      dir?: string;
-      level?: LevelKeys;
-      write?: boolean;
-    } = {
+      dir?: string
+    } & Omit<ExecuteData<Levels>, "color"> = {
+      ...defaultExecuteData,
       dir: config.dir,
       level: "info",
       write: config.logging
@@ -147,16 +174,21 @@ class Logger<T extends string> {
   ) {
     this._name = name;
     this._file_log = data;
-
     this._dir = data.dir || config.dir;
-    this._level = data.level || "info";
-    this._write = data.write || config.logging;
-
+    
     this._colors = data?.colors
       ? data.colors
       : loggers[name]
         ? loggers[name].colors
         : loggersNames.GetNames()[name]?.colors || config.colors;
+    
+    this._data = {
+      ...defaultExecuteData,
+      level: config.level as Levels,
+      write: config.logging,
+      ...data,
+      color: this._colors[1],
+    }
 
     this._logger = this.init();
   }
@@ -194,18 +226,17 @@ class Logger<T extends string> {
     return this._logger.write;
   }
 
-  public readonly execute = <T extends string>(
+  public readonly execute = (
     text: string | any[],
-    data?: {
-      color?: Colors;
-      level?: LevelKeys<T>;
-      write?: boolean;
-    }
+    data: ExecuteData<Levels> = {
+      ...defaultExecuteData,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Levels>
   ) => {
     return this._logger.execute(text, {
-      color: data?.color || this._colors[1],
-      level: data?.level || this._level,
-      write: data?.write || this._write
+      ...this._data,
+      ...data
     });
   };
 
