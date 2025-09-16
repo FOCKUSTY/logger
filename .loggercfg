@@ -1,0 +1,61 @@
+{
+    "logging": true,
+    "dir": "D:\\projects\\me\\logger",
+    "level": "warn",
+    "defaultLevel": "info",
+    "levels": {
+        "info": 1,
+        "warn": 2,
+        "error": 3
+    },
+    "deletion_interval": 7,
+    "date": false,
+    "colors": [
+        "\u001b[0m",
+        "\u001b[0m"
+    ],
+    "loggers": {
+        "test": {
+            "name": "Test",
+            "colors": [
+                "\u001b[31m",
+                "\u001b[42m"
+            ]
+        },
+        "Saver": {
+            "name": "Saver",
+            "colors": [
+                "\u001b[35m",
+                "\u001b[35m"
+            ]
+        },
+        "Commands": {
+            "name": "Commands",
+            "colors": [
+                "\u001b[33;1m",
+                "\u001b[35m"
+            ]
+        },
+        "Tester": {
+            "name": "Tester",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        },
+        "Fail": {
+            "name": "Fail",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        },
+        "Success": {
+            "name": "Success",
+            "colors": [
+                "\u001b[0m",
+                "\u001b[0m"
+            ]
+        }
+    }
+}

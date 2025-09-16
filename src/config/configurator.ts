@@ -25,7 +25,6 @@ class Configurator {
   private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
 
   public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
-    console.log(i++, config);
     this.Paste(config);
 
     if (!(this._config.dir === "./" && filePath === "./")) {

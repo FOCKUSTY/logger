@@ -4,7 +4,7 @@ import { Configurator } from "../config";
 import { join } from "path";
 
 new Configurator({
-  dir: join(__dirname, ".."),
+  dir: join(__dirname, "..", ".."),
   logging: true,
   create_file: true,
   overwrite_file: true,
