@@ -17,8 +17,6 @@ import Validator from "./validator";
 let filePath: string = "./";
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
-let i = 0;
-
 class Configurator {
   private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
   private readonly _config: Config = settings;

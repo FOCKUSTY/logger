@@ -34,8 +34,6 @@ class LoggersNames {
   }
 
   private readonly ChoosePath = (): string => {
-    console.log(this._dir, this._default_path);
-
     const loggercfg = join(this._dir, ".loggercfg");
     
     if (existsSync(loggercfg)) {
