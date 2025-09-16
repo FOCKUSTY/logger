@@ -7,6 +7,7 @@ export const types: Required<Record<SettingKeys, Types>> = {
   logging: new Types("boolean"),
   dir: new Types("string"),
   level: new Types("string"),
+  defaultLevel: new Types("string"),
   levels: new Types("object"),
   date: new Types("boolean"),
   deletion_interval: new Types("number"),
@@ -35,13 +36,15 @@ export const tutorials: Partial<Record<SettingKeys, string>> = {
 export const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
 export const extraSettings: ExtraneousConfig = {
-  create_file: true
+  create_file: true,
+  overwrite_file: true
 };
 
 export const settings: Config = {
   logging: true,
   dir: "./",
   level: "info",
+  defaultLevel: "info",
   levels: {
     info: 1,
     warn: 2,
