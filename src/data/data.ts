@@ -19,7 +19,7 @@ export const numbers: Partial<Record<SettingKeys, [number, number]>> = {
 };
 
 export const allowed: Partial<Record<SettingKeys, string[]>> = {
-  level: ["info", "warn", "err"]
+  level: ["info", "warn", "error"]
 };
 
 export const tutorials: Partial<Record<SettingKeys, string>> = {
@@ -35,17 +35,17 @@ export const tutorials: Partial<Record<SettingKeys, string>> = {
 export const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
 
 export const extraSettings: ExtraneousConfig = {
-  create_file: false
+  create_file: true
 };
 
 export const settings: Config = {
-  logging: false,
+  logging: true,
   dir: "./",
   level: "info",
   levels: {
     info: 1,
     warn: 2,
-    err: 3
+    error: 3
   },
   deletion_interval: 7,
   date: true,
