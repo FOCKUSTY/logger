@@ -100,15 +100,22 @@ class InitLogger {
     const start = `${this._config.date
       ? date + " "
       : ""
-    } ${data.sign !== false
+    }${data.sign !== false
       ? `${name} `
       : ""
     }`;
 
-    const end = data.end || defaultExecuteData.end;
-    const join = data.join || defaultExecuteData.join
+    const end = data.end !== undefined
+      ? data.end
+      : defaultExecuteData.end;
+      
+    const join = data.join !== undefined
+      ? data.join
+      : defaultExecuteData.join;
+
     const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
+      console.log({end});
       if (typeof text === "string") {
         this.out.write(start + output.join(join) + end);
       } else {
@@ -152,9 +159,9 @@ class InitLogger {
         this.input.removeListener("end", onEnd);
       };
 
-      const onReadable = () => {
-        this.execute(text, data);
+      this.execute(text, data);
 
+      const onReadable = () => {
         const userInput: string = this.input.read();
         if (!userInput) {
           cleanup();
@@ -162,8 +169,8 @@ class InitLogger {
         }
         
         cleanup();
-        const input = text.slice(0, text.indexOf("\r\n")) as string;
-        this.write("User: " + input);
+        const input = userInput.slice(0, userInput.indexOf("\r\n")) as string;
+        this._log.writeFile("User: " + input);
         resolve(input);
       };
 
