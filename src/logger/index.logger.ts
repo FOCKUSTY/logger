@@ -108,14 +108,13 @@ class InitLogger {
     const end = data.end !== undefined
       ? data.end
       : defaultExecuteData.end;
-      
+
     const join = data.join !== undefined
       ? data.join
       : defaultExecuteData.join;
 
     const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
-      console.log({end});
       if (typeof text === "string") {
         this.out.write(start + output.join(join) + end);
       } else {
