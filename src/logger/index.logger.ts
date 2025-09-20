@@ -20,7 +20,7 @@ type ExecuteData<Level extends string> = Partial<{
   join: string;
 }>
 
-const defaultExecuteData: Required<Pick<ExecuteData<string>, "level"|"end"|"join"|"sign">> = {
+const DEFAULT_EXECUTE_DATA: Required<Pick<ExecuteData<string>, "level"|"end"|"join"|"sign">> = {
   level: "info",
   end: "\n",
   join: " ",
@@ -73,7 +73,7 @@ class InitLogger {
   public readonly execute = <Level extends string>(
     text: string | any[],
     data: ExecuteData<Level> = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
     } as ExecuteData<Level>
@@ -81,69 +81,55 @@ class InitLogger {
     colored: string[],
     base: unknown[]
   } => {
-    const out = typeof text === "string"
-      ? [text]
-      : text;
+    const {
+      colored,
+      base
+    } = this.resolveText(text, data.color);
 
     const name = formatter.Color(this._name, this._colors[0]) + ":";
     const date = `[${new Date().toISOString()}]`;
 
-    const output: string[] = out.map(text => formatter.Color(
-      typeof text !== "string"
-        ? text instanceof Error
-          ? text.stack || text.message
-          : JSON.stringify(text, undefined, 4)
-        : text,
-      data.color || this._colors[1]
-    ));
-
-    const start = `${this._config.date
-      ? date + " "
-      : ""
-    }${data.sign !== false
-      ? `${name} `
-      : ""
-    }`;
-
-    const end = data.end !== undefined
-      ? data.end
-      : defaultExecuteData.end;
-
-    const join = data.join !== undefined
-      ? data.join
-      : defaultExecuteData.join;
-
+    const {
+      prefix,
+      join,
+      suffix
+    } = this.resolveAffix({
+      ...data,
+      date,
+      name,
+    });
+ 
     const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
       if (typeof text === "string") {
-        this.out.write(start + output.join(join) + end);
+        this.out.write(prefix + colored.join(join) + suffix);
       } else {
-        this.out.write(start + formatter.Color(output.join(join), data.color || this._colors[1]) + end);
+        this.out.write(prefix + formatter.Color(colored.join(join), data.color || this._colors[1]) + suffix);
       }
     }
 
     const logEnabled = (config.logging && this._log) || data.write;
     if (logEnabled) {
       if (typeof text === "string") {
-        this._log.writeFile(this._name + ": " + text);
+        this._log.writeFile(`${this._name}: ${text}`)
       } else {
-        this._log.writeFile(this._name + ":");
-        for (const msg of output) {
+        this._log.writeFile(`${this._name}:`);
+        for (const msg of colored) {
           this._log.writeFile(msg[1])
         }
       };
     }
 
     return {
-      colored: output,
-      base: out
+      colored,
+      base
     };
   };
 
   public readonly readLine = <Level extends string>(
     text: string | any[],
     data: ExecuteData<Level> = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
     } as ExecuteData<Level>
@@ -200,6 +186,82 @@ class InitLogger {
   public get name(): string {
     return this._name;
   }
+
+  private resolveText(text: string | unknown[], color?: Colors) {
+    const out = typeof text === "string"
+      ? [text]
+      : text;
+
+    const output: string[] = out.map(text => formatter.Color(
+      typeof text !== "string"
+        ? text instanceof Error
+          ? text.stack || text.message
+          : JSON.stringify(text, undefined, 4)
+        : text,
+      color || this._colors[1]
+    ));
+
+    return {
+      colored: output,
+      base: out
+    }
+  }
+
+  private resolveAffix({
+    date,
+    name,
+    end,
+    join,
+    sign
+  }: {
+    date: string,
+    name: string,
+    sign?: boolean,
+    end?: string,
+    join?: string
+  }) {
+    const prefix = this.resolveLogPrefix({
+      date,
+      dateEnabled: this._config.date,
+      sign: name,
+      signEnabled: sign !== false
+    });
+
+    const resolvedJoin = this.resolveExecuteData("join", join);
+    const suffix = this.resolveExecuteData("end", end);
+
+    return {
+      prefix,
+      suffix,
+      join: resolvedJoin
+    };
+  }
+
+  private resolveExecuteData<T extends "end"|"join">(key: T, data?: string) {
+    return data !== undefined
+      ? data
+      : DEFAULT_EXECUTE_DATA[key];
+  }
+
+  private resolveLogPrefix({
+    date,
+    dateEnabled,
+    sign,
+    signEnabled
+  }: {
+    date: string,
+    dateEnabled: boolean,
+    sign: string,
+    signEnabled: boolean
+  }) {
+    const datePrefix = dateEnabled
+      ? (date + " ") : "";
+
+    const signPrefix = signEnabled
+      ? (sign + " ") : "";
+
+    return (datePrefix + signPrefix);
+  }
 }
 
 const loggers: { [key: LoggerName<string>]: InitLogger } = {};
@@ -223,7 +285,7 @@ class Logger<T extends string, Levels extends string> {
       prefix?: string;
       dir?: string
     } & Omit<ExecuteData<Levels>, "color"> = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       dir: config.dir,
       level: "info",
       write: config.logging
@@ -240,7 +302,7 @@ class Logger<T extends string, Levels extends string> {
         : loggersNames.GetNames()[name]?.colors || config.colors;
     
     this._data = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       level: config.level as Levels,
       write: config.logging,
       ...data,
@@ -286,7 +348,7 @@ class Logger<T extends string, Levels extends string> {
   public readonly execute = (
     text: string | any[],
     data: ExecuteData<Levels> = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
     } as ExecuteData<Levels>
@@ -300,7 +362,7 @@ class Logger<T extends string, Levels extends string> {
   public readonly read = (
     text: string | any[],
     data: ExecuteData<Levels> = {
-      ...defaultExecuteData,
+      ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
     } as ExecuteData<Levels>
