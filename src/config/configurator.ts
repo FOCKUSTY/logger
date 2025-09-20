@@ -11,29 +11,29 @@ import type {
 } from "../data/loggers.types";
 
 import { sort } from "../utils/object-sorter";
-import { extraSettings, settings } from "../data/data";
+import { EXTRA_SETTINGS, LOGGER_CONFIG_FILE_NAME, ROOT_DIR, SETTINGS } from "../data/data";
 import Validator from "./validator";
 
-let filePath: string = "./";
+let filePath: string = ROOT_DIR;
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 class Configurator {
-  private readonly _extra_config: ExtraConfig<Settings> = extraSettings;
-  private readonly _config: Config = settings;
-  private readonly _path: string = pathFormat(settings.dir, ".loggercfg");
+  private readonly _extra_config: ExtraConfig<Settings> = EXTRA_SETTINGS;
+  private readonly _config: Config = SETTINGS;
+  private readonly _path: string = pathFormat(SETTINGS.dir, LOGGER_CONFIG_FILE_NAME);
 
   public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
     this.Paste(config);
 
-    if (!(this._config.dir === "./" && filePath === "./")) {
-      if (this._config.dir !== "./") {
+    if (!(this._config.dir === ROOT_DIR && filePath === ROOT_DIR)) {
+      if (this._config.dir !== ROOT_DIR) {
         filePath = this._config.dir
       } else {
         this._config.dir = filePath
       };
     }
 
-    this._path = pathFormat(this._config.dir, ".loggercfg");
+    this._path = pathFormat(this._config.dir, LOGGER_CONFIG_FILE_NAME);
 
     this.init();
   }
@@ -44,12 +44,12 @@ class Configurator {
     for (const key in config) {
       if (!config[key] && typeof config[key] !== "boolean") continue;
 
-      if (Object.keys(extraSettings).includes(key)) {
+      if (Object.keys(EXTRA_SETTINGS).includes(key)) {
         this._extra_config[key] = config[key];
         continue;
       }
 
-      if (!Object.keys(settings).includes(key)) {
+      if (!Object.keys(SETTINGS).includes(key)) {
         const str = `"${key}": ${config[key]}`;
         const err = JSON.stringify(config, undefined, 4).replaceAll(
           str,
@@ -104,7 +104,7 @@ class Configurator {
   }
 
   private Validate(config: Config) {
-    for (const key in settings) {
+    for (const key in SETTINGS) {
       const value = this.Validator(key as SettingKeys, config[key]);
 
       this._config[key] = value;

@@ -8,6 +8,7 @@ import path from "path";
 import fs from "fs";
 
 import Deleter from "./deleter.logger";
+import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "src/data/data";
 
 const cache = new Map();
 const formatter = new Formatter();
@@ -41,21 +42,12 @@ class Log {
     this._date = new Date();
     this._date_string = formatter.date.Date(this._date, "yyyy.MM.dd");
     this._config = {
+      ...config,
       ...data,
-      prefix: data.prefix ? data.prefix + "-" : "",
+      prefix,
       file_path: data.filePath
         ? data.filePath
-        : pathFormat(dir, "log", prefix + this._date_string) + ".log",
-      logging: data.logging || config.logging,
-      dir: data.dir || config.dir,
-      level: data.level || config.level,
-      levels: data.levels || config.levels,
-      defaultLevel: data.defaultLevel || config.defaultLevel,
-      deletion_interval: data.deletion_interval || config.deletion_interval,
-      date: data.date || config.date,
-      date_format: data.date_format || config.date_format,
-      colors: data.colors || config.colors,
-      loggers: data.loggers || config.loggers
+        : pathFormat(dir, LOG_DIR_NAME, prefix + this._date_string) + LOG_FILE_EXTENSION,
     };
 
     this._init = init;
@@ -74,16 +66,16 @@ class Log {
   private CreateFile() {
     if (
       !fs
-        .readdirSync(pathFormat(this._dir, "log"))
-        .includes(this._config.prefix + this._date_string + ".log")
+        .readdirSync(pathFormat(this._dir, LOG_DIR_NAME))
+        .includes(this._config.prefix + this._date_string + LOG_FILE_EXTENSION)
     ) {
       fs.writeFileSync(this._config.file_path, this._hello);
     }
   }
 
   private CreateFolder() {
-    if (!fs.readdirSync(this._dir).includes("log")) {
-      fs.mkdirSync(pathFormat(this._dir, "log"));
+    if (!fs.readdirSync(this._dir).includes(LOG_DIR_NAME)) {
+      fs.mkdirSync(pathFormat(this._dir, LOG_DIR_NAME));
     }
 
     this.CreateFile();
@@ -91,7 +83,7 @@ class Log {
 
   private ReadFile() {
     return fs.readFileSync(
-      pathFormat(this._dir, "./log", this._config.prefix + this._date_string + ".log"),
+      pathFormat(this._dir, LOG_DIR_NAME, this._config.prefix + this._date_string + LOG_FILE_EXTENSION),
       "utf-8"
     );
   }

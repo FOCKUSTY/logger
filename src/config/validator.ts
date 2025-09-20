@@ -2,7 +2,7 @@ import { Colors } from "f-formatter";
 
 import type { SettingKeys, Settings } from "../data/loggers.types";
 
-import { allowed, numbers, settings, tutorials, types } from "../data/data";
+import { ALLOWED, LOGGER_CONFIG_FILE_NAME, NUMBERS, SETTINGS, TUTORIALS, TYPES } from "../data/data";
 
 class Validator {
   private readonly _file: string;
@@ -15,7 +15,7 @@ class Validator {
 
     this._key = key;
     this._value = value;
-    this._default = settings[key] || null;
+    this._default = SETTINGS[key] || null;
   }
 
   private readonly PrintErrorFixing = async () => {
@@ -23,11 +23,11 @@ class Validator {
     const value = JSON.stringify(v, undefined, 0);
 
     console.log("To fixing error:");
-    console.log("Open .loggercfg");
+    console.log("Open " + LOGGER_CONFIG_FILE_NAME);
 
-    if (allowed[key])
+    if (ALLOWED[key])
       console.log(
-        `Find key: "${key}" and replace your value (${value}) to ${allowed[key][0]} (Or another, see above)`
+        `Find key: "${key}" and replace your value (${value}) to ${ALLOWED[key][0]} (Or another, see above)`
       );
     else console.log(`Find key: "${key}" and replace your value (${value}) (Or see above)`);
 
@@ -115,10 +115,10 @@ class Validator {
     const keys = Object.keys(value);
 
     if (
-      keys.length < 3 || !allowed.level.every(level => keys.includes(level))
+      keys.length < 3 || !ALLOWED.level.every(level => keys.includes(level))
     ) {
       this.PrintErrorFixing().then(() => {
-        throw new Error(`your value at key ${key} must includes 3 options: info, warn, err`);
+        throw new Error(`your value at key ${key} must includes 3 options: ` + ALLOWED.level.join(", "));
       });
 
       return this._default;
@@ -204,15 +204,15 @@ class Validator {
     if (Array.isArray(value)) return this.ArrayValidator();
     if (typeof value === "object") return this.ObjectValidator();
 
-    if (!numbers[key]) throw new Error(`"${key}" in number settings is not defind (Library error)`);
+    if (!NUMBERS[key]) throw new Error(`"${key}" in number SETTINGS is not defind (Library error)`);
 
     if (Number.isNaN(Number(value))) throw new Error(`Value at "${key}" is not a number`);
 
-    if (Number(value) < numbers[key][0])
-      throw new Error(`Value at "${key}" must be more than ${numbers[key][0]} (Your: ${value})`);
+    if (Number(value) < NUMBERS[key][0])
+      throw new Error(`Value at "${key}" must be more than ${NUMBERS[key][0]} (Your: ${value})`);
 
-    if (Number(value) > numbers[key][1])
-      throw new Error(`Value at "${key}" must be less than ${numbers[key][1]} (Your: ${value})`);
+    if (Number(value) > NUMBERS[key][1])
+      throw new Error(`Value at "${key}" must be less than ${NUMBERS[key][1]} (Your: ${value})`);
 
     return value;
   };
@@ -221,24 +221,24 @@ class Validator {
     const { key, value } = { key: this._key, value: this._value };
 
     if (!value) return this._default;
-    if (!allowed[key]) throw new Error(`${key} in allowed settings is not defined (Library error)`);
+    if (!ALLOWED[key]) throw new Error(`${key} in ALLOWED SETTINGS is not defined (Library error)`);
 
     if (Array.isArray(value)) return this.ArrayValidator();
     if (typeof value === "object") return this.ObjectValidator();
     if (typeof value === "number") return this.NumberValidator();
 
-    if (!allowed[key].includes(value.toString())) {
+    if (!ALLOWED[key].includes(value.toString())) {
       console.log(
         Colors.red +
-          `Value at key: "${key}" is not allowed, you can use:\r\n` +
+          `Value at key: "${key}" is not ALLOWED, you can use:\r\n` +
           Colors.cyan +
-          allowed[key].join(Colors.reset + " or" + Colors.cyan + "\r\n") +
+          ALLOWED[key].join(Colors.reset + " or" + Colors.cyan + "\r\n") +
           Colors.reset
       );
 
       this.PrintErrorFixing();
 
-      throw new Error(`Value at key: "${key}" is not allowed`);
+      throw new Error(`Value at key: "${key}" is not ALLOWED`);
     }
 
     return value;
@@ -251,25 +251,25 @@ class Validator {
       console.log(
         Colors.brightYellow +
           `Value at key: "${key}" is not defined\r\nThis value can be:\r\n` +
-          JSON.stringify(settings[key], undefined, 2)
+          JSON.stringify(SETTINGS[key], undefined, 2)
       );
-      if (Object.keys(allowed).includes(key))
-        console.log("Or other allowed values:\r\n" + JSON.stringify(allowed[key], undefined, 2));
+      if (Object.keys(ALLOWED).includes(key))
+        console.log("Or other ALLOWED values:\r\n" + JSON.stringify(ALLOWED[key], undefined, 2));
 
-      if (tutorials[key]) console.log("\r" + tutorials[key]);
+      if (TUTORIALS[key]) console.log("\r" + TUTORIALS[key]);
       console.log(Colors.reset + "(Do not worry, we paste a default value)🤍\r\n");
 
       return this._default;
     }
 
-    const valueType = types[key].execute(value);
+    const valueType = TYPES[key].execute(value);
 
     if (!valueType[0])
       throw new Error(
         `Type error at key "${key}", value is a ${valueType[1]}, but must be ${valueType[2]}\r\nValue: ${JSON.stringify(value)}`
       );
 
-    if (Object.keys(allowed).includes(key)) return this.AllowedValidator();
+    if (Object.keys(ALLOWED).includes(key)) return this.AllowedValidator();
 
     if (Array.isArray(value)) return this.ArrayValidator();
     if (typeof value === "object") return this.ObjectValidator();

@@ -3,7 +3,7 @@ import { Colors } from "f-formatter";
 import type { Config, ExtraneousConfig, SettingKeys } from "./loggers.types";
 import { Types } from "./loggers.types";
 
-export const types: Required<Record<SettingKeys, Types>> = {
+export const TYPES: Required<Record<SettingKeys, Types>> = {
   logging: new Types("boolean"),
   dir: new Types("string"),
   level: new Types("string"),
@@ -15,15 +15,15 @@ export const types: Required<Record<SettingKeys, Types>> = {
   loggers: new Types("object")
 };
 
-export const numbers: Partial<Record<SettingKeys, [number, number]>> = {
+export const NUMBERS: Partial<Record<SettingKeys, [number, number]>> = {
   deletion_interval: [0, 31]
 };
 
-export const allowed: Partial<Record<SettingKeys, string[]>> & Pick<Required<Record<SettingKeys, string[]>>, "level"> = {
+export const ALLOWED: Partial<Record<SettingKeys, string[]>> & Pick<Required<Record<SettingKeys, string[]>>, "level"> = {
   level: ["info", "warn", "error"]
 };
 
-export const tutorials: Partial<Record<SettingKeys, string>> = {
+export const TUTORIALS: Partial<Record<SettingKeys, string>> = {
   dir: "this value is a your root dir",
   level: "this value is level of logging",
   levels: "this value shows the possible logging options",
@@ -33,14 +33,14 @@ export const tutorials: Partial<Record<SettingKeys, string>> = {
   loggers: "this a your loggers, you can don't have to touch it"
 };
 
-export const defaultColors: [Colors, Colors] = [Colors.reset, Colors.reset];
+export const DEFAULT_COLORS: [Colors, Colors] = [Colors.reset, Colors.reset];
 
-export const extraSettings: ExtraneousConfig = {
+export const EXTRA_SETTINGS: ExtraneousConfig = {
   create_file: false,
   overwrite_file: false
 };
 
-export const settings: Config = {
+export const SETTINGS: Config = {
   logging: true,
   dir: "./",
   level: "info",
@@ -52,15 +52,27 @@ export const settings: Config = {
   },
   deletion_interval: 7,
   date: true,
-  colors: defaultColors,
+  colors: DEFAULT_COLORS,
   loggers: {
     "Fail": {
       name: "Fail",
-      colors: defaultColors
+      colors: DEFAULT_COLORS
     },
     "Success": {
       name: "Success",
-      colors: defaultColors
+      colors: DEFAULT_COLORS
     }
   }
 };
+
+export const DAY = 60 * 60 * 24;
+export const FORMAT: any = "*&0000.00.00" as const;
+export const FILTER = new RegExp(
+  FORMAT.replace("*", "[a-zA-Z]?").replace("&", "[!@#$%^&*()-+]?").replaceAll("0", "[0-9]"),
+  "gi"
+);
+export const LOG_DIR_NAME = "log" as const;
+export const LOG_FILE_EXTENSION = ".log" as const;
+export const LOGGER_CONFIG_FILE_NAME = ".loggercfg" as const;
+export const LOGGER_LOGGERS_FILE_NAME = "loggers.json" as const;
+export const ROOT_DIR = "./" as const;

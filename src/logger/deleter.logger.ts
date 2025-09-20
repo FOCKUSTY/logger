@@ -1,16 +1,14 @@
 import Configurator from "../config/configurator";
 const { config } = new Configurator();
 
+import {
+  LOG_DIR_NAME,
+  FILTER,
+  DAY
+} from "../data/data";
+
 import path from "path";
 import fs from "fs";
-
-const DAY = 60 * 60 * 24;
-const FORMAT: any = "*&0000.00.00";
-const FILTER = new RegExp(
-  FORMAT.replace("*", "[a-zA-Z]?").replace("&", "[!@#$%^&*()-+]?").replaceAll("0", "[0-9]"),
-  "gi"
-);
-const LOG_DIR_NAME = "log";
 
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
