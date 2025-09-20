@@ -101,11 +101,11 @@ class InitLogger {
  
     const isLevelEqualsOrLess = this._config.levels[config.level] <= this._config.levels[data.level || config.defaultLevel]; 
     if (isLevelEqualsOrLess) {
-      if (typeof text === "string") {
-        this.out.write(prefix + colored.join(join) + suffix);
-      } else {
-        this.out.write(prefix + formatter.Color(colored.join(join), data.color || this._colors[1]) + suffix);
-      }
+      this.out.write(prefix + (
+        typeof text === "string"
+          ? colored.join(join)
+          : formatter.Color(colored.join(join), data.color || this._colors[1])
+      ) + suffix);
     }
 
     const logEnabled = (config.logging && this._log) || data.write;
