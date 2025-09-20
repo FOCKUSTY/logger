@@ -1,19 +1,17 @@
 import Configurator from "../config/configurator";
 const { config } = new Configurator();
 
-import Formatter from "f-formatter";
-
 import path from "path";
 import fs from "fs";
 
-const day = 60 * 60 * 24;
-const format: any = "*&0000.00.00";
-const filter = new RegExp(
-  format.replace("*", "[a-zA-Z]?").replace("&", "[!@#$%^&*()-+]?").replaceAll("0", "[0-9]"),
+const DAY = 60 * 60 * 24;
+const FORMAT: any = "*&0000.00.00";
+const FILTER = new RegExp(
+  FORMAT.replace("*", "[a-zA-Z]?").replace("&", "[!@#$%^&*()-+]?").replaceAll("0", "[0-9]"),
   "gi"
 );
+const LOG_DIR_NAME = "log";
 
-const formatter = new Formatter();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 class Deleter {
@@ -24,42 +22,25 @@ class Deleter {
   }
 
   public init() {
-    for (const log of fs.readdirSync(pathFormat(this._dir, "log"))) {
-      const name = path.parse(pathFormat(this._dir, "log", log)).name;
-      const date = name.match(filter);
+    const dir = fs.readdirSync(pathFormat(this._dir, LOG_DIR_NAME));
+    for (const log of dir) {
+      const { name } = path.parse(pathFormat(this._dir, LOG_DIR_NAME, log));
+      const date = name.match(FILTER);
 
       if (!date) continue;
 
-      const currentTime = formatter.date.Date(new Date(), "dd.MM.yyyy").split(".").reverse();
       const time = date[0].split(".");
 
-      const now = formatter.date.Timestamp(
-        {
-          year: Number(currentTime[0]),
-          month: Number(currentTime[1]),
-          day: Number(currentTime[2])
-        },
-        "seconds"
-      );
-
-      const fileTime =
-        formatter.date.Timestamp(
-          {
-            year: Number(time[0]),
-            month: Number(time[1]),
-            day: Number(time[2])
-          },
-          "seconds"
-        ) +
-        day * config.deletion_interval;
+      const now = new Date().getTime();
+      const deleteTime = new Date(...time.map(t => +t) as [number, number, number]).getTime() + DAY * config.deletion_interval * 1000;
 
       try {
-        if (now > fileTime) {
-          fs.unlinkSync(pathFormat(this._dir, "log", log));
+        if (now > deleteTime) {
+          fs.unlinkSync(pathFormat(this._dir, LOG_DIR_NAME, log));
 
           continue;
         }
-      } catch {}
+      } catch { /* empty */ }
     }
   }
 }
