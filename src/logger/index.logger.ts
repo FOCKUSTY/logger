@@ -18,34 +18,34 @@ type ExecuteData<Level extends string> = Partial<{
   write: boolean;
   end: string;
   join: string;
-}>
+}>;
+
+type InitLoggerConfig<IsPartial extends boolean = false> = {
+  name: string;
+  colors: [Colors, Colors];
+  filePath?: string;
+  prefix?: string;
+} & (
+  IsPartial extends false
+    ? Config
+    : Partial<Config>);
 
 const DEFAULT_EXECUTE_DATA: Required<Pick<ExecuteData<string>, "level"|"end"|"join"|"sign">> = {
   level: "info",
   end: "\n",
   join: " ",
   sign: true
-}
+};
 
 class InitLogger {
   private readonly _name: string;
   private readonly _colors: [Colors, Colors];
   private readonly _log: FileLogger;
-  private readonly _config: {
-    name: string;
-    colors: [Colors, Colors];
-    filePath?: string;
-    prefix?: string;
-  } & Config;
+  private readonly _config: InitLoggerConfig;
 
   public constructor(
     dir: string,
-    data: {
-      name: string;
-      colors: [Colors, Colors];
-      filePath?: string;
-      prefix?: string;
-    } & Partial<Config>,
+    data: InitLoggerConfig<true>,
 
     protected readonly out: typeof process.stdout = process.stdout,
     protected readonly input: typeof process.stdin = process.stdin
@@ -54,18 +54,14 @@ class InitLogger {
     this._colors = data.colors;
 
     this._config = {
-      ...data,
-      logging: data.logging || config.logging,
-      dir: data.dir || config.dir,
-      level: data.level || config.level,
-      levels: data.levels || config.levels,
-      defaultLevel: data.defaultLevel || config.defaultLevel,
-      deletion_interval: data.deletion_interval || config.deletion_interval,
-      date: data.date || config.date,
-      date_format: data.date_format || config.date_format,
-      colors: data.colors || config.colors,
-      loggers: data.loggers || config.loggers
-    };
+      ...config,
+      ...data
+    } as {
+      name: string;
+      colors: [Colors, Colors];
+      filePath?: string;
+      prefix?: string;
+    } & Config;
 
     this._log = new FileLogger(dir, this._config, config.logging);
   }
