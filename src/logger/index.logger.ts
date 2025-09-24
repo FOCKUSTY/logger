@@ -30,6 +30,12 @@ type InitLoggerConfig<IsPartial extends boolean = false> = {
     ? Config
     : Partial<Config>);
 
+type TextTypes = "execute"|"error";
+type ResolveTextType<T extends TextTypes> = {
+  execute: string|unknown[],
+  error: Error|Error[]
+}[T];
+
 const DEFAULT_EXECUTE_DATA: Required<Pick<ExecuteData<string>, "level"|"end"|"join"|"sign">> = {
   level: "info",
   end: "\n",
@@ -77,10 +83,39 @@ class InitLogger {
     colored: string[],
     base: unknown[]
   } => {
+    return this.logger(text, data, "execute");
+  };
+
+  public readonly error = <Level extends string>(
+    text: Error | Error[],
+    data: ExecuteData<Level> = {
+      ...DEFAULT_EXECUTE_DATA,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Level>
+  ): {
+    colored: string[],
+    base: unknown[]
+  } => {
+    return this.logger(text, data, "error");
+  };
+
+  private readonly logger = <Level extends string, Type extends TextTypes>(
+    text: ResolveTextType<Type>,
+    data: ExecuteData<Level> = {
+      ...DEFAULT_EXECUTE_DATA,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Level>,
+    type: Type
+  ): {
+    colored: string[],
+    base: unknown[]
+  } => {
     const {
       colored,
       base
-    } = this.resolveText(text, data.color);
+    } = this.resolveText(Array.isArray(text) ? text : [text], data.color);
 
     const name = formatter.Color(this._name, this._colors[0]) + ":";
     const date = `[${new Date().toISOString()}]`;
@@ -106,14 +141,7 @@ class InitLogger {
 
     const logEnabled = (config.logging && this._log) || data.write;
     if (logEnabled) {
-      if (typeof text === "string") {
-        this._log.execute(`${this._name}: ${text}`)
-      } else {
-        this._log.execute(`${this._name}:`);
-        for (const msg of colored) {
-          this._log.execute(msg[1])
-        }
-      };
+      this.logFileService({type, text, colored});
     }
 
     return {
@@ -121,6 +149,38 @@ class InitLogger {
       base
     };
   };
+
+  private readonly logFileService = <Type extends TextTypes>({
+    type,
+    text,
+    colored
+  }: {
+    type: Type,
+    text: ResolveTextType<Type>,
+    colored: string[]
+  }) => {
+    const suffix = "LogFile" as const;
+    const prefix = type;
+    const name = `${prefix}${suffix}` as `${Type}LogFile`;
+    
+    this[name](<any>text, colored);
+  }
+
+  protected readonly executeLogFile = (text: ResolveTextType<"execute">, colored: string[]) => {
+    if (typeof text === "string") {
+      this._log.execute(`${this._name}: ${text}`)
+    } else {
+      this._log.execute(`${this._name}:`);
+  
+      for (const msg of colored) {
+        this._log.execute(msg[1]);
+      }
+    };
+  }
+
+  protected readonly errorLogFile = (text: ResolveTextType<"error">) => {
+    this._log.error(text);
+  }
 
   public readonly readLine = <Level extends string>(
     text: string | any[],
@@ -354,6 +414,20 @@ class Logger<T extends string, Levels extends string> {
       ...data
     });
   };
+
+  public readonly error = (
+    text: string| Error | Error[],
+    data: ExecuteData<Levels> = {
+      ...DEFAULT_EXECUTE_DATA,
+      color: this._colors[1],
+      write: config.logging,
+    } as ExecuteData<Levels>
+  ) => {
+    return this._logger.error(typeof text === "string" ? new Error(text) : text, {
+      ...this._data,
+      ...data
+    });
+  }
 
   public readonly read = (
     text: string | any[],

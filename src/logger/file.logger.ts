@@ -14,6 +14,9 @@ const cache = new Map();
 const formatter = new Formatter();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
+const errorAffixText = "------------------ ERROR ------------------";
+const errorAffix = (error: string) => `${errorAffixText}\n${error}\n${errorAffixText}`;
+
 abstract class LogStrategy {
   protected readonly _date: Date;
   protected readonly _date_string: string;
@@ -62,7 +65,7 @@ abstract class LogStrategy {
     if (init) {
       this.init();
     
-      const file = this.readFile()
+      const file = this.readFile();
 
       this._cache = file;
       cache.set(this._config.file_path, this._cache);
@@ -70,6 +73,7 @@ abstract class LogStrategy {
   }
 
   public abstract execute(text: string): void;
+  public abstract error(error: Error|Error[]): void;
   protected abstract init(): void;
 
   protected abstract createFile(): void;
@@ -107,6 +111,21 @@ export class Log extends LogStrategy {
     );
 
     return this.writeFile();
+  }
+
+  public error(error: Error | Error[]): void {
+    const errorText = (Array.isArray(error)
+      ? error
+      : [error]).map(err => this.parseError(err)
+    ).join("\n");
+    
+    const text = errorAffix(errorText);
+
+    return this.execute(text);
+  }
+
+  private parseError(error: Error) {
+    return error.stack || `${error.name} ${error.message}`;
   }
 
   protected init(): Promise<void>  {

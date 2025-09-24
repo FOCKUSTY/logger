@@ -17,10 +17,13 @@ import Logger, { Colors as c } from "../index";
 const logger = new Logger("Tester");
 new Logger("Commands", { colors: [c.brightYellow, c.magenta] });
 
+const err = new Error("Some error");
+
 describe("Logger", () => {
   (() => {
     const tests: [string, string][] = [
       [c.reset + "Привет, Мир !" + c.reset, logger.execute("Привет, Мир !", { level: "warn" }).colored[0]],
+      [c.reset + (err.stack || (`${err.name} ${err.message}`)) + c.reset, logger.error(err, { level: "warn" }).colored[0]],
       [c.reset + "Hello, World !" + c.reset, logger.execute("Hello, World !").colored[0]],
       [
         c.magenta + "Hello, World !" + c.reset,
