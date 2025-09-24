@@ -16,6 +16,6 @@ import Logger, { Colors as c } from "../index";
   const logger = new Logger("Tester");
 
   logger.execute("Hello");
-  
+
   await logger.read("Your name: ", { end: "" });
 })();

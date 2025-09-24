@@ -15,7 +15,8 @@ const formatter = new Formatter();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 const errorAffixText = "------------------ ERROR ------------------";
-const errorAffix = (error: string) => `${errorAffixText}\n${error}\n${errorAffixText}`;
+const errorAffix = (error: string) =>
+  `${errorAffixText}\n${error}\n${errorAffixText}`;
 
 abstract class LogStrategy {
   protected readonly _date: Date;
@@ -41,7 +42,7 @@ abstract class LogStrategy {
       filePath?: string;
       prefix?: string;
     } & Partial<Config>,
-    init: boolean = true
+    init: boolean = true,
   ) {
     const prefix = data.prefix ? data.prefix + "-" : "";
 
@@ -53,9 +54,11 @@ abstract class LogStrategy {
       prefix,
       file_path: data.filePath
         ? data.filePath
-        : pathFormat(dir, LOG_DIR_NAME, prefix + this._date_string) + LOG_FILE_EXTENSION,
+        : pathFormat(dir, LOG_DIR_NAME, prefix + this._date_string) +
+          LOG_FILE_EXTENSION,
     };
-    this._file_name = this._config.prefix + this._date_string + LOG_FILE_EXTENSION;
+    this._file_name =
+      this._config.prefix + this._date_string + LOG_FILE_EXTENSION;
 
     this._init = init;
     this._dir = pathFormat(dir);
@@ -64,7 +67,7 @@ abstract class LogStrategy {
 
     if (init) {
       this.init();
-    
+
       const file = this.readFile();
 
       this._cache = file;
@@ -73,7 +76,7 @@ abstract class LogStrategy {
   }
 
   public abstract execute(text: string): void;
-  public abstract error(error: Error|Error[]): void;
+  public abstract error(error: Error | Error[]): void;
   protected abstract init(): void;
 
   protected abstract createFile(): void;
@@ -90,12 +93,12 @@ export class Log extends LogStrategy {
       filePath?: string;
       prefix?: string;
     } & Partial<Config>,
-    init: boolean = true
+    init: boolean = true,
   ) {
     super(dir, data, init);
   }
 
-  public execute(text: string): void  {
+  public execute(text: string): void {
     if (!this._init) {
       this.init();
 
@@ -107,18 +110,17 @@ export class Log extends LogStrategy {
       this._config.file_path,
       (cache.get(this._config.file_path) || this._hello) +
         `\n[${this._date.toISOString()}]: ` +
-        text
+        text,
     );
 
     return this.writeFile();
   }
 
   public error(error: Error | Error[]): void {
-    const errorText = (Array.isArray(error)
-      ? error
-      : [error]).map(err => this.parseError(err)
-    ).join("\n");
-    
+    const errorText = (Array.isArray(error) ? error : [error])
+      .map((err) => this.parseError(err))
+      .join("\n");
+
     const text = errorAffix(errorText);
 
     return this.execute(text);
@@ -128,42 +130,47 @@ export class Log extends LogStrategy {
     return error.stack || `${error.name} ${error.message}`;
   }
 
-  protected init(): Promise<void>  {
+  protected init(): Promise<void> {
     this.createFolder();
-    
+
     return this._deleter.init();
   }
-  
-  protected createFile(): void  {
+
+  protected createFile(): void {
     const dir = readdirSync(pathFormat(this._dir, LOG_DIR_NAME));
     const dirIncludesFile = dir.includes(this._file_name);
-    
+
     if (dirIncludesFile) {
       return;
     }
 
     return writeFileSync(this._config.file_path, this._hello, "utf-8");
   }
-  
-  protected createFolder(): void  {
+
+  protected createFolder(): void {
     const dir = readdirSync(this._dir);
     const dirIncludesFile = dir.includes(LOG_DIR_NAME);
-    
+
     if (!dirIncludesFile) {
       mkdirSync(pathFormat(this._dir, LOG_DIR_NAME), { recursive: true });
     }
 
     return this.createFile();
   }
-  
+
   protected readFile(): string {
     return readFileSync(
-      pathFormat(this._dir, LOG_DIR_NAME, this._file_name), "utf-8"
+      pathFormat(this._dir, LOG_DIR_NAME, this._file_name),
+      "utf-8",
     );
   }
-  
-  protected writeFile(): void  {
-    return writeFileSync(this._config.file_path, cache.get(this._config.file_path), "utf-8");
+
+  protected writeFile(): void {
+    return writeFileSync(
+      this._config.file_path,
+      cache.get(this._config.file_path),
+      "utf-8",
+    );
   }
 
   public get file() {

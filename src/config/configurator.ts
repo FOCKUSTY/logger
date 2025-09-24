@@ -7,11 +7,16 @@ import type {
   Config,
   SettingKeys,
   Settings,
-  ExtraneousConfig as ExtraConfig
+  ExtraneousConfig as ExtraConfig,
 } from "../data/loggers.types";
 
 import { sort } from "../utils/object-sorter";
-import { EXTRA_SETTINGS, LOGGER_CONFIG_FILE_NAME, ROOT_DIR, SETTINGS } from "../data/data";
+import {
+  EXTRA_SETTINGS,
+  LOGGER_CONFIG_FILE_NAME,
+  ROOT_DIR,
+  SETTINGS,
+} from "../data/data";
 import Validator from "./validator";
 
 let filePath: string = ROOT_DIR;
@@ -20,17 +25,22 @@ const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 class Configurator {
   private readonly _extra_config: ExtraConfig<Settings> = EXTRA_SETTINGS;
   private readonly _config: Config = SETTINGS;
-  private readonly _path: string = pathFormat(SETTINGS.dir, LOGGER_CONFIG_FILE_NAME);
+  private readonly _path: string = pathFormat(
+    SETTINGS.dir,
+    LOGGER_CONFIG_FILE_NAME,
+  );
 
-  public constructor(config?: Partial<Config> | Partial<ExtraConfig<Settings>>) {
+  public constructor(
+    config?: Partial<Config> | Partial<ExtraConfig<Settings>>,
+  ) {
     this.Paste(config);
 
     if (!(this._config.dir === ROOT_DIR && filePath === ROOT_DIR)) {
       if (this._config.dir !== ROOT_DIR) {
-        filePath = this._config.dir
+        filePath = this._config.dir;
       } else {
-        this._config.dir = filePath
-      };
+        this._config.dir = filePath;
+      }
     }
 
     this._path = pathFormat(this._config.dir, LOGGER_CONFIG_FILE_NAME);
@@ -53,16 +63,18 @@ class Configurator {
         const str = `"${key}": ${config[key]}`;
         const err = JSON.stringify(config, undefined, 4).replaceAll(
           str,
-          new Formatter().Color(str, Colors.bgMagenta)
+          new Formatter().Color(str, Colors.bgMagenta),
         );
 
-        throw new Error("Unknown key: " + key + " change or delete it\nAt your file:\n" + err);
+        throw new Error(
+          "Unknown key: " + key + " change or delete it\nAt your file:\n" + err,
+        );
       }
 
       this._config[key] = new Validator(
         key as SettingKeys,
         config[key],
-        JSON.stringify(config, undefined, 4)
+        JSON.stringify(config, undefined, 4),
       ).init();
     }
 
@@ -73,12 +85,12 @@ class Configurator {
     if (!existsSync(this._path)) return;
     if (!this._extra_config.create_file) return;
 
-    const json = readFileSync(this._path, "utf-8");    
+    const json = readFileSync(this._path, "utf-8");
     const file = JSON.parse(json);
-    
+
     const config = sort({
       ...file,
-      ...this._config
+      ...this._config,
     });
 
     writeFileSync(this._path, JSON.stringify(config, undefined, 2), "utf-8");
@@ -88,7 +100,7 @@ class Configurator {
 
   private Create() {
     const config = sort(this._config);
-    
+
     const file = JSON.stringify(config, undefined, 2);
     writeFileSync(this._path, file, "utf-8");
 
@@ -99,7 +111,11 @@ class Configurator {
     return new Validator(
       key,
       value,
-      JSON.stringify(JSON.parse(readFileSync(this._path, "utf-8")), undefined, 0)
+      JSON.stringify(
+        JSON.parse(readFileSync(this._path, "utf-8")),
+        undefined,
+        0,
+      ),
     ).init();
   }
 
@@ -112,14 +128,18 @@ class Configurator {
   }
 
   private Read() {
-    if (!existsSync(this._path) && this._extra_config.create_file) this.Create();
+    if (!existsSync(this._path) && this._extra_config.create_file)
+      this.Create();
 
     if (
       existsSync(this._path) &&
-      Object.keys(JSON.parse(readFileSync(this._path, "utf-8") || "{}")).length === 0
+      Object.keys(JSON.parse(readFileSync(this._path, "utf-8") || "{}"))
+        .length === 0
     ) {
       console.log(
-        Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset
+        Colors.brightYellow +
+          "Your config is empty, returning to default" +
+          Colors.reset,
       );
 
       unlinkSync(this._path);
@@ -148,10 +168,10 @@ class Configurator {
     if (this._extra_config.overwrite_file) {
       this.Overwrite();
     }
-    
+
     if (this.HasPermissions()) {
       this.Read();
-    };
+    }
   };
 
   public get config(): Config {

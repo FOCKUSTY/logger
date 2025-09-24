@@ -7,12 +7,16 @@ import { existsSync, readFileSync, writeFileSync } from "fs";
 
 import Configurator from "../config/configurator";
 
-import { DEFAULT_COLORS, LOGGER_CONFIG_FILE_NAME, LOGGER_LOGGERS_FILE_NAME } from "./data";
+import {
+  DEFAULT_COLORS,
+  LOGGER_CONFIG_FILE_NAME,
+  LOGGER_LOGGERS_FILE_NAME,
+} from "./data";
 
 const { config } = new Configurator();
 const cache: LoggersNameType = {
   Success: { name: "Success", colors: [Colors.red, Colors.green] },
-  Fail: { name: "Fail", colors: [Colors.red, Colors.red] }
+  Fail: { name: "Fail", colors: [Colors.red, Colors.red] },
 };
 
 const join = (...p: string[]) => resolve(pJoin(...p));
@@ -35,17 +39,21 @@ class LoggersNames {
 
   private readonly ChoosePath = (): string => {
     const loggercfg = join(this._dir, LOGGER_CONFIG_FILE_NAME);
-    
+
     if (existsSync(loggercfg)) {
       return loggercfg;
-    } 
-    
+    }
+
     if (existsSync(this._default_path)) {
       return this._default_path;
     }
-    
+
     if (this._create_file) {
-      writeFileSync(this._default_path, JSON.stringify(this._standart, undefined, 2), "utf-8");
+      writeFileSync(
+        this._default_path,
+        JSON.stringify(this._standart, undefined, 2),
+        "utf-8",
+      );
     }
 
     return this._default_path;
@@ -75,7 +83,7 @@ class LoggersNames {
 
     if (!this._create_file && !existsSync(this._path)) {
       return names;
-    };
+    }
 
     if (parse(this._path).base === LOGGER_CONFIG_FILE_NAME) {
       const file: Config = JSON.parse(readFileSync(this._path, "utf-8"));

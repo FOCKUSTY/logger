@@ -62,7 +62,7 @@ const loggerName = "The Void"; /* MY-APP-NAME */
 const baseLogger = new Logger(loggerName, { dir });
 const colorableLogger = new Logger(loggerName, {
   dir,
-  colors: [Colors.magenta, Colors.reset]
+  colors: [Colors.magenta, Colors.reset],
 });
 
 /* Если вы хотите вывести бесцветное сообщение в чат, просто введите текст */
@@ -87,7 +87,7 @@ import { Configurator } from "fock-logger/config";
 new Configurator({
   create_file: true,
   dir: "../",
-  level: "info" /* тут могут быть ещё значения из конфига */
+  level: "info" /* тут могут быть ещё значения из конфига */,
 });
 ```
 
