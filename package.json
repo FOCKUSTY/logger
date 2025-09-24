@@ -6,7 +6,7 @@
   "types": "./index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test:prod": "cd dist && mocha --extension test.js",
+    "test:prod": "mocha --extension test.js",
     "test": "ts-mocha --paths ./src/test/**/*.test.ts"
   },
   "files": [
