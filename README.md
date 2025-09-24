@@ -73,7 +73,7 @@ baseLogger.execute("Hello, World !");
 colorableLogger.execute("Hello, World !");
 // \u001B[35mThe Void\u001B[0m: \u001B[0mHello, World!\u001B[0m (The Void: Hello, World!)
 
-colorableLogger.execute("Hello, World !", Colors.magenta);
+colorableLogger.execute("Hello, World !", { color: Colors.magenta });
 // \u001B[35mThe Void\u001B[0m: \u001B[35m0mHello, World!\u001B[0m (The Void: Hello, World!)
 ```
 
