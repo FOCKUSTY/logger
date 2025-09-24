@@ -5,8 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "watch:conf": "nodemon configurator.ts",
-    "build": "tsc && fockbuilder",
+    "build": "tsc",
     "test:prod": "cd dist && mocha --extension test.js",
     "test": "ts-mocha --paths ./src/test/**/*.test.ts"
   },
@@ -15,11 +14,9 @@
     "./README.md",
     "./LICENSE",
     "./**/*.js",
-    "./**/*.js.map",
     "./**/*.d.ts",
-    "./**/*.d.ts.map",
     "./**/*.svg",
-    "!./**/test/",
+    "!./**/test/*",
     "!./**/*.ts"
   ],
   "keywords": [
@@ -32,7 +29,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.8",
     "@types/node": "^22.7.4",
-    "fock-builder": "^1.1.0-beta",
+    "fock-builder": "^2.1.0-beta.1",
     "mocha": "^10.7.3",
     "ts-mocha": "^10.0.0",
     "typescript": "^5.6.2"

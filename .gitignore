@@ -11,6 +11,11 @@ build/
 dist/
 out/
 
+*.d.ts
+*.d.ts.map
+*.js.map
+*.js
+
 # vscode
 .vs
 .vscode
