@@ -5,7 +5,7 @@ import { Config } from "../data/loggers.types";
 import Formatter from "f-formatter";
 
 import path from "path";
-import fs from "fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
 
 import Deleter from "./deleter.logger";
 import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "src/data/data";
@@ -14,20 +14,23 @@ const cache = new Map();
 const formatter = new Formatter();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
-class Log {
-  private readonly _date: Date;
-  private readonly _date_string: string;
-  private readonly _dir: string = config.dir;
-  private readonly _deleter: Deleter;
-  private readonly _hello: string;
-  private readonly _init: boolean = true;
+abstract class LogStrategy {
+  protected readonly _date: Date;
+  protected readonly _date_string: string;
+  protected readonly _dir: string;
+  protected readonly _deleter: Deleter;
+  protected readonly _hello: string;
+  protected readonly _init: boolean;
+  protected readonly _file_name: string;
 
-  private readonly _config: {
+  protected readonly _config: {
     file_path: string;
     prefix: string;
   } & Config;
 
-  private _cache: string = "";
+  public _cache: string = "";
+
+  abstract file: string | Promise<string>;
 
   public constructor(
     dir: string,
@@ -49,6 +52,7 @@ class Log {
         ? data.filePath
         : pathFormat(dir, LOG_DIR_NAME, prefix + this._date_string) + LOG_FILE_EXTENSION,
     };
+    this._file_name = this._config.prefix + this._date_string + LOG_FILE_EXTENSION;
 
     this._init = init;
     this._dir = pathFormat(dir);
@@ -56,54 +60,48 @@ class Log {
     this._hello = `====---- Hello! This is log file of ${this._date_string} ! ----====`;
 
     if (init) {
-      this.init();
+      new Promise((res) => {
+        (async () => {
+          await this.init();
+    
+          const file = await this.readFile()
 
-      this._cache = this.ReadFile();
-      cache.set(this._config.file_path, this._cache);
+          this._cache = file;
+          cache.set(this._config.file_path, this._cache);
+          
+          res(true);
+        })();
+      });
     }
   }
 
-  private CreateFile() {
-    if (
-      !fs
-        .readdirSync(pathFormat(this._dir, LOG_DIR_NAME))
-        .includes(this._config.prefix + this._date_string + LOG_FILE_EXTENSION)
-    ) {
-      fs.writeFileSync(this._config.file_path, this._hello);
-    }
+  public abstract execute(text: string): void | Promise<void>;
+  protected abstract init(): void | Promise<void>;
+
+  protected abstract createFile(): void | Promise<void>;
+  protected abstract createFolder(): void | Promise<void>;
+
+  protected abstract readFile(): string | Promise<string>;
+  protected abstract writeFile(): void | Promise<void>;
+}
+
+export class Log extends LogStrategy {
+  public constructor(
+    dir: string,
+    data: {
+      filePath?: string;
+      prefix?: string;
+    } & Partial<Config>,
+    init: boolean = true
+  ) {
+    super(dir, data, init);
   }
 
-  private CreateFolder() {
-    if (!fs.readdirSync(this._dir).includes(LOG_DIR_NAME)) {
-      fs.mkdirSync(pathFormat(this._dir, LOG_DIR_NAME));
-    }
-
-    this.CreateFile();
-  }
-
-  private ReadFile() {
-    return fs.readFileSync(
-      pathFormat(this._dir, LOG_DIR_NAME, this._config.prefix + this._date_string + LOG_FILE_EXTENSION),
-      "utf-8"
-    );
-  }
-
-  private WriteFile = () => {
-    fs.writeFileSync(this._config.file_path, cache.get(this._config.file_path), {
-      encoding: "utf-8"
-    });
-  };
-
-  private readonly init = () => {
-    this.CreateFolder();
-    this._deleter.init();
-  };
-
-  public writeFile(text: string) {
+  public execute(text: string): void  {
     if (!this._init) {
       this.init();
 
-      this._cache = this.ReadFile();
+      this._cache = this.readFile();
       cache.set(this._config.file_path, this._cache);
     }
 
@@ -114,11 +112,49 @@ class Log {
         text
     );
 
-    this.WriteFile();
+    return this.writeFile();
+  }
+
+  protected init(): Promise<void>  {
+    this.createFolder();
+    
+    return this._deleter.init();
+  }
+  
+  protected createFile(): void  {
+    const dir = readdirSync(pathFormat(this._dir, LOG_DIR_NAME));
+    const dirIncludesFile = dir.includes(this._file_name);
+    
+    if (dirIncludesFile) {
+      return;
+    }
+
+    return writeFileSync(this._config.file_path, this._hello, "utf-8");
+  }
+  
+  protected createFolder(): void  {
+    const dir = readdirSync(this._dir);
+    const dirIncludesFile = dir.includes(LOG_DIR_NAME);
+    
+    if (!dirIncludesFile) {
+      mkdirSync(pathFormat(this._dir, LOG_DIR_NAME), { recursive: true });
+    }
+
+    return this.createFile();
+  }
+  
+  protected readFile(): string {
+    return readFileSync(
+      pathFormat(this._dir, LOG_DIR_NAME, this._file_name), "utf-8"
+    );
+  }
+  
+  protected writeFile(): void  {
+    return writeFileSync(this._config.file_path, cache.get(this._config.file_path), "utf-8");
   }
 
   public get file() {
-    return this.ReadFile();
+    return this.readFile();
   }
 }
 

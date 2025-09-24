@@ -1,7 +1,7 @@
 import Formatter, { Colors } from "f-formatter";
 
 import path from "path";
-import fs from "fs";
+import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 
 import type {
   Config,
@@ -70,10 +70,10 @@ class Configurator {
   }
 
   private Overwrite() {
-    if (!fs.existsSync(this._path)) return;
+    if (!existsSync(this._path)) return;
     if (!this._extra_config.create_file) return;
 
-    const json = fs.readFileSync(this._path, "utf-8");    
+    const json = readFileSync(this._path, "utf-8");    
     const file = JSON.parse(json);
     
     const config = sort({
@@ -81,7 +81,7 @@ class Configurator {
       ...this._config
     });
 
-    fs.writeFileSync(this._path, JSON.stringify(config, undefined, 2), "utf-8");
+    writeFileSync(this._path, JSON.stringify(config, undefined, 2), "utf-8");
 
     return config;
   }
@@ -90,7 +90,7 @@ class Configurator {
     const config = sort(this._config);
     
     const file = JSON.stringify(config, undefined, 2);
-    fs.writeFileSync(this._path, file, "utf-8");
+    writeFileSync(this._path, file, "utf-8");
 
     return config;
   }
@@ -99,7 +99,7 @@ class Configurator {
     return new Validator(
       key,
       value,
-      JSON.stringify(JSON.parse(fs.readFileSync(this._path, "utf-8")), undefined, 0)
+      JSON.stringify(JSON.parse(readFileSync(this._path, "utf-8")), undefined, 0)
     ).init();
   }
 
@@ -112,17 +112,17 @@ class Configurator {
   }
 
   private Read() {
-    if (!fs.existsSync(this._path) && this._extra_config.create_file) this.Create();
+    if (!existsSync(this._path) && this._extra_config.create_file) this.Create();
 
     if (
-      fs.existsSync(this._path) &&
-      Object.keys(JSON.parse(fs.readFileSync(this._path, "utf-8") || "{}")).length === 0
+      existsSync(this._path) &&
+      Object.keys(JSON.parse(readFileSync(this._path, "utf-8") || "{}")).length === 0
     ) {
       console.log(
         Colors.brightYellow + "Your config is empty, returning to default" + Colors.reset
       );
 
-      fs.unlinkSync(this._path);
+      unlinkSync(this._path);
       this.Create();
     }
 
@@ -131,7 +131,7 @@ class Configurator {
 
       this.Validate(config);
     } catch (err: any) {
-      if (!fs.existsSync(this._path)) return;
+      if (!existsSync(this._path)) return;
 
       throw new Error(err);
     }
@@ -139,7 +139,7 @@ class Configurator {
 
   private HasPermissions(): boolean {
     if (this._extra_config.create_file) return true;
-    if (fs.existsSync(this._path)) return true;
+    if (existsSync(this._path)) return true;
 
     return false;
   }

@@ -107,11 +107,11 @@ class InitLogger {
     const logEnabled = (config.logging && this._log) || data.write;
     if (logEnabled) {
       if (typeof text === "string") {
-        this._log.writeFile(`${this._name}: ${text}`)
+        this._log.execute(`${this._name}: ${text}`)
       } else {
-        this._log.writeFile(`${this._name}:`);
+        this._log.execute(`${this._name}:`);
         for (const msg of colored) {
-          this._log.writeFile(msg[1])
+          this._log.execute(msg[1])
         }
       };
     }
@@ -151,7 +151,7 @@ class InitLogger {
         
         cleanup();
         const input = userInput.slice(0, userInput.indexOf("\r\n")) as string;
-        this._log.writeFile("User: " + input);
+        this._log.execute("User: " + input);
         resolve(input);
       };
 
@@ -172,7 +172,7 @@ class InitLogger {
   }
 
   public get write() {
-    return this._log.writeFile;
+    return this._log.execute;
   }
 
   public get colors(): [Colors, Colors] {

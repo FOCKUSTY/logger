@@ -8,7 +8,7 @@ import {
 } from "../data/data";
 
 import path from "path";
-import fs from "fs";
+import { readdir, unlink } from "fs/promises";
 
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
@@ -19,8 +19,9 @@ class Deleter {
     this._dir = pathFormat(dir);
   }
 
-  public init() {
-    const dir = fs.readdirSync(pathFormat(this._dir, LOG_DIR_NAME));
+  public async init() {
+    const dir = await readdir(pathFormat(this._dir, LOG_DIR_NAME));
+    
     for (const log of dir) {
       const { name } = path.parse(pathFormat(this._dir, LOG_DIR_NAME, log));
       const date = name.match(FILTER);
@@ -34,7 +35,7 @@ class Deleter {
 
       try {
         if (now > deleteTime) {
-          fs.unlinkSync(pathFormat(this._dir, LOG_DIR_NAME, log));
+          unlink(pathFormat(this._dir, LOG_DIR_NAME, log));
 
           continue;
         }
