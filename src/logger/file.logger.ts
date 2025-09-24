@@ -60,29 +60,23 @@ abstract class LogStrategy {
     this._hello = `====---- Hello! This is log file of ${this._date_string} ! ----====`;
 
     if (init) {
-      new Promise((res) => {
-        (async () => {
-          await this.init();
+      this.init();
     
-          const file = await this.readFile()
+      const file = this.readFile()
 
-          this._cache = file;
-          cache.set(this._config.file_path, this._cache);
-          
-          res(true);
-        })();
-      });
+      this._cache = file;
+      cache.set(this._config.file_path, this._cache);
     }
   }
 
-  public abstract execute(text: string): void | Promise<void>;
-  protected abstract init(): void | Promise<void>;
+  public abstract execute(text: string): void;
+  protected abstract init(): void;
 
-  protected abstract createFile(): void | Promise<void>;
-  protected abstract createFolder(): void | Promise<void>;
+  protected abstract createFile(): void;
+  protected abstract createFolder(): void;
 
-  protected abstract readFile(): string | Promise<string>;
-  protected abstract writeFile(): void | Promise<void>;
+  protected abstract readFile(): string;
+  protected abstract writeFile(): void;
 }
 
 export class Log extends LogStrategy {
