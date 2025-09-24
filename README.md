@@ -10,6 +10,10 @@
 
 ![Logotype](./assets/logger.logo.svg)
 
+```cmd
+npm install --save fock-logger@latest
+```
+
 ## Предисловие
 
 Обязательно импортируйте конфиг `fock-logger/config` первым, если хотите его настраивать (чтобы изменения всегда были актуальны)
@@ -34,26 +38,19 @@ const logger = new Logger("Tester");
 /* ... */
 ```
 
-### Установка (Windows, npm)
-
-```
-npm install fock-logger@latest
-```
-
-<hr>
-
 ## Примеры
 
 ```ts
 /* Импортируем конфиг, желательно, чтобы он находился вверху импортов */
-import { Configurator } from "f-logger";
+import { Configurator } from "fock-logger/config";
 
 /* Устанавливаем свои значение в конфиг */
 /* Тут мы установили значение date на false, потому что мне лень в примере писать дату */
 /* Вы можете устанавливать свои значение, указанные в конфиге */
 new Configurator({ date: false });
 
-import Logger, { Colors } from "f-logger";
+import { Colors } from "fock-logger/colors";
+import Logger from "fock-logger";
 
 /* dir - Ваша папка, где находится конфиг */
 /* loggerName - Название вашего логгера */
@@ -62,30 +59,30 @@ const loggerName = "The Void"; /* MY-APP-NAME */
 
 /* Первый logger - бесцветный */
 /* Второй logger - с цветами, первый цвет - цвет логгера, второй цвет - цвет сообщения */
-const loggerNO_COLOR = new Logger(loggerName, { dir });
-const loggerCOLOR = new Logger(loggerName, {
+const baseLogger = new Logger(loggerName, { dir });
+const colorableLogger = new Logger(loggerName, {
   dir,
   colors: [Colors.magenta, Colors.reset]
 });
 
 /* Если вы хотите вывести бесцветное сообщение в чат, просто введите текст */
 /* Однако это сработает только при том случае, если в конфиге не будет указано цветов по умолчанию */
-loggerNO_COLOR.execute("Hello, World !");
+baseLogger.execute("Hello, World !");
 // \u001B[35mThe Void\u001B[0m: \u001B[0mHello, World !\u001B[0m (The Void: Hello, World!)
 
-loggerCOLOR.execute("Hello, World !");
+colorableLogger.execute("Hello, World !");
 // \u001B[35mThe Void\u001B[0m: \u001B[0mHello, World!\u001B[0m (The Void: Hello, World!)
 
-loggerCOLOR.execute("Hello, World !", Colors.magenta);
+colorableLogger.execute("Hello, World !", Colors.magenta);
 // \u001B[35mThe Void\u001B[0m: \u001B[35m0mHello, World!\u001B[0m (The Void: Hello, World!)
 ```
 
-# config-файл
+## config-файл
 
 config-файл называется `.loggercfg`, его можно создать автоматически:
 
 ```ts
-import { Configurator } from "fock-logger";
+import { Configurator } from "fock-logger/config";
 
 new Configurator({
   create_file: true,
@@ -101,6 +98,12 @@ new Configurator({
   "logging": true,
   "dir": "./",
   "level": "info",
+  "defautLevel": "info",
+  "levels": {
+    "info": 1,
+    "warn": 2,
+    "error": 3
+  },
   "deletion_interval": 7,
   "date": true,
   "colors": ["\u001b[0m", "\u001b[0m"],
@@ -119,25 +122,28 @@ new Configurator({
 
 Рассмотрим подробнее
 
-- `logging` - Булевое значение, если `true`, то все логи будут выводит, иначе логгер перестанет работать
-- `dir` - Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`, принимает значения типа: `string`.
-- `level` - Уровень логирования в консоли, `info` - Вся информация, `warn` - Предупреждения, `err` - Ошибки, принимает значения типа: `string`.
-- `deletion_interval` - Промежуток удаления лога, принимает значение типа `number`, отображает количесто дней (Количество дней, после которых лог удалится)
-- `date` - Включает и выключает дату в консоли
-- `colors` - Стандартные цвета для логгера, принимает значения типа: `[Colors, Colors]`.
-- `loggers` - Ваши логгеры, принимает значения типа: `LoggersNameType` (`{[key: string]: {name: string, colors: [Colors, Colors]}}`).
+- `logging` — Булевое значение, если `true`, то все логи будут выводит, иначе логгер перестанет работать
+- `dir` — Ваша папка, где будет лежать config-файл `.loggercfg`, и папка `log`, принимает значения типа: `string`.
+- `level` — Уровень логирования в консоли
+  - `info` — Вся информация
+  - `warn` — Предупреждения
+  - `error` — Ошибки, принимает значения типа: `string`
+- `defaultLevel` — Уровень по умолчанию для всех логгеров
+- `levels` — Все доступные уровни логирования
+- `deletion_interval` — Промежуток удаления лога, принимает значение типа `number`, отображает количесто дней (Количество дней, после которых лог удалится)
+- `date` — Включает и выключает дату в консоли
+- `colors` — Стандартные цвета для логгера, принимает значения типа: `[Colors, Colors]`.
+- `loggers` — Ваши логгеры, принимает значения типа: `LoggersNameType` (`{[key: string]: {name: string, colors: [Colors, Colors]}}`).
 
-## Внимание!
+## Внимание
 
 - Если у Вас есть файл `loggers.json` логгеры не будут записываться в конфиг.
 - Чтобы их записывать в конфиг, удалите файл `loggers.json`.
 - Или иначе, если Вам конфиг не нужен и Вас устраивают стандартные значение, то ничего не делаете, `loggers.json` сам создаться с предустановленными настройками.
 
-# Если
+## Если
 
 - Если возникли проблемы или сложности, создайте [обсуждение](https://github.com/fockusty/logger/issues/new/choose) в репозитории
-- Если Вы заметили проблемы в коде, пишите мне в [Discord](https://discord.gg/5MJrRjzPec) или в [Telegram](https://t.me/FOCKUSTY)
+- Если Вы заметили проблемы в коде, пишите мне в [Discord](https://discord.gg/97J8mnn4Gr) или в [Telegram](https://t.me/The_Void_Community)
 
-<div align="center">
-    <img src="./assets/logger.banner.svg" alt="banner">
-</div>
+![Banner](./assets/logger.banner.svg)
