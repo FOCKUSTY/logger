@@ -1,4 +1,4 @@
-import { Colors } from "f-formatter";
+import { Colors } from "../utils/colors";
 
 import type { Config, ExtraneousConfig, SettingKeys } from "./loggers.types";
 import { Types } from "./loggers.types";

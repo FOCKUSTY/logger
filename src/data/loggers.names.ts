@@ -1,6 +1,6 @@
 import type { Config, LoggersNameType } from "./loggers.types";
 
-import { Colors } from "f-formatter/colors";
+import { Colors } from "../utils/colors";
 
 import { join as pJoin, parse, resolve } from "path";
 import { existsSync, readFileSync, writeFileSync } from "fs";

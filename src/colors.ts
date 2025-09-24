@@ -1,1 +1,1 @@
-export { Colors } from "f-formatter";
+export * from "./utils/colors";

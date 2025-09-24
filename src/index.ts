@@ -1,5 +1,5 @@
 import Logger from "./logger/index.logger";
 
-export { Colors } from "f-formatter";
+export { Colors } from "./colors";
 export { Logger };
 export default Logger;

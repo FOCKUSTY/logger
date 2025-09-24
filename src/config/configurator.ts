@@ -1,4 +1,5 @@
-import Formatter, { Colors } from "f-formatter";
+import { Colors } from "../utils/colors";
+import { color } from "../utils/color";
 
 import path from "path";
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from "fs";
@@ -63,7 +64,7 @@ class Configurator {
         const str = `"${key}": ${config[key]}`;
         const err = JSON.stringify(config, undefined, 4).replaceAll(
           str,
-          new Formatter().Color(str, Colors.bgMagenta),
+          color(str, Colors.bgMagenta),
         );
 
         throw new Error(
@@ -147,7 +148,7 @@ class Configurator {
     }
 
     try {
-      const config: Config = new Formatter().FromJSONWithPath(this._path);
+      const config: Config = JSON.parse(readFileSync(this._path, "utf-8"));
 
       this.Validate(config);
     } catch (err: any) {

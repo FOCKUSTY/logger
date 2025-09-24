@@ -47,9 +47,5 @@
   "bugs": {
     "email": "wwddwwwd@mail.ru",
     "url": "https://github.com/FOCKUSTY/logger/issues"
-  },
-  "dependencies": {
-    "f-formatter": "^0.3.1",
-    "node": "^22.9.0"
   }
 }

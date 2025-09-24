@@ -1,14 +1,14 @@
 import Configurator from "../config/configurator";
 const { config } = new Configurator();
 
-import Formatter, { Colors } from "f-formatter";
+import { Colors } from "../utils/colors";
+import { color as paint } from "../utils/color";
 
 import { LevelKeys, LoggerName, Config } from "../data/loggers.types";
 import LoggersNames from "../data/loggers.names";
 
 import FileLogger from "./file.logger";
 
-const formatter = new Formatter();
 const loggersNames = new LoggersNames(config.logging);
 
 type ExecuteData<Level extends string> = Partial<{
@@ -116,7 +116,7 @@ class InitLogger {
       data.color,
     );
 
-    const name = formatter.Color(this._name, this._colors[0]) + ":";
+    const name = paint(this._name, this._colors[0]) + ":";
     const date = `[${new Date().toISOString()}]`;
 
     const { prefix, join, suffix } = this.resolveAffix({
@@ -133,7 +133,7 @@ class InitLogger {
         prefix +
           (typeof text === "string"
             ? colored.join(join)
-            : formatter.Color(
+            : paint(
                 colored.join(join),
                 data.color || this._colors[1],
               )) +
@@ -252,13 +252,13 @@ class InitLogger {
     const out = typeof text === "string" ? [text] : text;
 
     const output: string[] = out.map((text) =>
-      formatter.Color(
+      paint(
         typeof text !== "string"
           ? text instanceof Error
             ? text.stack || text.message
             : JSON.stringify(text, undefined, 4)
           : text,
-        color || this._colors[1],
+        color || this._colors[1]
       ),
     );
 

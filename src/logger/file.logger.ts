@@ -2,7 +2,6 @@ import Configurator from "../config/configurator";
 const { config } = new Configurator();
 
 import { Config } from "../data/loggers.types";
-import Formatter from "f-formatter";
 
 import path from "path";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
@@ -11,7 +10,6 @@ import Deleter from "./deleter.logger";
 import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "src/data/data";
 
 const cache = new Map();
-const formatter = new Formatter();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
 const errorAffixText = "------------------ ERROR ------------------";
@@ -47,7 +45,7 @@ abstract class LogStrategy {
     const prefix = data.prefix ? data.prefix + "-" : "";
 
     this._date = new Date();
-    this._date_string = formatter.date.Date(this._date, "yyyy.MM.dd");
+    this._date_string = this._date.toLocaleDateString().split(".").reverse().join(".");
     this._config = {
       ...config,
       ...data,

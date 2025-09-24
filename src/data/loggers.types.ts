@@ -1,4 +1,4 @@
-import { Colors } from "f-formatter";
+import { Colors } from "../utils/colors";
 
 export type LoggerName<T extends string> = "Fail" | "Success" | T;
 
