@@ -1,9 +1,9 @@
 {
   "name": "fock-logger",
-  "version": "5.5.1",
+  "version": "5.5.1a",
   "description": "Simple logger for your pet-project",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "scripts": {
     "build": "tsc",
     "test:prod": "cd dist && mocha --extension test.js",

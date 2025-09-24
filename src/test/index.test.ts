@@ -1,6 +1,6 @@
 import Test from "./test.class";
 
-import { Configurator } from "../config";
+import Configurator from "../config/configurator";
 import { join } from "path";
 
 new Configurator({
@@ -12,7 +12,7 @@ new Configurator({
   date: false,
 });
 
-import Logger, { Colors as c } from "../index";
+import Logger, { Colors as c } from "../../index";
 
 const logger = new Logger("Tester");
 new Logger("Commands", { colors: [c.brightYellow, c.magenta] });

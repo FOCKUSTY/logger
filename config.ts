@@ -1,4 +1,4 @@
-import Configurator from "./config/configurator";
+import Configurator from "./src/config/configurator";
 
 export { Configurator };
 
