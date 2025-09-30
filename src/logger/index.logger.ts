@@ -33,6 +33,16 @@ type ResolveTextType<T extends TextTypes> = {
   error: Error | Error[];
 }[T];
 
+type Listeners = {
+  listeners?: (input: NodeJS.ReadStream) => {
+    onReadable?: () => void
+    onError?: (error: unknown) => void
+    onEnd?: () => void
+    onData?: (chunk: unknown) => void
+    onStart?: () => void
+  }
+};
+
 const DEFAULT_EXECUTE_DATA: Required<
   Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
 > = {
@@ -189,25 +199,33 @@ class InitLogger {
 
   public readonly readLine = <Level extends string>(
     text: string | any[],
-    data: ExecuteData<Level> = {
+    data: (ExecuteData<Level> & Listeners) = {
       ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
-    } as ExecuteData<Level>,
+    } as (ExecuteData<Level> & Listeners)
   ) => {
     return new Promise<string | Error>((resolve, reject) => {
       this.input.resume();
       this.input.setEncoding("utf8");
+      
+      const listeners = (data?.listeners || (() => undefined))(this.input);
+
+      const onStart = (listeners?.onStart || (() => {}));
+      onStart();
 
       const cleanup = () => {
         this.input.removeListener("readable", onReadable);
         this.input.removeListener("error", onError);
         this.input.removeListener("end", onEnd);
+        this.input.removeListener("data", listeners?.onData || (() => {}));
       };
 
       this.execute(text, data);
 
       const onReadable = () => {
+        if (listeners?.onReadable) listeners.onReadable();
+
         const userInput: string = this.input.read();
         if (!userInput) {
           cleanup();
@@ -221,11 +239,15 @@ class InitLogger {
       };
 
       const onError = (err: unknown) => {
+        if (listeners?.onError) listeners.onError(err);
+        
         cleanup();
         reject(err);
       };
 
       const onEnd = () => {
+        if (listeners?.onEnd) listeners.onEnd();
+        
         cleanup();
         reject(new Error("Stream ended without data"));
       };
@@ -233,6 +255,7 @@ class InitLogger {
       this.input.on("readable", onReadable);
       this.input.on("error", onError);
       this.input.on("end", onEnd);
+      this.input.on("data", listeners?.onData || (() => {}));
     });
   };
 
@@ -435,11 +458,11 @@ class Logger<T extends string, Levels extends string> {
 
   public readonly read = (
     text: string | any[],
-    data: ExecuteData<Levels> = {
+    data: (ExecuteData<Levels> & Listeners) = {
       ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
-    } as ExecuteData<Levels>,
+    } as (ExecuteData<Levels> & Listeners),
   ) => {
     return this._logger.readLine(text, {
       ...this._data,

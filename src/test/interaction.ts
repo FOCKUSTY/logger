@@ -17,5 +17,20 @@ import Logger, { Colors as c } from "../../index";
 
   logger.execute("Hello");
 
-  await logger.read("Your name: ", { end: "" });
+  const data = await logger.read("Your name: ", { end: "", listeners: (input) => ({
+    onReadable() {
+      console.log(1);
+    },
+    onStart() {
+      console.log(2);
+    },
+    onEnd() {
+      console.log(3);
+    },
+    onData(chunk) {
+      console.log({chunk});
+    }
+  })});
+
+  console.log({data});
 })();

@@ -7,7 +7,7 @@ import path from "path";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
 
 import Deleter from "./deleter.logger";
-import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "src/data/data";
+import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "../data/data";
 
 const cache = new Map();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
