@@ -427,11 +427,7 @@ class Logger<T extends string, Levels extends string> {
 
   public readonly execute = (
     text: string | any[],
-    data: ExecuteData<Levels> = {
-      ...DEFAULT_EXECUTE_DATA,
-      color: this._colors[1],
-      write: config.logging,
-    } as ExecuteData<Levels>,
+    data: ExecuteData<Levels>,
   ) => {
     return this._logger.execute(text, {
       ...this._data,
@@ -441,11 +437,7 @@ class Logger<T extends string, Levels extends string> {
 
   public readonly error = (
     text: string | Error | Error[],
-    data: ExecuteData<Levels> = {
-      ...DEFAULT_EXECUTE_DATA,
-      color: this._colors[1],
-      write: config.logging,
-    } as ExecuteData<Levels>,
+    data: ExecuteData<Levels>,
   ) => {
     return this._logger.error(
       typeof text === "string" ? new Error(text) : text,
@@ -458,11 +450,7 @@ class Logger<T extends string, Levels extends string> {
 
   public readonly read = (
     text: string | any[],
-    data: (ExecuteData<Levels> & Listeners) = {
-      ...DEFAULT_EXECUTE_DATA,
-      color: this._colors[1],
-      write: config.logging,
-    } as (ExecuteData<Levels> & Listeners),
+    data: (ExecuteData<Levels> & Listeners),
   ) => {
     return this._logger.readLine(text, {
       ...this._data,
