@@ -4,12 +4,12 @@ class Test {
   private readonly _tests: [any, any][];
   private readonly _name: string;
 
-  constructor(name: string, tests: [any, any][]) {
+  public constructor(name: string, tests: [any, any][]) {
     this._name = name;
     this._tests = tests;
   }
 
-  public readonly execute = () => {
+  public execute() {
     describe(this._name, () => {
       for (const test of this._tests) {
         const answer = test[0];

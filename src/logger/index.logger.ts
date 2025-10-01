@@ -81,7 +81,7 @@ class InitLogger {
     this._log = new FileLogger(dir, this._config, config.logging);
   }
 
-  public readonly execute = <Level extends string>(
+  public execute<Level extends string>(
     text: string | any[],
     data: ExecuteData<Level> = {
       ...DEFAULT_EXECUTE_DATA,
@@ -91,11 +91,11 @@ class InitLogger {
   ): {
     colored: string[];
     base: unknown[];
-  } => {
+  } {
     return this.logger(text, data, "execute");
   };
 
-  public readonly error = <Level extends string>(
+  public error<Level extends string>(
     text: Error | Error[],
     data: ExecuteData<Level> = {
       ...DEFAULT_EXECUTE_DATA,
@@ -105,11 +105,11 @@ class InitLogger {
   ): {
     colored: string[];
     base: unknown[];
-  } => {
+  } {
     return this.logger(text, data, "error");
   };
 
-  private readonly logger = <Level extends string, Type extends TextTypes>(
+  private logger<Level extends string, Type extends TextTypes>(
     text: ResolveTextType<Type>,
     data: ExecuteData<Level> = {
       ...DEFAULT_EXECUTE_DATA,
@@ -120,7 +120,7 @@ class InitLogger {
   ): {
     colored: string[];
     base: unknown[];
-  } => {
+  } {
     const { colored, base } = this.resolveText(
       Array.isArray(text) ? text : [text],
       data.color,
@@ -162,7 +162,7 @@ class InitLogger {
     };
   };
 
-  private readonly logFileService = <Type extends TextTypes>({
+  private logFileService<Type extends TextTypes>({
     type,
     text,
     colored,
@@ -170,7 +170,7 @@ class InitLogger {
     type: Type;
     text: ResolveTextType<Type>;
     colored: string[];
-  }) => {
+  }) {
     const suffix = "LogFile" as const;
     const prefix = type;
     const name = `${prefix}${suffix}` as `${Type}LogFile`;
@@ -178,10 +178,10 @@ class InitLogger {
     this[name](<any>text, colored);
   };
 
-  protected readonly executeLogFile = (
+  protected executeLogFile(
     text: ResolveTextType<"execute">,
     colored: string[],
-  ) => {
+  ) {
     if (typeof text === "string") {
       this._log.execute(`${this._name}: ${text}`);
     } else {
@@ -193,18 +193,18 @@ class InitLogger {
     }
   };
 
-  protected readonly errorLogFile = (text: ResolveTextType<"error">) => {
+  protected errorLogFile(text: ResolveTextType<"error">) {
     this._log.error(text);
   };
 
-  public readonly readLine = <Level extends string>(
+  public readLine<Level extends string>(
     text: string | any[],
     data: (ExecuteData<Level> & Listeners) = {
       ...DEFAULT_EXECUTE_DATA,
       color: this._colors[1],
       write: config.logging,
     } as (ExecuteData<Level> & Listeners)
-  ) => {
+  ) {
     return new Promise<string | Error>((resolve, reject) => {
       this.input.resume();
       this.input.setEncoding("utf8");
@@ -392,7 +392,7 @@ class Logger<T extends string, Levels extends string> {
     this._logger = this.init();
   }
 
-  private readonly init = (): InitLogger => {
+  private init(): InitLogger {
     this._logger = new InitLogger(this._dir, {
       name: this._name,
       colors: this._colors,
@@ -425,20 +425,20 @@ class Logger<T extends string, Levels extends string> {
     return this._logger.write;
   }
 
-  public readonly execute = (
+  public execute(
     text: string | any[],
-    data: ExecuteData<Levels>,
-  ) => {
+    data: ExecuteData<Levels> = {},
+  ) {
     return this._logger.execute(text, {
       ...this._data,
       ...data,
     });
   };
 
-  public readonly error = (
+  public error(
     text: string | Error | Error[],
-    data: ExecuteData<Levels>,
-  ) => {
+    data: ExecuteData<Levels> = {},
+  ) {
     return this._logger.error(
       typeof text === "string" ? new Error(text) : text,
       {
@@ -448,10 +448,10 @@ class Logger<T extends string, Levels extends string> {
     );
   };
 
-  public readonly read = (
+  public read(
     text: string | any[],
-    data: (ExecuteData<Levels> & Listeners),
-  ) => {
+    data: (ExecuteData<Levels> & Listeners) = {},
+  ) {
     return this._logger.readLine(text, {
       ...this._data,
       ...data,
