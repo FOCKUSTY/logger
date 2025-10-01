@@ -53,26 +53,26 @@ const DEFAULT_EXECUTE_DATA: Required<
 };
 
 class Logger<T extends string, Level extends string> {
-  private readonly _name: LoggerName<T>;
   private readonly _log: FileLogger;
 
   private readonly _config: InitLoggerConfig;
   private readonly _execute_data: Required<ExecuteData<Level>>;
 
   public constructor(
-    dir: string,
-    data: {
-      name: LoggerName<T>;
+    public readonly name: LoggerName<T>,
+    data: Partial<{
       colors: [Colors, Colors];
-      filePath?: string;
-      prefix?: string;
-    } & Partial<Config>,
+      dir: string;
+      filePath: string;
+      prefix: string;
+    } & Config> = {
+      ...DEFAULT_EXECUTE_DATA,
+      ...config,
+    },
 
     protected readonly out: typeof process.stdout = process.stdout,
     protected readonly input: typeof process.stdin = process.stdin,
   ) {
-    this._name = data.name;
-
     this._config = {
       ...config,
       ...data,
@@ -85,7 +85,7 @@ class Logger<T extends string, Level extends string> {
       level: (data.level || config.defaultLevel) as Level,
     };
 
-    this._log = new FileLogger(dir, this._config, config.logging);
+    this._log = new FileLogger(this._config.dir, this._config, config.logging);
 
     loggersNames.SetNames({
       [this._config.name]: {
@@ -174,7 +174,7 @@ class Logger<T extends string, Level extends string> {
     });
   }
 
-  public changeLastLine(
+  public changeLine(
     text: string | any[],
     data: ExecuteData<Level> & { ignoreLineBreakerError?: boolean } = {},
   ) {
@@ -198,7 +198,7 @@ class Logger<T extends string, Level extends string> {
       this.out.cursorTo(-1);
       this.out.clearLine(0);
 
-      return this.changeLastLine(t, { ...data, ...d });
+      return this.changeLine(t, { ...data, ...d });
     };
   }
 
@@ -207,9 +207,9 @@ class Logger<T extends string, Level extends string> {
     colored: string[],
   ) {
     if (typeof text === "string") {
-      this._log.execute(`${this._name}: ${text}`);
+      this._log.execute(`${this.name}: ${text}`);
     } else {
-      this._log.execute(`${this._name}:`);
+      this._log.execute(`${this.name}:`);
 
       for (const msg of colored) {
         this._log.execute(msg[1]);
@@ -238,7 +238,7 @@ class Logger<T extends string, Level extends string> {
       configuration.color,
     );
 
-    const name = paint(this._name, this._config.colors[0]) + ":";
+    const name = paint(this.name, this._config.colors[0]) + ":";
     const date = `[${new Date().toISOString()}]`;
 
     const { prefix, join, suffix } = this.resolveAffix({
@@ -293,10 +293,6 @@ class Logger<T extends string, Level extends string> {
 
   public get colors(): [Colors, Colors] {
     return this._config.colors;
-  }
-
-  public get name(): string {
-    return this._name;
   }
 
   private resolveData<T, K = Required<T>>(data: Partial<T>, defaultData: K) {
