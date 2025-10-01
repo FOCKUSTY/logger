@@ -35,14 +35,13 @@ type ResolveTextType<T extends TextTypes> = {
 
 type Listeners = {
   listeners?: (input: NodeJS.ReadStream) => {
-    onReadable?: () => void
-    onError?: (error: unknown) => void
-    onEnd?: () => void
-    onData?: (chunk: unknown) => void
-    onStart?: () => void
-  }
+    onReadable?: () => void;
+    onError?: (error: unknown) => void;
+    onEnd?: () => void;
+    onData?: (chunk: unknown) => void;
+    onStart?: () => void;
+  };
 };
-
 
 const DEFAULT_EXECUTE_DATA: Required<
   Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
@@ -56,9 +55,9 @@ const DEFAULT_EXECUTE_DATA: Required<
 class Logger<T extends string, Level extends string> {
   private readonly _name: LoggerName<T>;
   private readonly _log: FileLogger;
-  
+
   private readonly _config: InitLoggerConfig;
-  private readonly _execute_data: Required<ExecuteData<Level>>
+  private readonly _execute_data: Required<ExecuteData<Level>>;
 
   public constructor(
     dir: string,
@@ -84,7 +83,7 @@ class Logger<T extends string, Level extends string> {
       color: config.colors[0],
       write: config.logging,
       level: (data.level || config.defaultLevel) as Level,
-    }
+    };
 
     this._log = new FileLogger(dir, this._config, config.logging);
 
@@ -104,7 +103,7 @@ class Logger<T extends string, Level extends string> {
     base: unknown[];
   } {
     return this.logger(text, data, "execute");
-  };
+  }
 
   public error(
     text: Error | Error[],
@@ -114,21 +113,23 @@ class Logger<T extends string, Level extends string> {
     base: unknown[];
   } {
     return this.logger(text, data, "error");
-  };
+  }
 
-  public read(
-    text: string | any[],
-    data: (ExecuteData<Level> & Listeners) = {}
-  ) {
-    const configuration = this.resolveData<ExecuteData<Level> & Listeners, Required<ExecuteData<Level>>>(data, this._execute_data);
-    
+  public read(text: string | any[], data: ExecuteData<Level> & Listeners = {}) {
+    const configuration = this.resolveData<
+      ExecuteData<Level> & Listeners,
+      Required<ExecuteData<Level>>
+    >(data, this._execute_data);
+
     return new Promise<string | Error>((resolve, reject) => {
       this.input.resume();
       this.input.setEncoding("utf8");
-      
-      const listeners = (configuration?.listeners || (() => undefined))(this.input);
 
-      const onStart = (listeners?.onStart || (() => {}));
+      const listeners = (configuration?.listeners || (() => undefined))(
+        this.input,
+      );
+
+      const onStart = listeners?.onStart || (() => {});
       onStart();
 
       const cleanup = () => {
@@ -154,14 +155,14 @@ class Logger<T extends string, Level extends string> {
 
       const onError = (err: unknown) => {
         if (listeners?.onError) listeners.onError(err);
-        
+
         cleanup();
         reject(err);
       };
 
       const onEnd = () => {
         if (listeners?.onEnd) listeners.onEnd();
-        
+
         cleanup();
         reject(new Error("Stream ended without data"));
       };
@@ -171,30 +172,34 @@ class Logger<T extends string, Level extends string> {
       this.input.on("end", onEnd);
       this.input.on("data", listeners?.onData || (() => {}));
     });
-  };
+  }
 
   public changeLastLine(
     text: string | any[],
-    data: (ExecuteData<Level> & { ignoreLineBreakerError?: boolean }) = {}
+    data: ExecuteData<Level> & { ignoreLineBreakerError?: boolean } = {},
   ) {
-    const configuration = this.resolveData<ExecuteData<Level> & { ignoreLineBreakerError?: boolean }, Required<ExecuteData<Level>>>(data, this._execute_data);
-    
-    const errorCaptched = !configuration.ignoreLineBreakerError && configuration.end.includes("\n");
+    const configuration = this.resolveData<
+      ExecuteData<Level> & { ignoreLineBreakerError?: boolean },
+      Required<ExecuteData<Level>>
+    >(data, this._execute_data);
+
+    const errorCaptched =
+      !configuration.ignoreLineBreakerError && configuration.end.includes("\n");
     if (errorCaptched) {
-      throw new Error("Can not resolve line breaker")
+      throw new Error("Can not resolve line breaker");
     }
-    
+
     this.execute(text, configuration);
 
     return (
       t: string | any[],
-      d: (ExecuteData<Level> & { ignoreLineBreakerError?: boolean }) = {}
+      d: ExecuteData<Level> & { ignoreLineBreakerError?: boolean } = {},
     ) => {
       this.out.cursorTo(-1);
       this.out.clearLine(0);
-      
+
       return this.changeLastLine(t, { ...data, ...d });
-    }
+    };
   }
 
   protected executeLogFile(
@@ -210,11 +215,11 @@ class Logger<T extends string, Level extends string> {
         this._log.execute(msg[1]);
       }
     }
-  };
+  }
 
   protected errorLogFile(text: ResolveTextType<"error">) {
     this._log.error(text);
-  };
+  }
 
   private logger<Type extends TextTypes>(
     text: ResolveTextType<Type>,
@@ -224,7 +229,10 @@ class Logger<T extends string, Level extends string> {
     colored: string[];
     base: unknown[];
   } {
-    const configuration = this.resolveData<ExecuteData<Level>>(data, this._execute_data);
+    const configuration = this.resolveData<ExecuteData<Level>>(
+      data,
+      this._execute_data,
+    );
     const { colored, base } = this.resolveText(
       Array.isArray(text) ? text : [text],
       configuration.color,
@@ -247,10 +255,7 @@ class Logger<T extends string, Level extends string> {
         prefix +
           (typeof text === "string"
             ? colored.join(join)
-            : paint(
-                colored.join(join),
-                configuration.color,
-              )) +
+            : paint(colored.join(join), configuration.color)) +
           suffix,
       );
     }
@@ -264,7 +269,7 @@ class Logger<T extends string, Level extends string> {
       colored,
       base,
     };
-  };
+  }
 
   private logFileService<Type extends TextTypes>({
     type,
@@ -280,7 +285,7 @@ class Logger<T extends string, Level extends string> {
     const name = `${prefix}${suffix}` as `${Type}LogFile`;
 
     this[name](<any>text, colored);
-  };
+  }
 
   public get write() {
     return this._log.execute;
@@ -308,7 +313,7 @@ class Logger<T extends string, Level extends string> {
             ? text.stack || text.message
             : JSON.stringify(text, undefined, 4)
           : text,
-        color || this._config.colors[1]
+        color || this._config.colors[1],
       ),
     );
 
@@ -364,7 +369,6 @@ class Logger<T extends string, Level extends string> {
     signEnabled: boolean;
   }) {
     const datePrefix = dateEnabled ? date + " " : "";
-
     const signPrefix = signEnabled ? sign + " " : "";
 
     return datePrefix + signPrefix;

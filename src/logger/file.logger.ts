@@ -45,7 +45,11 @@ abstract class LogStrategy {
     const prefix = data.prefix ? data.prefix + "-" : "";
 
     this._date = new Date();
-    this._date_string = this._date.toLocaleDateString().split(".").reverse().join(".");
+    this._date_string = this._date
+      .toLocaleDateString()
+      .split(".")
+      .reverse()
+      .join(".");
     this._config = {
       ...config,
       ...data,
