@@ -259,6 +259,30 @@ class InitLogger {
     });
   };
 
+  public changeLastLine<Level extends string>(
+    text: string | any[],
+    data: (ExecuteData<Level> & { ignoreLineBreakerError: boolean }) = {
+      ...DEFAULT_EXECUTE_DATA,
+      color: this._colors[1],
+      write: config.logging,
+      ignoreLineBreakerError: false
+    } as (ExecuteData<Level> & { ignoreLineBreakerError: boolean })
+  ) {
+    if (!data.ignoreLineBreakerError && data.end?.includes("\n")) throw new Error("Can not resolve line breaker")
+    
+    this.execute(text, data);
+
+    return (
+      t: string | any[],
+      d: (ExecuteData<Level> & { ignoreLineBreakerError?: boolean }) = {}
+    ) => {
+      this.out.cursorTo(-1);
+      this.out.clearLine(0);
+      
+      return this.changeLastLine(t, { ...data, ...d });
+    }
+  }
+
   public get write() {
     return this._log.execute;
   }
@@ -457,6 +481,40 @@ class Logger<T extends string, Levels extends string> {
       ...data,
     });
   };
+
+  /**
+   * @example
+   * ```ts
+   * const logger = new Logger();
+   * 
+   * const datas = [
+   *   "|",
+   *   "/",
+   *   "—",
+   *   "\\",
+   * ];
+   * 
+   * let i = 1;
+   * 
+   * const changeLine = logger.changeLine(datas[i-1], { end: "" });
+   * 
+   * setInterval(() => {
+   *   if (i>datas.length-1) i = 0;
+   * 
+   *   changeLine(datas[i++]);
+   * }, 200);
+   * ```
+   */
+  public changeLine(
+    text: string | any[],
+    data: (ExecuteData<Levels> & {ignoreLineBreakerError?: boolean}) = {}
+  ) {
+    return this._logger.changeLastLine(text, {
+      ignoreLineBreakerError: false,
+      ...this._data,
+      ...data,
+    });
+  }
 
   public get colors(): [Colors, Colors] {
     return this._colors;
