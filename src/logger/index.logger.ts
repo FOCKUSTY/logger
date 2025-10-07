@@ -60,12 +60,14 @@ class Logger<T extends string, Level extends string> {
 
   public constructor(
     public readonly name: LoggerName<T>,
-    data: Partial<{
-      colors: [Colors, Colors];
-      dir: string;
-      filePath: string;
-      prefix: string;
-    } & Config> = {
+    data: Partial<
+      {
+        colors: [Colors, Colors];
+        dir: string;
+        filePath: string;
+        prefix: string;
+      } & Config
+    > = {
       ...DEFAULT_EXECUTE_DATA,
       ...config,
     },
@@ -174,6 +176,29 @@ class Logger<T extends string, Level extends string> {
     });
   }
 
+  /**
+   * @example
+   * ```ts
+   * const logger = new Logger();
+   *
+   * const datas = [
+   *   "|",
+   *   "/",
+   *   "—",
+   *   "\\",
+   * ];
+   *
+   * let i = 1;
+   *
+   * const changeLine = logger.changeLine(datas[i-1], { end: "" });
+   *
+   * setInterval(() => {
+   *   if (i>datas.length-1) i = 0;
+   *
+   *   changeLine(datas[i++]);
+   * }, 200);
+   * ```
+   */
   public changeLine(
     text: string | any[],
     data: ExecuteData<Level> & { ignoreLineBreakerError?: boolean } = {},
