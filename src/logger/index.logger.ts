@@ -53,7 +53,7 @@ const DEFAULT_EXECUTE_DATA: Required<
 };
 
 class Logger<T extends string, Level extends string> {
-  private readonly _log: FileLogger;
+  private readonly _file_logger: FileLogger;
 
   private readonly _config: InitLoggerConfig;
   private readonly _execute_data: Required<ExecuteData<Level>>;
@@ -87,7 +87,7 @@ class Logger<T extends string, Level extends string> {
       level: (data.level || config.defaultLevel) as Level,
     };
 
-    this._log = new FileLogger(this._config.dir, this._config, config.logging);
+    this._file_logger = new FileLogger(this._config.dir, this._config, config.logging);
 
     loggersNames.SetNames({
       [this._config.name]: {
@@ -104,7 +104,7 @@ class Logger<T extends string, Level extends string> {
     colored: string[];
     base: unknown[];
   } {
-    return this.logger(text, data, "execute");
+    return this.log(text, data, "execute");
   }
 
   public error(
@@ -114,7 +114,7 @@ class Logger<T extends string, Level extends string> {
     colored: string[];
     base: unknown[];
   } {
-    return this.logger(text, data, "error");
+    return this.log(text, data, "error");
   }
 
   public read(text: string | any[], data: ExecuteData<Level> & Listeners = {}) {
@@ -151,7 +151,7 @@ class Logger<T extends string, Level extends string> {
 
         cleanup();
         const input = userInput.slice(0, userInput.indexOf("\r\n")) as string;
-        this._log.execute("User: " + input);
+        this._file_logger.execute("User: " + input);
         resolve(input);
       };
 
@@ -232,21 +232,21 @@ class Logger<T extends string, Level extends string> {
     colored: string[],
   ) {
     if (typeof text === "string") {
-      this._log.execute(`${this.name}: ${text}`);
+      this._file_logger.execute(`${this.name}: ${text}`);
     } else {
-      this._log.execute(`${this.name}:`);
+      this._file_logger.execute(`${this.name}:`);
 
       for (const msg of colored) {
-        this._log.execute(msg[1]);
+        this._file_logger.execute(msg[1]);
       }
     }
   }
 
   protected errorLogFile(text: ResolveTextType<"error">) {
-    this._log.error(text);
+    this._file_logger.error(text);
   }
 
-  private logger<Type extends TextTypes>(
+  private log<Type extends TextTypes>(
     text: ResolveTextType<Type>,
     data: ExecuteData<Level>,
     type: Type,
@@ -285,7 +285,7 @@ class Logger<T extends string, Level extends string> {
       );
     }
 
-    const logEnabled = (config.logging && this._log) || configuration.write;
+    const logEnabled = (config.logging && this._file_logger) || configuration.write;
     if (logEnabled) {
       this.logFileService({ type, text, colored });
     }
@@ -313,7 +313,7 @@ class Logger<T extends string, Level extends string> {
   }
 
   public get write() {
-    return this._log.execute;
+    return this._file_logger.execute;
   }
 
   public get colors(): [Colors, Colors] {
