@@ -6,9 +6,9 @@ import { LOG_DIR_NAME, FILTER, DAY } from "../data/data";
 import path from "path";
 import { readdir, unlink } from "fs/promises";
 
-const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
+export const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
-class Deleter {
+export class Deleter {
   private readonly _dir: string = config.dir;
 
   public constructor(dir: string) {

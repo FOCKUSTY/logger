@@ -9,9 +9,9 @@ import LoggersNames from "../data/loggers.names";
 
 import FileLogger from "./file.logger";
 
-const loggersNames = new LoggersNames(config.logging);
+export const loggersNames = new LoggersNames(config.logging);
 
-type ExecuteData<Level extends string> = Partial<{
+export type ExecuteData<Level extends string> = Partial<{
   color: Colors;
   level: LevelKeys<Level>;
   sign: boolean;
@@ -20,20 +20,20 @@ type ExecuteData<Level extends string> = Partial<{
   join: string;
 }>;
 
-type InitLoggerConfig<IsPartial extends boolean = false> = {
+export type InitLoggerConfig<IsPartial extends boolean = false> = {
   name: string;
   colors: [Colors, Colors];
   filePath?: string;
   prefix?: string;
 } & (IsPartial extends false ? Config : Partial<Config>);
 
-type TextTypes = "execute" | "error";
-type ResolveTextType<T extends TextTypes> = {
+export type TextTypes = "execute" | "error";
+export type ResolveTextType<T extends TextTypes> = {
   execute: string | unknown[];
   error: Error | Error[];
 }[T];
 
-type Listeners = {
+export type Listeners = {
   listeners?: (input: NodeJS.ReadStream) => {
     onReadable?: () => void;
     onError?: (error: unknown) => void;
@@ -43,7 +43,7 @@ type Listeners = {
   };
 };
 
-const DEFAULT_EXECUTE_DATA: Required<
+export const DEFAULT_EXECUTE_DATA: Required<
   Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
 > = {
   level: "info",
@@ -52,7 +52,7 @@ const DEFAULT_EXECUTE_DATA: Required<
   sign: true,
 };
 
-class Logger<T extends string, Level extends string> {
+export class Logger<T extends string, Level extends string> {
   private readonly _file_logger: FileLogger;
 
   private readonly _config: InitLoggerConfig;

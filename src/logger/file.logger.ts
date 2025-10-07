@@ -12,11 +12,11 @@ import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "../data/data";
 const cache = new Map();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
-const errorAffixText = "------------------ ERROR ------------------";
-const errorAffix = (error: string) =>
+export const errorAffixText = "------------------ ERROR ------------------";
+export const errorAffix = (error: string) =>
   `${errorAffixText}\n${error}\n${errorAffixText}`;
 
-abstract class LogStrategy {
+export abstract class LogStrategy {
   protected readonly _date: Date;
   protected readonly _date_string: string;
   protected readonly _dir: string;
