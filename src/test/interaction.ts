@@ -15,32 +15,19 @@ import Logger, { Colors as c } from "../../index";
 (async () => {
   const logger = new Logger("Tester");
 
-  const datas = ["|", "/", "—", "\\"];
+  // const datas = ["|", "/", "—", "\\"];
 
-  let i = 1;
+  // let i = 1;
 
-  const changeLine = logger.changeLine(datas[i - 1], { end: "" });
+  // const changeLine = logger.changeLine(datas[i - 1], { end: "" });
 
-  setInterval(() => {
-    if (i > datas.length - 1) i = 0;
+  // setInterval(() => {
+  //   if (i > datas.length - 1) i = 0;
 
-    changeLine(datas[i++]);
-  }, 200);
+  //   changeLine(datas[i++]);
+  // }, 200);
 
-  // const data = await logger.read("Your name: ", { end: "", listeners: (input) => ({
-  //   onReadable() {
-  //     console.log(1);
-  //   },
-  //   onStart() {
-  //     console.log(2);
-  //   },
-  //   onEnd() {
-  //     console.log(3);
-  //   },
-  //   onData(chunk) {
-  //     console.log({chunk});
-  //   }
-  // })});
+  const data = await logger.readRaw("Your name:", { end: " " });
 
-  // console.log({data});
+  console.log({data});
 })();

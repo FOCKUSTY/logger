@@ -33,15 +33,31 @@ export type ResolveTextType<T extends TextTypes> = {
   error: Error | Error[];
 }[T];
 
-export type Listeners = {
+export type Listeners<T = unknown> = {
   listeners?: (input: NodeJS.ReadStream) => {
     onReadable?: () => void;
     onError?: (error: unknown) => void;
     onEnd?: () => void;
-    onData?: (chunk: unknown) => void;
+    onData?: (chunk: T) => void;
     onStart?: () => void;
   };
 };
+
+enum Keys {
+  ctrl_backspace = 23,
+  ctrl_c = 3,
+  backspace = 127,
+  revertSlash_n = 10,
+  revertSlash_r = 13
+}
+
+type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
+  listeners?: (input: NodeJS.ReadStream) => {
+    onError?: (error: unknown) => void;
+    onData?: (chunk: Buffer) => void;
+    onStart?: () => void;
+  };
+} & { overwriteListeners?: boolean };
 
 export const DEFAULT_EXECUTE_DATA: Required<
   Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
@@ -115,6 +131,80 @@ export class Logger<T extends string, Level extends string> {
     base: unknown[];
   } {
     return this.log(text, data, "error");
+  }
+
+  private clearChars(length: number, stdout: typeof process.stdout) {
+    const clear = new Array(length).join("\b");
+    const space = new Array(length).join(" ");
+    stdout.write(clear + space + clear);
+  }
+
+  private charCode(char: Buffer) {
+    return char.toString("utf8").charCodeAt(0)
+  }
+
+  public readRaw(text: string | any[], data: ReadRawParameters<Level> = {}) {
+    const configuration = this.resolveData<
+      ReadRawParameters<Level>,
+      Required<ExecuteData<Level>>
+    >(data, this._execute_data);
+
+    return new Promise<string | Error>((resolve, reject) => {
+      this.input.setRawMode(true);
+      this.input.resume();
+      this.input.setEncoding("utf8");
+
+      const listeners = (configuration?.listeners || (() => undefined))(
+        this.input,
+      );
+
+      this.execute(text, configuration);
+
+      let globalData = "";
+      const onData = (key: Buffer) => {
+        if (listeners?.onData) listeners.onData(key);
+
+        if (this.charCode(key) === Keys.ctrl_c) {
+          process.exit();
+        }
+
+        if (this.charCode(key) === Keys.ctrl_backspace) {
+          this.clearChars(0, this.out);
+          globalData = "";
+          return;
+        }
+
+        if (this.charCode(key) === Keys.backspace) {
+          this.clearChars(1, this.out);
+          globalData = globalData.slice(0, -1);
+          return;
+        }
+
+        if ([Keys.revertSlash_r, Keys.revertSlash_n].includes(this.charCode(key))) {
+          this.input.setRawMode(false);
+          this.input.pause();
+          this.out.write("\n");
+          return resolve(globalData);
+        }
+
+        globalData += key.toString("utf8");
+        this.out.write("*");
+      }
+
+      const cleanup = () => {
+        this.input.removeAllListeners();
+      };
+
+      const onError = (err: unknown) => {
+        if (listeners?.onError) listeners.onError(err);
+
+        cleanup();
+        reject(err);
+      };
+
+      this.input.on("data", data.overwriteListeners ? listeners?.onData || onData : onData);
+      this.input.on("error", data.overwriteListeners ? listeners?.onError || onError : onError);
+    });
   }
 
   public read(text: string | any[], data: ExecuteData<Level> & Listeners = {}) {
