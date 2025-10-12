@@ -57,7 +57,10 @@ type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
     onData?: (chunk: Buffer) => void;
     onStart?: () => void;
   };
-} & { overwriteListeners?: boolean };
+} & {
+  overwriteListeners?: boolean,
+  hideInput?: boolean
+};
 
 export const DEFAULT_EXECUTE_DATA: Required<
   Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
@@ -134,8 +137,8 @@ export class Logger<T extends string, Level extends string> {
   }
 
   private clearChars(length: number, stdout: typeof process.stdout) {
-    const clear = new Array(length).join("\b");
-    const space = new Array(length).join(" ");
+    const clear = new Array(length).fill("\b").join("");
+    const space = new Array(length).fill(" ").join("");
     stdout.write(clear + space + clear);
   }
 
@@ -169,7 +172,7 @@ export class Logger<T extends string, Level extends string> {
         }
 
         if (this.charCode(key) === Keys.ctrl_backspace) {
-          this.clearChars(0, this.out);
+          this.clearChars(globalData.length, this.out);
           globalData = "";
           return;
         }
@@ -188,7 +191,7 @@ export class Logger<T extends string, Level extends string> {
         }
 
         globalData += key.toString("utf8");
-        this.out.write("*");
+        this.out.write(data.hideInput ? "*" : key);
       }
 
       const cleanup = () => {

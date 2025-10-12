@@ -27,7 +27,7 @@ import Logger, { Colors as c } from "../../index";
   //   changeLine(datas[i++]);
   // }, 200);
 
-  const data = await logger.readRaw("Your name:", { end: " " });
+  const data = await logger.readRaw("Your name:", { end: " ", hideInput: true });
 
   console.log({data});
 })();
