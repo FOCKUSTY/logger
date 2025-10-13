@@ -54,21 +54,27 @@ enum Keys {
 type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
   listeners?: (input: NodeJS.ReadStream) => {
     onError?: (error: unknown) => void;
+    onEnd?: () => void;
     onData?: (chunk: Buffer) => void;
     onStart?: () => void;
   };
 } & {
   overwriteListeners?: boolean,
-  hideInput?: boolean
+  hideInput?: boolean,
+  hideSymbol?: string
 };
 
 export const DEFAULT_EXECUTE_DATA: Required<
-  Pick<ExecuteData<string>, "level" | "end" | "join" | "sign">
+  Omit<ExecuteData<string>, "color"|"write">
+  & Omit<ReadRawParameters<string>, "listeners"|"color"|"write">
 > = {
   level: "info",
   end: "\n",
   join: " ",
   sign: true,
+  hideSymbol: "*",
+  hideInput: false,
+  overwriteListeners: false
 };
 
 export class Logger<T extends string, Level extends string> {
@@ -173,6 +179,17 @@ export class Logger<T extends string, Level extends string> {
     return this.log(text, data, "error");
   }
 
+  public cleanupInput(listeners?: string[]) {
+    if (listeners) {
+      listeners.forEach(listener => this.input.removeAllListeners(listener));
+    } else {
+      this.input.removeAllListeners();
+    }
+
+    this.input.setRawMode(false);
+    this.input.pause();
+  }
+
   /**
    * Читает текст, который введёт пользователь в терминал. Читает все символы последовательно
    * 
@@ -197,8 +214,8 @@ export class Logger<T extends string, Level extends string> {
   public readRaw(text: string | any[], data: ReadRawParameters<Level> = {}) {
     const configuration = this.resolveData<
       ReadRawParameters<Level>,
-      Required<ExecuteData<Level>>
-    >(data, this._execute_data);
+      Required<Omit<ReadRawParameters<Level>, "listeners">>
+    >(data, this._execute_data as Required<ReadRawParameters<Level>>);
 
     return new Promise<string | Error>((resolve, reject) => {
       this.input.setRawMode(true);
@@ -208,6 +225,8 @@ export class Logger<T extends string, Level extends string> {
       const listeners = (configuration?.listeners || (() => undefined))(
         this.input,
       );
+
+      listeners?.onStart?.();
 
       this.execute(text, configuration);
       
@@ -237,7 +256,7 @@ export class Logger<T extends string, Level extends string> {
         }
 
         globalData += key.toString("utf8");
-        this.out.write(data.hideInput ? "*" : key);
+        this.out.write(data.hideInput ? configuration.hideSymbol : key);
       }
 
       const onError = (err: unknown) => {
@@ -266,17 +285,21 @@ export class Logger<T extends string, Level extends string> {
         if (listeners?.onError) {
           this.input.removeListener("error", listeners.onError);
         }
+        if (listeners?.onEnd) {
+          this.input.removeListener("error", listeners.onEnd);
+        }
       };
 
       if (data.overwriteListeners) {
         this.input.on("data", listeners?.onData || onData);
         this.input.on("error", listeners?.onError || onError);
+        this.input.on("end", listeners?.onEnd || onEnd);
       } else {
         this.input.on("data", onData);
         this.input.on("error", onError);
+        this.input.on("end", onEnd);
       }
 
-      this.input.on("end", onEnd);
     });
   }
 
@@ -541,7 +564,7 @@ export class Logger<T extends string, Level extends string> {
     return this._config.colors;
   }
 
-  private resolveData<T, K = Required<T>>(data: Partial<T>, defaultData: K) {
+  private resolveData<T, K = Required<T>>(data: Partial<T>, defaultData: K): Partial<T> & K {
     return { ...defaultData, ...data };
   }
 

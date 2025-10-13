@@ -27,9 +27,9 @@ import Logger, { Colors as c } from "../../index";
   //   changeLine(datas[i++]);
   // }, 200);
 
-  // const data = await logger.readRaw("Your name:", { end: " ", hideInput: true });
-  const data2 = await logger.readRaw("Your name:", { end: " " });
-  // const data2 = await logger.read("Abc:", { end: " " });
+  const data = await logger.readRaw("Your name:", { end: " ", hideInput: true });
+  // const data2 = await logger.readRaw("Your name:", { end: " " });
+  const data2 = await logger.read("Abc:", { end: " " });
 
   // for (let i = 0; i < 10; i++) {
   //   setTimeout(() => {
@@ -37,6 +37,6 @@ import Logger, { Colors as c } from "../../index";
   //   }, 1000 * i);
   // };
 
-  // console.log({data});
+  console.log({data});
   console.log({data2});
 })();
