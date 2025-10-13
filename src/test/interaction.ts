@@ -10,7 +10,7 @@ new Configurator({
   date: false,
 });
 
-import Logger, { Colors as c } from "../../index";
+import Logger from "../../index";
 
 (async () => {
   const logger = new Logger("Tester");

@@ -255,6 +255,10 @@ export class Logger<T extends string, Level extends string> {
         }
 
         if (CLEAR_KEYS.includes(key)) {
+          if (globalData.length === 0) {
+            return;
+          }
+          
           this.clearChars(1, this.out);
           return (globalData = globalData.slice(0, -1));
         }
