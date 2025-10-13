@@ -47,8 +47,14 @@ enum Keys {
   ctrl_backspace = "\x17",
   ctrl_c = "\x03",
   backspace = "\x7F",
+  backspaceTwo = "\b",
   enter = "\r",
 }
+
+const CLEAR_KEYS: string[] = [
+  Keys.backspace,
+  Keys.backspaceTwo
+];
 
 type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
   listeners?: (input: NodeJS.ReadStream) => {
@@ -248,7 +254,7 @@ export class Logger<T extends string, Level extends string> {
           return (globalData = "");
         }
 
-        if (key === Keys.backspace) {
+        if (CLEAR_KEYS.includes(key)) {
           this.clearChars(1, this.out);
           return (globalData = globalData.slice(0, -1));
         }
