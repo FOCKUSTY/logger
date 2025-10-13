@@ -27,7 +27,16 @@ import Logger, { Colors as c } from "../../index";
   //   changeLine(datas[i++]);
   // }, 200);
 
-  const data = await logger.readRaw("Your name:", { end: " ", hideInput: true });
+  // const data = await logger.readRaw("Your name:", { end: " ", hideInput: true });
+  const data2 = await logger.readRaw("Your name:", { end: " " });
+  // const data2 = await logger.read("Abc:", { end: " " });
 
-  console.log({data});
+  // for (let i = 0; i < 10; i++) {
+  //   setTimeout(() => {
+  //     logger.execute("AAAAAAAAA");
+  //   }, 1000 * i);
+  // };
+
+  // console.log({data});
+  console.log({data2});
 })();

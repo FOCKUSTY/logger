@@ -210,30 +210,28 @@ export class Logger<T extends string, Level extends string> {
       );
 
       this.execute(text, configuration);
-
+      
       let globalData = "";
       const onData = (key: Buffer) => {
-        if (listeners?.onData) listeners.onData(key);
+        listeners?.onData?.(key);
 
         if (this.charCode(key) === Keys.ctrl_c) {
-          process.exit();
+          cleanup();
+          return reject(new Error("User interrupted with Ctrl+C"));
         }
 
         if (this.charCode(key) === Keys.ctrl_backspace) {
           this.clearChars(globalData.length, this.out);
-          globalData = "";
-          return;
+          return globalData = "";
         }
 
         if (this.charCode(key) === Keys.backspace) {
           this.clearChars(1, this.out);
-          globalData = globalData.slice(0, -1);
-          return;
+          return globalData = globalData.slice(0, -1);
         }
 
-        if ([Keys.revertSlash_r, Keys.revertSlash_n].includes(this.charCode(key))) {
-          this.input.setRawMode(false);
-          this.input.pause();
+        if ([Keys.revertSlash_n, Keys.revertSlash_r].includes(this.charCode(key))) {
+          cleanup();
           this.out.write("\n");
           return resolve(globalData);
         }
@@ -242,19 +240,43 @@ export class Logger<T extends string, Level extends string> {
         this.out.write(data.hideInput ? "*" : key);
       }
 
-      const cleanup = () => {
-        this.input.removeAllListeners();
-      };
-
       const onError = (err: unknown) => {
-        if (listeners?.onError) listeners.onError(err);
+        listeners?.onError?.(err);
 
         cleanup();
         reject(err);
       };
 
-      this.input.on("data", data.overwriteListeners ? listeners?.onData || onData : onData);
-      this.input.on("error", data.overwriteListeners ? listeners?.onError || onError : onError);
+      const onEnd = () => {
+        cleanup();
+        reject(new Error("Stream ended without data"));
+      };
+      
+      const cleanup = () => {
+        this.input.removeListener("data", onData);
+        this.input.removeListener("error", onError);
+        this.input.removeListener("end", onEnd);
+        
+        this.input.setRawMode(false);
+        this.input.pause();
+        
+        if (listeners?.onData) {
+          this.input.removeListener("data", listeners.onData);
+        }
+        if (listeners?.onError) {
+          this.input.removeListener("error", listeners.onError);
+        }
+      };
+
+      if (data.overwriteListeners) {
+        this.input.on("data", listeners?.onData || onData);
+        this.input.on("error", listeners?.onError || onError);
+      } else {
+        this.input.on("data", onData);
+        this.input.on("error", onError);
+      }
+
+      this.input.on("end", onEnd);
     });
   }
 
@@ -291,48 +313,60 @@ export class Logger<T extends string, Level extends string> {
         this.input,
       );
 
-      const onStart = listeners?.onStart || (() => {});
-      onStart();
-
+      listeners?.onStart?.();
+      
       const cleanup = () => {
-        this.input.removeAllListeners();
+        this.input.removeListener("readable", onReadable);
+        this.input.removeListener("error", onError);
+        this.input.removeListener("end", onEnd);
+        
+        if (listeners?.onData) {
+          this.input.removeListener("data", listeners.onData);
+        }
+        
+        this.input.pause();
       };
 
       this.execute(text, configuration);
 
       const onReadable = () => {
-        if (listeners?.onReadable) listeners.onReadable();
+        try {
+          listeners?.onReadable?.();
 
-        const userInput: string = this.input.read();
-        if (!userInput) {
+          const userInput: string = this.input.read();
+          
+          if (!userInput) {
+            return reject(new Error("No user unput resolved"));
+          }
           cleanup();
-          reject(new Error());
+          const input = userInput.replace(/\r?\n$/, '');
+          this._file_logger.execute("User: " + input);
+          return resolve(input);
+        } catch (error) {
+          cleanup();
+          return reject(error);
         }
-
-        cleanup();
-        const input = userInput.slice(0, userInput.indexOf("\r\n")) as string;
-        this._file_logger.execute("User: " + input);
-        resolve(input);
       };
 
       const onError = (err: unknown) => {
-        if (listeners?.onError) listeners.onError(err);
-
+        listeners?.onError?.(err);
         cleanup();
-        reject(err);
+        return reject(err);
       };
 
       const onEnd = () => {
-        if (listeners?.onEnd) listeners.onEnd();
-
+        listeners?.onEnd?.();
         cleanup();
-        reject(new Error("Stream ended without data"));
+        return reject(new Error("Stream ended without data"));
       };
 
       this.input.on("readable", onReadable);
       this.input.on("error", onError);
       this.input.on("end", onEnd);
-      this.input.on("data", listeners?.onData || (() => {}));
+      
+      if (listeners?.onData) {
+        this.input.on("data", listeners.onData);
+      }
     });
   }
 
