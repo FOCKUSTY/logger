@@ -44,11 +44,10 @@ export type Listeners<T = unknown> = {
 };
 
 enum Keys {
-  ctrl_backspace = 23,
-  ctrl_c = 3,
-  backspace = 127,
-  revertSlash_n = 10,
-  revertSlash_r = 13,
+  ctrl_backspace = "\x17",
+  ctrl_c = "\x03",
+  backspace = "\x7F",
+  enter = "\r",
 }
 
 type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
@@ -235,33 +234,32 @@ export class Logger<T extends string, Level extends string> {
       this.execute(text, configuration);
 
       let globalData = "";
-      const onData = (key: Buffer) => {
-        listeners?.onData?.(key);
+      const onData = (buffer: Buffer) => {
+        listeners?.onData?.(buffer);
 
-        if (this.charCode(key) === Keys.ctrl_c) {
+        const key = buffer.toString("utf8");
+        if (key === Keys.ctrl_c) {
           cleanup();
           return reject(new Error("User interrupted with Ctrl+C"));
         }
 
-        if (this.charCode(key) === Keys.ctrl_backspace) {
+        if (key === Keys.ctrl_backspace) {
           this.clearChars(globalData.length, this.out);
           return (globalData = "");
         }
 
-        if (this.charCode(key) === Keys.backspace) {
+        if (key === Keys.backspace) {
           this.clearChars(1, this.out);
           return (globalData = globalData.slice(0, -1));
         }
 
-        if (
-          [Keys.revertSlash_n, Keys.revertSlash_r].includes(this.charCode(key))
-        ) {
+        if (Keys.enter === key) {
           cleanup();
           this.out.write("\n");
           return resolve(globalData);
         }
 
-        globalData += key.toString("utf8");
+        globalData += key;
         this.out.write(data.hideInput ? configuration.hideSymbol : key);
       };
 
@@ -540,10 +538,6 @@ export class Logger<T extends string, Level extends string> {
     const clear = new Array(length).fill("\b").join("");
     const space = new Array(length).fill(" ").join("");
     stdout.write(clear + space + clear);
-  }
-
-  private charCode(char: Buffer) {
-    return char.toString("utf8").charCodeAt(0);
   }
 
   private logFileService<Type extends TextTypes>({
