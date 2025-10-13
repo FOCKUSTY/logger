@@ -48,7 +48,7 @@ enum Keys {
   ctrl_c = 3,
   backspace = 127,
   revertSlash_n = 10,
-  revertSlash_r = 13
+  revertSlash_r = 13,
 }
 
 type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
@@ -59,14 +59,14 @@ type ReadRawParameters<Level extends string> = ExecuteData<Level> & {
     onStart?: () => void;
   };
 } & {
-  overwriteListeners?: boolean,
-  hideInput?: boolean,
-  hideSymbol?: string
+  overwriteListeners?: boolean;
+  hideInput?: boolean;
+  hideSymbol?: string;
 };
 
 export const DEFAULT_EXECUTE_DATA: Required<
-  Omit<ExecuteData<string>, "color"|"write">
-  & Omit<ReadRawParameters<string>, "listeners"|"color"|"write">
+  Omit<ExecuteData<string>, "color" | "write"> &
+    Omit<ReadRawParameters<string>, "listeners" | "color" | "write">
 > = {
   level: "info",
   end: "\n",
@@ -74,7 +74,7 @@ export const DEFAULT_EXECUTE_DATA: Required<
   sign: true,
   hideSymbol: "*",
   hideInput: false,
-  overwriteListeners: false
+  overwriteListeners: false,
 };
 
 export class Logger<T extends string, Level extends string> {
@@ -112,7 +112,11 @@ export class Logger<T extends string, Level extends string> {
       level: (data.level || config.defaultLevel) as Level,
     };
 
-    this._file_logger = new FileLogger(this._config.dir, this._config, config.logging);
+    this._file_logger = new FileLogger(
+      this._config.dir,
+      this._config,
+      config.logging,
+    );
 
     loggersNames.SetNames({
       [this._config.name]: {
@@ -127,18 +131,18 @@ export class Logger<T extends string, Level extends string> {
    * и последующей её записи в файл
    * @param text Ваш текст или другая информация, которая будет переведена в `JSON` формат (если Вы закинули массив)
    * или отобразится как `Error` если элемент будет соответствовать `Error`
-   * 
+   *
    * @param data это конфигурация Вашего логгера, которые Вы можете менять, смотря, что Вы хотите
-   * 
+   *
    * ## Значения
-   * 
+   *
    * - `color` — Цвет текста после имени логгера (`this.colors[1]` по умолчанию)
    * - `level` — Уровень логирования (определяет, нужно ли выводить информацию или просто её записать в `.log` файл) (`this._config.defaultLevel` по умолчанию)
    * - `sign` — Булево значение, говорит, нужно ли подписывать данный лог или нет (`true` по умолчанию)
    * - `write` — Булево значение, говорит, нужно ли записывать данный лог в файл или нет (`true` по умолчанию)
    * - `end` — Конец строки для логгера (`\n` по умолчанию)
    * - `join` — Соединение для значения массиов (`" "` по умолчанию)
-   * 
+   *
    * @returns значения `colored` и `base`, где первый — цветное отображение Ваших данных, а `base` — обычное, в Вашем виде данных
    */
   public execute(
@@ -153,20 +157,20 @@ export class Logger<T extends string, Level extends string> {
 
   /**
    * Выводит ошибки в терминал и обрабатывает их, также запись в `.log`-файл
-   * 
+   *
    * @param text Ваши ошибки
-   * 
+   *
    * @param data это конфигурация Вашего логгера, которые Вы можете менять, смотря, что Вы хотите
-   * 
+   *
    * ## Значения
-   * 
+   *
    * - `color` — Цвет текста после имени логгера (`this.colors[1]` по умолчанию)
    * - `level` — Уровень логирования (определяет, нужно ли выводить информацию или просто её записать в `.log` файл) (`this._config.defaultLevel` по умолчанию)
    * - `sign` — Булево значение, говорит, нужно ли подписывать данный лог или нет (`true` по умолчанию)
    * - `write` — Булево значение, говорит, нужно ли записывать данный лог в файл или нет (`true` по умолчанию)
    * - `end` — Конец строки для логгера (`\n` по умолчанию)
    * - `join` — Соединение для значения массиов (`" "` по умолчанию)
-   * 
+   *
    * @returns значения `colored` и `base`, где первый — цветное отображение Ваших данных, а `base` — обычное, в Вашем виде данных
    */
   public error(
@@ -181,7 +185,7 @@ export class Logger<T extends string, Level extends string> {
 
   public cleanupInput(listeners?: string[]) {
     if (listeners) {
-      listeners.forEach(listener => this.input.removeAllListeners(listener));
+      listeners.forEach((listener) => this.input.removeAllListeners(listener));
     } else {
       this.input.removeAllListeners();
     }
@@ -192,13 +196,13 @@ export class Logger<T extends string, Level extends string> {
 
   /**
    * Читает текст, который введёт пользователь в терминал. Читает все символы последовательно
-   * 
+   *
    * @param text То, что Вы хотите вывести перед тем, как пользователь начнёт ввод
-   * 
+   *
    * @param data это конфигурация Вашего логгера, которые Вы можете менять, смотря, что Вы хотите
-   * 
+   *
    * ## Значения
-   * 
+   *
    * - `color` — Цвет текста после имени логгера (`this.colors[1]` по умолчанию)
    * - `level` — Уровень логирования (определяет, нужно ли выводить информацию или просто её записать в `.log` файл) (`this._config.defaultLevel` по умолчанию)
    * - `sign` — Булево значение, говорит, нужно ли подписывать данный лог или нет (`true` по умолчанию)
@@ -208,7 +212,7 @@ export class Logger<T extends string, Level extends string> {
    * - `listeners` — Ваши прослушиватели, если хотите больше гибкости (`{}`)
    * - `overwriteListeners` — Булево значение, говорит, нужно ли перезаписывать дефолтные прослушиватели логгера (`false`)
    * - `hideInput` — Булево значение, говорит, нужно ли прятать текст в терминале (ввод превратится в `****`) (`false`)
-   * 
+   *
    * @returns текст, что ввёл пользователь
    */
   public readRaw(text: string | any[], data: ReadRawParameters<Level> = {}) {
@@ -229,7 +233,7 @@ export class Logger<T extends string, Level extends string> {
       listeners?.onStart?.();
 
       this.execute(text, configuration);
-      
+
       let globalData = "";
       const onData = (key: Buffer) => {
         listeners?.onData?.(key);
@@ -241,15 +245,17 @@ export class Logger<T extends string, Level extends string> {
 
         if (this.charCode(key) === Keys.ctrl_backspace) {
           this.clearChars(globalData.length, this.out);
-          return globalData = "";
+          return (globalData = "");
         }
 
         if (this.charCode(key) === Keys.backspace) {
           this.clearChars(1, this.out);
-          return globalData = globalData.slice(0, -1);
+          return (globalData = globalData.slice(0, -1));
         }
 
-        if ([Keys.revertSlash_n, Keys.revertSlash_r].includes(this.charCode(key))) {
+        if (
+          [Keys.revertSlash_n, Keys.revertSlash_r].includes(this.charCode(key))
+        ) {
           cleanup();
           this.out.write("\n");
           return resolve(globalData);
@@ -257,7 +263,7 @@ export class Logger<T extends string, Level extends string> {
 
         globalData += key.toString("utf8");
         this.out.write(data.hideInput ? configuration.hideSymbol : key);
-      }
+      };
 
       const onError = (err: unknown) => {
         listeners?.onError?.(err);
@@ -270,15 +276,15 @@ export class Logger<T extends string, Level extends string> {
         cleanup();
         reject(new Error("Stream ended without data"));
       };
-      
+
       const cleanup = () => {
         this.input.removeListener("data", onData);
         this.input.removeListener("error", onError);
         this.input.removeListener("end", onEnd);
-        
+
         this.input.setRawMode(false);
         this.input.pause();
-        
+
         if (listeners?.onData) {
           this.input.removeListener("data", listeners.onData);
         }
@@ -299,19 +305,18 @@ export class Logger<T extends string, Level extends string> {
         this.input.on("error", onError);
         this.input.on("end", onEnd);
       }
-
     });
   }
 
   /**
    * Читает текст, который введёт пользователь в терминал. Читает всё целиком
-   * 
+   *
    * @param text То, что Вы хотите вывести перед тем, как пользователь начнёт ввод
-   * 
+   *
    * @param data это конфигурация Вашего логгера, которые Вы можете менять, смотря, что Вы хотите
-   * 
+   *
    * ## Значения
-   * 
+   *
    * - `color` — Цвет текста после имени логгера (`this.colors[1]` по умолчанию)
    * - `level` — Уровень логирования (определяет, нужно ли выводить информацию или просто её записать в `.log` файл) (`this._config.defaultLevel` по умолчанию)
    * - `sign` — Булево значение, говорит, нужно ли подписывать данный лог или нет (`true` по умолчанию)
@@ -319,7 +324,7 @@ export class Logger<T extends string, Level extends string> {
    * - `end` — Конец строки для логгера (`\n` по умолчанию)
    * - `join` — Соединение для значения массиов (`" "` по умолчанию)
    * - `listeners` — Ваши прослушиватели, если хотите больше гибкости (`{}`)
-   * 
+   *
    * @returns текст, что ввёл пользователь
    */
   public read(text: string | any[], data: ExecuteData<Level> & Listeners = {}) {
@@ -337,16 +342,16 @@ export class Logger<T extends string, Level extends string> {
       );
 
       listeners?.onStart?.();
-      
+
       const cleanup = () => {
         this.input.removeListener("readable", onReadable);
         this.input.removeListener("error", onError);
         this.input.removeListener("end", onEnd);
-        
+
         if (listeners?.onData) {
           this.input.removeListener("data", listeners.onData);
         }
-        
+
         this.input.pause();
       };
 
@@ -357,12 +362,12 @@ export class Logger<T extends string, Level extends string> {
           listeners?.onReadable?.();
 
           const userInput: string = this.input.read();
-          
+
           if (!userInput) {
             return reject(new Error("No user unput resolved"));
           }
           cleanup();
-          const input = userInput.replace(/\r?\n$/, '');
+          const input = userInput.replace(/\r?\n$/, "");
           this._file_logger.execute("User: " + input);
           return resolve(input);
         } catch (error) {
@@ -386,7 +391,7 @@ export class Logger<T extends string, Level extends string> {
       this.input.on("readable", onReadable);
       this.input.on("error", onError);
       this.input.on("end", onEnd);
-      
+
       if (listeners?.onData) {
         this.input.on("data", listeners.onData);
       }
@@ -395,12 +400,12 @@ export class Logger<T extends string, Level extends string> {
 
   /**
    * Изменяет последнюю линию в терминале
-   * 
+   *
    * @param text То, что Вы хотите вывести перед тем, как пользователь начнёт ввод
    * @param data это конфигурация Вашего логгера, которые Вы можете менять, смотря, что Вы хотите
-   * 
+   *
    * ## Значения
-   * 
+   *
    * - `color` — Цвет текста после имени логгера (`this.colors[1]` по умолчанию)
    * - `level` — Уровень логирования (определяет, нужно ли выводить информацию или просто её записать в `.log` файл) (`this._config.defaultLevel` по умолчанию)
    * - `sign` — Булево значение, говорит, нужно ли подписывать данный лог или нет (`true` по умолчанию)
@@ -408,9 +413,9 @@ export class Logger<T extends string, Level extends string> {
    * - `end` — Конец строки для логгера (`\n` по умолчанию)
    * - `join` — Соединение для значения массиов (`" "` по умолчанию)
    * - `ignoreLineBreakerError` — Булево значение, говорит, игнорировать ли ошибки о `\n` (`false` по умолчанию)
-   * 
+   *
    * @returns тот же метод для замены предыдущего текста
-   * 
+   *
    * @example
    * ```ts
    * const logger = new Logger();
@@ -519,7 +524,8 @@ export class Logger<T extends string, Level extends string> {
       );
     }
 
-    const logEnabled = (config.logging && this._file_logger) || configuration.write;
+    const logEnabled =
+      (config.logging && this._file_logger) || configuration.write;
     if (logEnabled) {
       this.logFileService({ type, text, colored });
     }
@@ -537,7 +543,7 @@ export class Logger<T extends string, Level extends string> {
   }
 
   private charCode(char: Buffer) {
-    return char.toString("utf8").charCodeAt(0)
+    return char.toString("utf8").charCodeAt(0);
   }
 
   private logFileService<Type extends TextTypes>({
@@ -564,7 +570,10 @@ export class Logger<T extends string, Level extends string> {
     return this._config.colors;
   }
 
-  private resolveData<T, K = Required<T>>(data: Partial<T>, defaultData: K): Partial<T> & K {
+  private resolveData<T, K = Required<T>>(
+    data: Partial<T>,
+    defaultData: K,
+  ): Partial<T> & K {
     return { ...defaultData, ...data };
   }
 
