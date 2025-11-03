@@ -189,7 +189,7 @@ export class Logger<T extends string, Level extends string> {
     return this.log(text, data, "error");
   }
 
-  public cleanupInput(listeners?: string[]) {
+  public cleanupInput(listeners?: Array<'data' | 'end' | 'error' | 'readable'>) {
     if (listeners) {
       listeners.forEach((listener) => this.input.removeAllListeners(listener));
     } else {
@@ -301,7 +301,7 @@ export class Logger<T extends string, Level extends string> {
           this.input.removeListener("error", listeners.onError);
         }
         if (listeners?.onEnd) {
-          this.input.removeListener("error", listeners.onEnd);
+          this.input.removeListener("end", listeners.onEnd);
         }
       };
 
@@ -373,7 +373,7 @@ export class Logger<T extends string, Level extends string> {
           const userInput: string = this.input.read();
 
           if (!userInput) {
-            return reject(new Error("No user unput resolved"));
+            return reject(new Error("No user input resolved"));
           }
           cleanup();
           const input = userInput.replace(/\r?\n$/, "");
@@ -520,9 +520,14 @@ export class Logger<T extends string, Level extends string> {
       name,
     });
 
-    const isLevelEqualsOrLess =
-      this._config.levels[config.level] <=
-      this._config.levels[configuration.level];
+    const configLevel = this._config.levels[config.level];
+    const messageLevel = this._config.levels[configuration.level];
+    
+    if (configLevel === undefined || messageLevel === undefined) {
+      throw new Error(`Invalid log level. Config level: ${config.level}, Message level: ${configuration.level}`);
+    }
+    
+    const isLevelEqualsOrLess = configLevel <= messageLevel;
     if (isLevelEqualsOrLess) {
       // Используем уже окрашенный текст без дополнительного окрашивания
       this.out.write(prefix + colored.join(join) + suffix);
@@ -580,12 +585,21 @@ export class Logger<T extends string, Level extends string> {
   private resolveText(text: string | unknown[], color?: Colors) {
     const out = typeof text === "string" ? [text] : text;
     const finalColor = color || this._config.colors[1];
+    const seen = new WeakSet();
 
     const output: string[] = out.map((text) => {
       const processedText = typeof text !== "string"
         ? text instanceof Error
           ? text.stack || text.message
-          : JSON.stringify(text, undefined, 4)
+          : JSON.stringify(text, (key, value) => {
+              if (typeof value === 'object' && value !== null) {
+                if (seen.has(value)) {
+                  return '[Circular]';
+                }
+                seen.add(value);
+              }
+              return value;
+            }, 4)
         : text;
       
       // Добавляем цвет только если он определен

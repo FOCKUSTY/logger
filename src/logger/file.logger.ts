@@ -9,8 +9,34 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import Deleter from "./deleter.logger";
 import { LOG_DIR_NAME, LOG_FILE_EXTENSION } from "../data/data";
 
-const cache = new Map();
+interface CacheEntry {
+  content: string;
+  timestamp: number;
+}
+
+const MAX_CACHE_SIZE = 100;
+const CACHE_TTL = 1000 * 60 * 60;
+
+const cache = new Map<string, CacheEntry>();
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
+
+function cleanupCache(): void {
+  const now = Date.now();
+  
+  for (const [key, entry] of cache.entries()) {
+    if (now - entry.timestamp > CACHE_TTL) {
+      cache.delete(key);
+    }
+  }
+
+  if (cache.size > MAX_CACHE_SIZE) {
+    const entries = Array.from(cache.entries())
+      .sort((a, b) => a[1].timestamp - b[1].timestamp);
+    
+    const toDelete = entries.slice(0, entries.length - MAX_CACHE_SIZE);
+    toDelete.forEach(([key]) => cache.delete(key));
+  }
+}
 
 export const errorAffixText = "------------------ ERROR ------------------";
 export const errorAffix = (error: string) =>
@@ -73,7 +99,10 @@ export abstract class LogStrategy {
       const file = this.readFile();
 
       this._cache = file;
-      cache.set(this._config.file_path, this._cache);
+      cache.set(this._config.file_path, {
+        content: this._cache,
+        timestamp: Date.now()
+      });
     }
   }
 
@@ -105,14 +134,25 @@ export class Log extends LogStrategy {
       this.init();
 
       this._cache = this.readFile();
-      cache.set(this._config.file_path, this._cache);
+      cache.set(this._config.file_path, {
+        content: this._cache,
+        timestamp: Date.now()
+      });
     }
+
+    cleanupCache();
+
+    const existingCache = cache.get(this._config.file_path);
+    const content = (existingCache?.content || this._hello) +
+      `\n[${this._date.toISOString()}]: ` +
+      text;
 
     cache.set(
       this._config.file_path,
-      (cache.get(this._config.file_path) || this._hello) +
-        `\n[${this._date.toISOString()}]: ` +
-        text,
+      {
+        content,
+        timestamp: Date.now()
+      }
     );
 
     return this.writeFile();
@@ -168,9 +208,13 @@ export class Log extends LogStrategy {
   }
 
   protected writeFile(): void {
+    const cacheEntry = cache.get(this._config.file_path);
+    if (!cacheEntry) {
+      throw new Error(`No cache entry found for ${this._config.file_path}`);
+    }
     return writeFileSync(
       this._config.file_path,
-      cache.get(this._config.file_path),
+      cacheEntry.content,
       "utf-8",
     );
   }
