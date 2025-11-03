@@ -35,7 +35,7 @@ export const TUTORIALS: Partial<Record<SettingKeys, string>> = {
   loggers: "this a your loggers, you can don't have to touch it",
 };
 
-export const DEFAULT_COLORS: [Colors, Colors] = [Colors.reset, Colors.reset];
+export const DEFAULT_COLORS: [Colors, Colors] = [Colors.white, Colors.white];
 
 export const EXTRA_SETTINGS: ExtraneousConfig = {
   create_file: false,

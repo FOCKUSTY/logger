@@ -108,6 +108,8 @@ export class Logger<T extends string, Level extends string> {
     this._config = {
       ...config,
       ...data,
+      ...loggersNames.GetNames()[name],
+      name,
     } as InitLoggerConfig;
 
     this._execute_data = {
@@ -523,13 +525,8 @@ export class Logger<T extends string, Level extends string> {
       this._config.levels[config.level] <=
       this._config.levels[configuration.level];
     if (isLevelEqualsOrLess) {
-      this.out.write(
-        prefix +
-          (typeof text === "string"
-            ? colored.join(join)
-            : paint(colored.join(join), configuration.color)) +
-          suffix,
-      );
+      // Используем уже окрашенный текст без дополнительного окрашивания
+      this.out.write(prefix + colored.join(join) + suffix);
     }
 
     const logEnabled =
@@ -583,17 +580,18 @@ export class Logger<T extends string, Level extends string> {
 
   private resolveText(text: string | unknown[], color?: Colors) {
     const out = typeof text === "string" ? [text] : text;
+    const finalColor = color || this._config.colors[1];
 
-    const output: string[] = out.map((text) =>
-      paint(
-        typeof text !== "string"
-          ? text instanceof Error
-            ? text.stack || text.message
-            : JSON.stringify(text, undefined, 4)
-          : text,
-        color || this._config.colors[1],
-      ),
-    );
+    const output: string[] = out.map((text) => {
+      const processedText = typeof text !== "string"
+        ? text instanceof Error
+          ? text.stack || text.message
+          : JSON.stringify(text, undefined, 4)
+        : text;
+      
+      // Добавляем цвет только если он определен
+      return finalColor ? paint(processedText, finalColor) : processedText;
+    });
 
     return {
       colored: output,
