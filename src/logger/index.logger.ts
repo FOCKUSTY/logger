@@ -99,7 +99,6 @@ export class Logger<T extends string, Level extends string> {
       } & Config
     > = {
       ...DEFAULT_EXECUTE_DATA,
-      ...config,
     },
 
     protected readonly out: typeof process.stdout = process.stdout,
@@ -107,16 +106,16 @@ export class Logger<T extends string, Level extends string> {
   ) {
     this._config = {
       ...config,
-      ...data,
       ...loggersNames.GetNames()[name],
+      ...data,
       name,
     } as InitLoggerConfig;
 
     this._execute_data = {
       ...DEFAULT_EXECUTE_DATA,
-      color: config.colors[0],
-      write: config.logging,
-      level: (data.level || config.defaultLevel) as Level,
+      color: this._config.colors[1],
+      write: this._config.logging,
+      level: (data.level || this._config.defaultLevel) as Level,
     };
 
     this._file_logger = new FileLogger(

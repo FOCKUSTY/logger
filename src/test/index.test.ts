@@ -7,7 +7,7 @@ new Configurator({
   dir: join(__dirname, "..", ".."),
   logging: true,
   create_file: true,
-  overwrite_file: true,
+  overwrite_file: false,
   level: "info",
   date: false,
 });
