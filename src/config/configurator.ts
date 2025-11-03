@@ -23,7 +23,7 @@ import Validator from "./validator";
 let filePath: string = ROOT_DIR;
 const pathFormat = (...p: string[]) => path.resolve(path.join(...p));
 
-class Configurator {
+export class Configurator {
   private readonly _extra_config: ExtraConfig<Settings> = EXTRA_SETTINGS;
   private readonly _config: Config = SETTINGS;
   private readonly _path: string = pathFormat(

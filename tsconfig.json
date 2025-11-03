@@ -5,7 +5,7 @@
     "rootDir": "./",
     "baseUrl": "./",
     "declaration": true,
-    "outDir": "./dist",
+    "outDir": "./",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
