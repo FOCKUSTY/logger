@@ -2,8 +2,7 @@ name: package publish
 
 on:
   push:
-    tags:
-      - "bv*"
+    branches: [main]
 
 permissions:
   id-token: write
