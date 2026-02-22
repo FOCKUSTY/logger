@@ -533,9 +533,8 @@ export class Logger<T extends string, Level extends string> {
       this.out.write(prefix + colored.join(join) + suffix);
     }
 
-    const logEnabled =
-      (config.logging && this._file_logger) || configuration.write;
-    if (logEnabled) {
+    const logFileEnabled = config.logging || configuration.write;
+    if (logFileEnabled) {
       this.logFileService({ type, text, colored });
     }
 
