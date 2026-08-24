@@ -3,20 +3,24 @@ title: К прочтению
 category: Руководство
 ---
 
+<!-- Banner -->
+<p align="center">
+  <img src="./assets/logger.banner.svg" alt="fock-logger banner" width="100%">
+</p>
+
 # fock-logger
 
 Простой, гибкий и расширяемый логгер для ваших pet-проектов.
 
-## Особенности
+[![Static Badge](https://img.shields.io/badge/fockusty-logger-logger?style=for-the-badge&logo=npm&color=blue)](https://www.npmjs.com/package/fock-logger)
+[![GitHub top language](https://img.shields.io/github/languages/top/fockusty/logger?style=for-the-badge)](https://github.com/fockusty/logger)
+[![GitHub license](https://img.shields.io/github/license/fockusty/logger?style=for-the-badge)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/fockusty/logger/publish.yaml?style=for-the-badge)](https://github.com/fockusty/logger/actions)
 
-- Логирование в консоль и/или файл (с автоматическим созданием директорий).
-- Уровни логирования (настраиваемые, с фильтрацией по приоритету).
-- Интерактивный ввод — метод `read()` для запроса данных от пользователя.
-- Форматирование — встроенные форматтеры для ошибок, null/undefined, toString() и цепочка кастомных форматтеров.
-- Временные метки — настраиваемый формат (локали, часовые пояса или собственная функция).
-- Префиксы/суффиксы — легко добавить имя логгера или другую информацию к каждому сообщению.
-- Включаемые/выключаемые компоненты (например, временные метки можно отключить).
-- Написано на TypeScript — полная типизация и поддержка IDE.
+[![npm version](https://img.shields.io/npm/v/fock-logger?style=for-the-badge)](https://www.npmjs.com/package/fock-logger)
+[![npm downloads](https://img.shields.io/npm/dt/fock-logger?style=for-the-badge)](https://www.npmjs.com/package/fock-logger)
+
+---
 
 ## Установка
 
@@ -24,12 +28,27 @@ category: Руководство
 npm install fock-logger
 ```
 
+---
+
+## Особенности
+
+- Логирование в консоль и/или файл (с автоматическим созданием директорий).
+- Настраиваемые уровни логирования с фильтрацией по приоритету.
+- Интерактивный ввод — метод `read()` для запроса данных от пользователя.
+- Гибкое форматирование: встроенные форматтеры для ошибок, `null`/`undefined`, `toString()` и цепочка кастомных форматтеров.
+- Временные метки с поддержкой локалей, часовых поясов или собственной функции форматирования.
+- Добавление префиксов/суффиксов (например, имя логгера или метка времени).
+- Возможность включать/выключать отдельные компоненты (например, временные метки).
+- Полная типизация и поддержка IDE.
+
+---
+
 ## Быстрый старт
 
 ```typescript
 import { Logger, FileService, TimestampService } from "fock-logger";
 
-// 1. Создаём сервисы
+// 1. Создаём сервисы (оба опциональны)
 const fileService = new FileService({ filePath: "./logs/app.log" });
 const timestampService = new TimestampService({
   timeZone: "Europe/Moscow",
@@ -39,28 +58,31 @@ const timestampService = new TimestampService({
 // 2. Определяем уровни логирования
 const levels = {
   levels: { debug: 0, info: 1, warn: 2, error: 3 },
-  level: "info", // текущий уровень (будут выводиться только >= info)
+  level: "info", // будут выводиться только info и выше
 };
 
 // 3. Создаём логгер
 const logger = new Logger({
   name: "my-app",
-  fileService, // опционально
-  timestampService, // опционально
+  fileService,
+  timestampService,
   baseLevels: levels,
-  baseContext: { log: true, writeFile: true }, // по умолчанию пишем и в консоль, и в файл
+  baseContext: { log: true, writeFile: true },
 });
 
 // 4. Логируем
 await logger.execute("Сервер запущен", { context: { level: "info" } });
-// или: await logger.log.info("Сервер запущен");
+// или с использованием свойства `log`:
+await logger.log.info("Сервер запущен");
 
 // 5. Читаем ввод пользователя
-const answer = await logger.read("Как вас зовут?", {
+const userName = await logger.read("Введите ваше имя:", {
   context: { level: "info" },
 });
-console.log(`Привет, ${answer}!`);
+console.log(`Привет, ${userName}!`);
 ```
+
+---
 
 ## API
 
@@ -76,7 +98,7 @@ console.log(`Привет, ${answer}!`);
 ### Настройка уровней логирования
 
 ```typescript
-const levels: LoggerLevels<"debug" | "info" | "warn" | "error"> = {
+const levels = {
   levels: {
     debug: 0,
     info: 1,
@@ -137,6 +159,13 @@ timestampService.disable(); // или timestampService.turn(false);
 // Теперь execute() будет возвращать строку без временной метки
 ```
 
+---
+
+## Ссылки
+
+Пакет: [npm/fock-logger](https://www.npmjs.com/package/fock-logger)
+Документация: [fockusty.github.io/logger](https://fockusty.github.io/logger)
+
 ## Лицензия
 
 MIT © [FOCKUSTY](https://github.com/FOCKUSTY)
@@ -144,3 +173,9 @@ MIT © [FOCKUSTY](https://github.com/FOCKUSTY)
 ## Содействие
 
 Пожалуйста, ознакомьтесь с [CONTRIBUTING.md](./CONTRIBUTING.md) перед отправкой pull request. Мы придерживаемся соглашения LAF и принципов SOLID.
+
+---
+
+<p align="center">
+  <img src="./assets/logger.logo.svg" alt="fock-logger logo" width="200">
+</p>
