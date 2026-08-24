@@ -16,7 +16,7 @@
 </div></section>
 <div class="tsd-signature"><span class="tsd-signature-keyword">type</span> <span class="tsd-kind-type-alias">LoggerReadListeners</span> <span class="tsd-signature-symbol">=</span> <span class="tsd-signature-symbol">{</span><br/>    <a class="tsd-kind-property" href="#ondata">onData</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">chunk</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onend">onEnd</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onerror">onError</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">error</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onreadable">onReadable</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/>    <a class="tsd-kind-property" href="#onstart">onStart</a><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L156">types/logger-service.types.ts:156</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L156">types/logger-service.types.ts:156</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-accordion" open><summary class="tsd-accordion-summary tsd-index-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
@@ -39,35 +39,35 @@
 <div class="tsd-comment tsd-typography"><p>Вызывается при поступлении порции данных (chunk).</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L164">types/logger-service.types.ts:164</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L164">types/logger-service.types.ts:164</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="onend"><code class="tsd-tag">Optional</code><span>on<wbr/>End</span><a href="#onend" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">onEnd</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span></div>
 <div class="tsd-comment tsd-typography"><p>Вызывается, когда поток завершён.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L162">types/logger-service.types.ts:162</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L162">types/logger-service.types.ts:162</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="onerror"><code class="tsd-tag">Optional</code><span>on<wbr/>Error</span><a href="#onerror" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">onError</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">error</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">unknown</span><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span></div>
 <div class="tsd-comment tsd-typography"><p>Вызывается при ошибке потока.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L160">types/logger-service.types.ts:160</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L160">types/logger-service.types.ts:160</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="onreadable"><code class="tsd-tag">Optional</code><span>on<wbr/>Readable</span><a href="#onreadable" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">onReadable</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span></div>
 <div class="tsd-comment tsd-typography"><p>Вызывается, когда поток ввода готов к чтению.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L158">types/logger-service.types.ts:158</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L158">types/logger-service.types.ts:158</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member">
 <h3 class="tsd-anchor-link" id="onstart"><code class="tsd-tag">Optional</code><span>on<wbr/>Start</span><a href="#onstart" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">onStart</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-symbol">()</span> <span class="tsd-signature-symbol">=&gt;</span> <span class="tsd-signature-type">void</span></div>
 <div class="tsd-comment tsd-typography"><p>Вызывается в самом начале перед выводом приглашения.</p>
 </div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/62c1d6942d49682626d1983a7e2568d8c025783d/src/types/logger-service.types.ts#L166">types/logger-service.types.ts:166</a></li></ul></aside></section></section></details></div>
+<li>Defined in <a href="https://github.com/FOCKUSTY/logger/blob/6131705af55c9e613b39b22beac8f13a40ef74b6/src/types/logger-service.types.ts#L166">types/logger-service.types.ts:166</a></li></ul></aside></section></section></details></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
