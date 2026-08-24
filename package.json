@@ -1,37 +1,28 @@
 {
   "name": "fock-logger",
-  "version": "6.3.2",
+  "version": "7.0.0",
   "description": "Simple logger for your pet-project",
+  "type": "commonjs",
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test:prod": "mocha --paths ./dist/test/**/*.test.js",
-    "test": "ts-mocha --paths ./src/test/**/*.test.ts"
+    "htmldocs": "typedoc --out htmldocs src/index.ts"
   },
   "files": [
-    "./package.json",
-    "./README.md",
-    "./LICENSE",
-    "./**/*.js",
-    "./**/*.d.ts",
-    "./**/*.svg",
-    "!./**/test/*",
-    "!./**/*.ts"
+    "dist"
   ],
-  "keywords": [
-    "logger",
-    "simple",
-    "simple logger"
-  ],
-  "author": "FOCKUSTY",
+  "keywords": [],
+  "author": {
+    "name": "FOCKUSTY",
+    "email": "viserd.yt@gmail.com",
+    "url": "https://fockusty.vercel.app"
+  },
   "license": "MIT",
   "devDependencies": {
-    "@types/mocha": "^10.0.8",
-    "@types/node": "^22.7.4",
-    "mocha": "^10.7.3",
-    "ts-mocha": "^10.0.0",
-    "typescript": "^5.6.2"
+    "@types/node": "^22.20.1",
+    "typedoc": "^0.28.20",
+    "typescript": "^6.0.3"
   },
   "engines": {
     "node": ">=7.6.0"
