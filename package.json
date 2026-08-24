@@ -1,17 +1,31 @@
 {
   "name": "fock-logger",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "Simple logger for your pet-project",
-  "type": "commonjs",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "htmldocs": "typedoc --out htmldocs src/index.ts"
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/types/index.d.ts"
+    },
+    "./config": {
+      "import": "./dist/config.mjs",
+      "require": "./dist/config.cjs",
+      "types": "./dist/types/config/index.d.ts"
+    }
   },
   "files": [
     "dist"
   ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "prepublishOnly": "npm run build",
+    "htmldocs": "typedoc --out htmldocs src/index.ts"
+  },
   "keywords": [],
   "author": {
     "name": "FOCKUSTY",
@@ -22,7 +36,9 @@
   "devDependencies": {
     "@types/node": "^22.20.1",
     "typedoc": "^0.28.20",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^8.2.2",
+    "vite-plugin-dts": "^5.0.3"
   },
   "engines": {
     "node": ">=7.6.0"
