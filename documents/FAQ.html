@@ -1,0 +1,188 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>FAQ | fock-logger - v7.0.0</title><meta name="description" content="Documentation for fock-logger"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">fock-logger - v7.0.0</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="" aria-current="page">FAQ</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="faq-часто-задаваемые-вопросы" class="tsd-anchor-link">FAQ (Часто задаваемые вопросы)<a href="#faq-часто-задаваемые-вопросы" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="общие-вопросы" class="tsd-anchor-link">Общие вопросы<a href="#общие-вопросы" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="как-добавить-собственный-уровень-логирования" class="tsd-anchor-link">Как добавить собственный уровень логирования?<a href="#как-добавить-собственный-уровень-логирования" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Вы можете определить любые строковые уровни в <code>LoggerLevels</code>. Например:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">levels</span><span class="hl-1"> = {</span><br/><span class="hl-1">  </span><span class="hl-4">levels:</span><span class="hl-1"> { </span><span class="hl-4">trace:</span><span class="hl-1"> -</span><span class="hl-8">1</span><span class="hl-1">, </span><span class="hl-4">debug:</span><span class="hl-1"> </span><span class="hl-8">0</span><span class="hl-1">, </span><span class="hl-4">info:</span><span class="hl-1"> </span><span class="hl-8">1</span><span class="hl-1">, </span><span class="hl-4">warn:</span><span class="hl-1"> </span><span class="hl-8">2</span><span class="hl-1">, </span><span class="hl-4">error:</span><span class="hl-1"> </span><span class="hl-8">3</span><span class="hl-1">, </span><span class="hl-4">fatal:</span><span class="hl-1"> </span><span class="hl-8">4</span><span class="hl-1"> },</span><br/><span class="hl-1">  </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;info&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">};</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="почему-мои-сообщения-не-записываются-в-файл" class="tsd-anchor-link">Почему мои сообщения не записываются в файл?<a href="#почему-мои-сообщения-не-записываются-в-файл" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Проверьте:</p>
+<ul>
+<li>Убедитесь, что <code>writeFile: true</code> передан в контексте вызова или в <code>baseContext</code>.</li>
+<li>Проверьте права на запись в директорию.</li>
+<li>Файл создаётся автоматически при первом вызове <code>write</code>, если директория существует.</li>
+</ul>
+<h3 id="как-изменить-разделитель-между-частями-сообщения" class="tsd-anchor-link">Как изменить разделитель между частями сообщения?<a href="#как-изменить-разделитель-между-частями-сообщения" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Используйте <code>separator</code> в контексте:</p>
+<pre><code class="typescript"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">execute</span><span class="hl-1">(</span><span class="hl-2">&quot;Сообщение&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-4">context:</span><span class="hl-1"> { </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;info&quot;</span><span class="hl-1">, </span><span class="hl-4">separator:</span><span class="hl-1"> </span><span class="hl-2">&quot; | &quot;</span><span class="hl-1"> },</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="работа-с-временными-метками" class="tsd-anchor-link">Работа с временными метками<a href="#работа-с-временными-метками" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="как-отключить-временные-метки" class="tsd-anchor-link">Как отключить временные метки?<a href="#как-отключить-временные-метки" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">timestampService</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">TimestampService</span><span class="hl-1">();</span><br/><span class="hl-4">timestampService</span><span class="hl-1">.</span><span class="hl-0">disable</span><span class="hl-1">();</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Или в конструкторе можно сразу выключить:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">timestampService</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">TimestampService</span><span class="hl-1">();</span><br/><span class="hl-4">timestampService</span><span class="hl-1">.</span><span class="hl-0">turn</span><span class="hl-1">(</span><span class="hl-6">false</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="как-изменить-формат-временной-метки" class="tsd-anchor-link">Как изменить формат временной метки?<a href="#как-изменить-формат-временной-метки" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Передайте свою функцию форматирования:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">timestampService</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">TimestampService</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-0">formatter</span><span class="hl-4">:</span><span class="hl-1"> (</span><span class="hl-4">date</span><span class="hl-1">) </span><span class="hl-6">=&gt;</span><br/><span class="hl-1">    </span><span class="hl-4">date</span><span class="hl-1">.</span><span class="hl-0">toLocaleString</span><span class="hl-1">(</span><span class="hl-2">&quot;ru-RU&quot;</span><span class="hl-1">, { </span><span class="hl-4">timeZone:</span><span class="hl-1"> </span><span class="hl-2">&quot;Europe/Moscow&quot;</span><span class="hl-1"> }),</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="как-добавить-квадратные-скобки-вокруг-временной-метки" class="tsd-anchor-link">Как добавить квадратные скобки вокруг временной метки?<a href="#как-добавить-квадратные-скобки-вокруг-временной-метки" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>По умолчанию <code>TimestampWrapper</code> уже добавляет скобки. Если вы хотите изменить обёртку, создайте свой класс, реализующий <code>WrapperType</code>, или используйте <code>EmptyWrapper</code> для отключения обёртки:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">timestampService</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">TimestampService</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-4">wrapper:</span><span class="hl-1"> </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">EmptyWrapper</span><span class="hl-1">(),</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="форматирование" class="tsd-anchor-link">Форматирование<a href="#форматирование" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="как-добавить-свой-форматтер-для-специфических-данных" class="tsd-anchor-link">Как добавить свой форматтер для специфических данных?<a href="#как-добавить-свой-форматтер-для-специфических-данных" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Наследуйте <code>BaseFormatter</code> и реализуйте <code>canFormat</code> и <code>format</code>. Затем подключите через <code>FormatterHandler</code>.</p>
+<p>Пример см. в разделе <a href="%D0%9A%D0%B0%D1%81%D1%82%D0%BE%D0%BC%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D1%8F.html">Расширение и кастомизация</a>.</p>
+<h3 id="почему-мои-ошибки-выводятся-как-object-object" class="tsd-anchor-link">Почему мои ошибки выводятся как [Object object]?<a href="#почему-мои-ошибки-выводятся-как-object-object" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Используйте <code>ErrorFormatter</code>, который автоматически обрабатывает ошибки в стандартном наборе форматтеров. Если вы заменили <code>formatterHandler</code>, добавьте <code>ErrorFormatter</code> в цепочку.</p>
+<h3 id="как-обработать-null-и-undefined" class="tsd-anchor-link">Как обработать null и undefined?<a href="#как-обработать-null-и-undefined" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p><code>NullableFormatter</code> преобразует их в строки &quot;null&quot; и &quot;undefined&quot;. Он также входит в стандартный набор.</p>
+<h2 id="пользовательский-ввод-метод-read" class="tsd-anchor-link">Пользовательский ввод (метод read)<a href="#пользовательский-ввод-метод-read" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="как-изменить-префикс-для-пользовательского-ввода-в-файле" class="tsd-anchor-link">Как изменить префикс для пользовательского ввода в файле?<a href="#как-изменить-префикс-для-пользовательского-ввода-в-файле" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>При создании логгера укажите <code>userInputSettings</code>:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">logger</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Logger</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-5">// ...</span><br/><span class="hl-1">  </span><span class="hl-4">userInputSettings:</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">prefix:</span><span class="hl-1"> </span><span class="hl-2">&quot;Input:&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">    </span><span class="hl-4">separator:</span><span class="hl-1"> </span><span class="hl-2">&quot; &quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  },</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="как-обработать-случай-когда-пользователь-ничего-не-ввёл" class="tsd-anchor-link">Как обработать случай, когда пользователь ничего не ввёл?<a href="#как-обработать-случай-когда-пользователь-ничего-не-ввёл" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Метод <code>read</code> возвращает пустую строку, если пользователь нажал Enter без ввода. Вы можете проверить это самостоятельно.</p>
+<pre><code class="ts"><span class="hl-6">let</span><span class="hl-1"> </span><span class="hl-4">userInput</span><span class="hl-1"> = </span><span class="hl-2">&quot;&quot;</span><span class="hl-1">;</span><br/><span class="hl-3">while</span><span class="hl-1"> (!</span><span class="hl-4">userInput</span><span class="hl-1">.</span><span class="hl-0">trim</span><span class="hl-1">()) {</span><br/><span class="hl-1">  </span><span class="hl-4">userInput</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">read</span><span class="hl-1">(</span><span class="hl-2">&quot;Введите ваше имя (обязательно):&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">    </span><span class="hl-4">context:</span><span class="hl-1"> { </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;info&quot;</span><span class="hl-1"> },</span><br/><span class="hl-1">  });</span><br/><span class="hl-1">  </span><span class="hl-3">if</span><span class="hl-1"> (!</span><span class="hl-4">userInput</span><span class="hl-1">.</span><span class="hl-0">trim</span><span class="hl-1">()) {</span><br/><span class="hl-1">    </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-2">&quot;Имя не может быть пустым. Попробуйте снова.&quot;</span><span class="hl-1">);</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span><br/><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-2">`Привет, </span><span class="hl-6">${</span><span class="hl-4">userInput</span><span class="hl-6">}</span><span class="hl-2">!`</span><span class="hl-1">);</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="как-добавить-обработку-нажатия-ctrlc" class="tsd-anchor-link">Как добавить обработку нажатия Ctrl+C?<a href="#как-добавить-обработку-нажатия-ctrlc" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>В Node.js вы можете использовать обработчик события <code>SIGINT</code>. Это не входит в библиотеку, но вы можете обернуть вызов <code>read</code>:</p>
+<pre><code class="typescript"><span class="hl-4">process</span><span class="hl-1">.</span><span class="hl-0">on</span><span class="hl-1">(</span><span class="hl-2">&quot;SIGINT&quot;</span><span class="hl-1">, () </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-4">console</span><span class="hl-1">.</span><span class="hl-0">log</span><span class="hl-1">(</span><span class="hl-2">&quot;</span><span class="hl-11">\n</span><span class="hl-2">Ввод прерван&quot;</span><span class="hl-1">);</span><br/><span class="hl-1">  </span><span class="hl-4">process</span><span class="hl-1">.</span><span class="hl-0">exit</span><span class="hl-1">();</span><br/><span class="hl-1">});</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">result</span><span class="hl-1"> = </span><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">read</span><span class="hl-1">(</span><span class="hl-2">&quot;Введите текст:&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-4">context:</span><span class="hl-1"> { </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;info&quot;</span><span class="hl-1"> },</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="производительность" class="tsd-anchor-link">Производительность<a href="#производительность" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="влияет-ли-запись-в-файл-на-производительность" class="tsd-anchor-link">Влияет ли запись в файл на производительность?<a href="#влияет-ли-запись-в-файл-на-производительность" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Запись в файл происходит асинхронно через поток в режиме <code>append</code>, что минимизирует блокировку. Однако для высоконагруженных систем рекомендуется использовать отдельный поток или буферизацию.</p>
+<h3 id="можно-ли-использовать-логгер-в-браузере" class="tsd-anchor-link">Можно ли использовать логгер в браузере?<a href="#можно-ли-использовать-логгер-в-браузере" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Нет, библиотека использует Node.js API (<code>fs</code>, <code>process</code>). Для браузера потребуется отдельная адаптация.</p>
+<h2 id="ошибки-и-исключения" class="tsd-anchor-link">Ошибки и исключения<a href="#ошибки-и-исключения" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="что-делать-если-fileservice-не-может-создать-файл" class="tsd-anchor-link">Что делать, если FileService не может создать файл?<a href="#что-делать-если-fileservice-не-может-создать-файл" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Убедитесь, что у процесса есть права на запись в указанную директорию. <code>FileService</code> автоматически создаёт директорию, если её нет, но только если родительская директория существует и доступна для записи.</p>
+<h3 id="почему-логгер-выбрасывает-ошибку-при-повторном-вызове-read" class="tsd-anchor-link">Почему логгер выбрасывает ошибку при повторном вызове read?<a href="#почему-логгер-выбрасывает-ошибку-при-повторном-вызове-read" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Метод <code>read</code> блокирует поток ввода до завершения. Если попытаться вызвать его повторно до завершения первого, будет выброшена ошибка. Дождитесь завершения предыдущего вызова.</p>
+<h2 id="кастомизация" class="tsd-anchor-link">Кастомизация<a href="#кастомизация" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="как-изменить-имя-логгера-в-префиксе" class="tsd-anchor-link">Как изменить имя логгера в префиксе?<a href="#как-изменить-имя-логгера-в-префиксе" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Укажите <code>name</code> в конструкторе:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">logger</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Logger</span><span class="hl-1">({</span><br/><span class="hl-1">  </span><span class="hl-4">name:</span><span class="hl-1"> </span><span class="hl-2">&quot;MyApp&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-5">// ...</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="можно-ли-использовать-несколько-логгеров-с-разными-настройками" class="tsd-anchor-link">Можно ли использовать несколько логгеров с разными настройками?<a href="#можно-ли-использовать-несколько-логгеров-с-разными-настройками" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Да, создайте несколько экземпляров с разными конфигурациями.</p>
+<h3 id="как-добавить-суффикс-вместо-префикса" class="tsd-anchor-link">Как добавить суффикс вместо префикса?<a href="#как-добавить-суффикс-вместо-префикса" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Вы можете создать свой аффикс, унаследовав <code>BaseAffix</code> с типом <code>suffix</code>:</p>
+<pre><code class="typescript"><span class="hl-6">class</span><span class="hl-1"> </span><span class="hl-9">MySuffix</span><span class="hl-1"> </span><span class="hl-6">extends</span><span class="hl-1"> </span><span class="hl-9">BaseAffix</span><span class="hl-1"> {</span><br/><span class="hl-1">  </span><span class="hl-6">public</span><span class="hl-1"> </span><span class="hl-6">constructor</span><span class="hl-1">(</span><span class="hl-4">data</span><span class="hl-1">: </span><span class="hl-9">AffixChildConstructor</span><span class="hl-1">) {</span><br/><span class="hl-1">    </span><span class="hl-6">super</span><span class="hl-1">({ </span><span class="hl-4">type:</span><span class="hl-1"> </span><span class="hl-2">&quot;suffix&quot;</span><span class="hl-1">, ...</span><span class="hl-4">data</span><span class="hl-1"> });</span><br/><span class="hl-1">  }</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Затем подключите его в <code>AffixHandler</code>.</p>
+<h2 id="совместимость" class="tsd-anchor-link">Совместимость<a href="#совместимость" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="какие-версии-nodejs-поддерживаются" class="tsd-anchor-link">Какие версии Node.js поддерживаются?<a href="#какие-версии-nodejs-поддерживаются" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Минимальная версия — 7.6.0 (из-за использования <code>async/await</code> и <code>fs/promises</code>). Рекомендуется использовать LTS-версии Node.js.</p>
+<h3 id="поддерживается-ли-typescript" class="tsd-anchor-link">Поддерживается ли TypeScript?<a href="#поддерживается-ли-typescript" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Да, библиотека написана на TypeScript и поставляется с полной типизацией.</p>
+<h2 id="дополнительные-вопросы" class="tsd-anchor-link">Дополнительные вопросы<a href="#дополнительные-вопросы" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="где-найти-примеры-использования" class="tsd-anchor-link">Где найти примеры использования?<a href="#где-найти-примеры-использования" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>В разделе <a href="%D0%91%D1%8B%D1%81%D1%82%D1%80%D1%8B%D0%B9_%D1%81%D1%82%D0%B0%D1%80%D1%82.html">Быстрый старт</a> и в тестах проекта (если есть).</p>
+<h3 id="можно-ли-использовать-логгер-без-записи-в-файл" class="tsd-anchor-link">Можно ли использовать логгер без записи в файл?<a href="#можно-ли-использовать-логгер-без-записи-в-файл" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Да, просто не передавайте <code>fileService</code> в конструктор.</p>
+<h3 id="как-скрыть-вывод-в-консоль" class="tsd-anchor-link">Как скрыть вывод в консоль?<a href="#как-скрыть-вывод-в-консоль" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Установите <code>log: false</code> в контексте:</p>
+<pre><code class="typescript"><span class="hl-3">await</span><span class="hl-1"> </span><span class="hl-4">logger</span><span class="hl-1">.</span><span class="hl-0">execute</span><span class="hl-1">(</span><span class="hl-2">&quot;Секретно&quot;</span><span class="hl-1">, {</span><br/><span class="hl-1">  </span><span class="hl-4">context:</span><span class="hl-1"> { </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;info&quot;</span><span class="hl-1">, </span><span class="hl-4">log:</span><span class="hl-1"> </span><span class="hl-6">false</span><span class="hl-1">, </span><span class="hl-4">writeFile:</span><span class="hl-1"> </span><span class="hl-6">true</span><span class="hl-1"> },</span><br/><span class="hl-1">});</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="как-добавить-дополнительные-данные-в-сообщение" class="tsd-anchor-link">Как добавить дополнительные данные в сообщение?<a href="#как-добавить-дополнительные-данные-в-сообщение" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>Вы можете передать любой объект в <code>input</code>, если он реализует <code>toString()</code> или если вы добавили кастомный форматтер для его обработки.</p>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#faq-часто-задаваемые-вопросы"><span>FAQ (Часто задаваемые вопросы)</span></a>
+<ul>
+<li><a href="#общие-вопросы"><span>Общие вопросы</span></a></li>
+<li>
+<ul>
+<li><a href="#как-добавить-собственный-уровень-логирования"><span>Как добавить собственный уровень логирования?</span></a></li>
+<li><a href="#почему-мои-сообщения-не-записываются-в-файл"><span>Почему мои сообщения не записываются в файл?</span></a></li>
+<li><a href="#как-изменить-разделитель-между-частями-сообщения"><span>Как изменить разделитель между частями сообщения?</span></a></li></ul></li>
+<li><a href="#работа-с-временными-метками"><span>Работа с временными метками</span></a></li>
+<li>
+<ul>
+<li><a href="#как-отключить-временные-метки"><span>Как отключить временные метки?</span></a></li>
+<li><a href="#как-изменить-формат-временной-метки"><span>Как изменить формат временной метки?</span></a></li>
+<li><a href="#как-добавить-квадратные-скобки-вокруг-временной-метки"><span>Как добавить квадратные скобки вокруг временной метки?</span></a></li></ul></li>
+<li><a href="#форматирование"><span>Форматирование</span></a></li>
+<li>
+<ul>
+<li><a href="#как-добавить-свой-форматтер-для-специфических-данных"><span>Как добавить свой форматтер для специфических данных?</span></a></li>
+<li><a href="#почему-мои-ошибки-выводятся-как-object-object"><span>Почему мои ошибки выводятся как [<wbr/>Object object]?</span></a></li>
+<li><a href="#как-обработать-null-и-undefined"><span>Как обработать null и undefined?</span></a></li></ul></li>
+<li><a href="#пользовательский-ввод-метод-read"><span>Пользовательский ввод (метод read)</span></a></li>
+<li>
+<ul>
+<li><a href="#как-изменить-префикс-для-пользовательского-ввода-в-файле"><span>Как изменить префикс для пользовательского ввода в файле?</span></a></li>
+<li><a href="#как-обработать-случай-когда-пользователь-ничего-не-ввёл"><span>Как обработать случай, когда пользователь ничего не ввёл?</span></a></li>
+<li><a href="#как-добавить-обработку-нажатия-ctrlc"><span>Как добавить обработку нажатия <wbr/>Ctrl+<wbr/>C?</span></a></li></ul></li>
+<li><a href="#производительность"><span>Производительность</span></a></li>
+<li>
+<ul>
+<li><a href="#влияет-ли-запись-в-файл-на-производительность"><span>Влияет ли запись в файл на производительность?</span></a></li>
+<li><a href="#можно-ли-использовать-логгер-в-браузере"><span>Можно ли использовать логгер в браузере?</span></a></li></ul></li>
+<li><a href="#ошибки-и-исключения"><span>Ошибки и исключения</span></a></li>
+<li>
+<ul>
+<li><a href="#что-делать-если-fileservice-не-может-создать-файл"><span>Что делать, если <wbr/>File<wbr/>Service не может создать файл?</span></a></li>
+<li><a href="#почему-логгер-выбрасывает-ошибку-при-повторном-вызове-read"><span>Почему логгер выбрасывает ошибку при повторном вызове read?</span></a></li></ul></li>
+<li><a href="#кастомизация"><span>Кастомизация</span></a></li>
+<li>
+<ul>
+<li><a href="#как-изменить-имя-логгера-в-префиксе"><span>Как изменить имя логгера в префиксе?</span></a></li>
+<li><a href="#можно-ли-использовать-несколько-логгеров-с-разными-настройками"><span>Можно ли использовать несколько логгеров с разными настройками?</span></a></li>
+<li><a href="#как-добавить-суффикс-вместо-префикса"><span>Как добавить суффикс вместо префикса?</span></a></li></ul></li>
+<li><a href="#совместимость"><span>Совместимость</span></a></li>
+<li>
+<ul>
+<li><a href="#какие-версии-nodejs-поддерживаются"><span>Какие версии <wbr/>Node.js поддерживаются?</span></a></li>
+<li><a href="#поддерживается-ли-typescript"><span>Поддерживается ли <wbr/>Type<wbr/>Script?</span></a></li></ul></li>
+<li><a href="#дополнительные-вопросы"><span>Дополнительные вопросы</span></a></li>
+<li>
+<ul>
+<li><a href="#где-найти-примеры-использования"><span>Где найти примеры использования?</span></a></li>
+<li><a href="#можно-ли-использовать-логгер-без-записи-в-файл"><span>Можно ли использовать логгер без записи в файл?</span></a></li>
+<li><a href="#как-скрыть-вывод-в-консоль"><span>Как скрыть вывод в консоль?</span></a></li>
+<li><a href="#как-добавить-дополнительные-данные-в-сообщение"><span>Как добавить дополнительные данные в сообщение?</span></a></li></ul></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">fock-logger - v7.0.0</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>

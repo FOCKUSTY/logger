@@ -1,0 +1,83 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>Основный понятия | fock-logger - v7.0.0</title><meta name="description" content="Documentation for fock-logger"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script><script async src="../assets/hierarchy.js" id="tsd-hierarchy-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<div class="tsd-toolbar-contents container"><a href="../index.html" class="title">fock-logger - v7.0.0</a>
+<div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
+<ul role="listbox" id="tsd-search-results"></ul>
+<div id="tsd-search-status" aria-live="polite" aria-atomic="true">
+<div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-menu"></use></svg></a></div></header>
+<div class="container container-main">
+<div class="col-content">
+<div class="tsd-page-title">
+<ul class="tsd-breadcrumb" aria-label="Breadcrumb">
+<li><a href="" aria-current="page">Основный понятия</a></li></ul></div>
+<div class="tsd-panel tsd-typography"><h1 id="основные-понятия" class="tsd-anchor-link">Основные понятия<a href="#основные-понятия" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<h2 id="логгер-logger" class="tsd-anchor-link">Логгер (Logger)<a href="#логгер-logger" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Главный класс, который предоставляет методы <code>execute</code> (запись сообщения) и <code>read</code> (запрос ввода от пользователя). Он наследует абстрактный <code>BaseLogger</code> и добавляет конкретную реализацию.</p>
+<h2 id="уровни-логирования" class="tsd-anchor-link">Уровни логирования<a href="#уровни-логирования" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Уровни определяются через объект <code>LoggerLevels</code>, который содержит:</p>
+<ul>
+<li><code>levels</code> — соответствие имени уровня числовому приоритету (чем больше число, тем выше приоритет).</li>
+<li><code>level</code> — текущий активный уровень. Сообщения с приоритетом <strong>меньше</strong> этого уровня игнорируются.</li>
+</ul>
+<p>Пример:</p>
+<pre><code class="typescript"><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">levels</span><span class="hl-1">: </span><span class="hl-9">LoggerLevels</span><span class="hl-1">&lt;{ </span><span class="hl-4">debug</span><span class="hl-1">: </span><span class="hl-8">0</span><span class="hl-1">; </span><span class="hl-4">info</span><span class="hl-1">: </span><span class="hl-8">1</span><span class="hl-1">; </span><span class="hl-4">warn</span><span class="hl-1">: </span><span class="hl-8">2</span><span class="hl-1">; </span><span class="hl-4">error</span><span class="hl-1">: </span><span class="hl-8">3</span><span class="hl-1"> }&gt; = {</span><br/><span class="hl-1">  </span><span class="hl-4">levels:</span><span class="hl-1"> { </span><span class="hl-4">debug:</span><span class="hl-1"> </span><span class="hl-8">0</span><span class="hl-1">, </span><span class="hl-4">info:</span><span class="hl-1"> </span><span class="hl-8">1</span><span class="hl-1">, </span><span class="hl-4">warn:</span><span class="hl-1"> </span><span class="hl-8">2</span><span class="hl-1">, </span><span class="hl-4">error:</span><span class="hl-1"> </span><span class="hl-8">3</span><span class="hl-1"> },</span><br/><span class="hl-1">  </span><span class="hl-4">level:</span><span class="hl-1"> </span><span class="hl-2">&quot;warn&quot;</span><span class="hl-1">, </span><span class="hl-5">// будут выводиться только warn и error</span><br/><span class="hl-1">};</span>
+</code><button type="button">Copy</button></pre>
+
+<h2 id="контекст-вызова" class="tsd-anchor-link">Контекст вызова<a href="#контекст-вызова" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Каждый вызов <code>execute</code> или <code>read</code> принимает объект контекста, который определяет поведение для конкретного сообщения:</p>
+<ul>
+<li><code>level</code> — уровень сообщения (обязателен).</li>
+<li><code>log</code> — выводить ли сообщение в консоль (по умолчанию <code>true</code>).</li>
+<li><code>writeFile</code> — записывать ли сообщение в файл (по умолчанию <code>false</code>).</li>
+<li><code>separator</code> — разделитель между частями сообщения (по умолчанию <code>\n</code>).</li>
+</ul>
+<p>Контекст может быть переопределён на уровне вызова, при этом он объединяется с базовым контекстом, переданным в конструктор.</p>
+<h2 id="сервисы" class="tsd-anchor-link">Сервисы<a href="#сервисы" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Библиотека предоставляет два основных сервиса:</p>
+<ul>
+<li><strong>FileService</strong> — управляет файлом лога: чтение, запись (добавление в конец), перезапись, удаление. Автоматически создаёт директорию, если её нет.</li>
+<li><strong>TimestampService</strong> — генерирует временные метки. Поддерживает форматирование через собственную функцию, локали и часовые пояса.</li>
+</ul>
+<h2 id="форматтеры" class="tsd-anchor-link">Форматтеры<a href="#форматтеры" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Форматтеры преобразуют входные данные (массив значений) в строку. Встроены:</p>
+<ul>
+<li><code>DefaultFormatter</code> — вызывает <code>toString()</code> у объектов.</li>
+<li><code>ErrorFormatter</code> — форматирует ошибки с именем, сообщением, причиной и стеком.</li>
+<li><code>NullableFormatter</code> — преобразует <code>null</code> и <code>undefined</code> в строки.</li>
+<li><code>FormatterHandler</code> — цепочка форматтеров, которые применяются последовательно.</li>
+</ul>
+<p>Вы можете создавать свои форматтеры, наследуя <code>BaseFormatter</code>.</p>
+<h2 id="аффиксы" class="tsd-anchor-link">Аффиксы<a href="#аффиксы" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="../assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Аффиксы — это префиксы или суффиксы, добавляемые к сообщению. Например, имя логгера или временная метка. Библиотека поставляется с:</p>
+<ul>
+<li><code>NamePrefix</code> — добавляет имя логгера.</li>
+<li><code>TimestampPrefix</code> — добавляет временную метку.</li>
+</ul>
+<p>Аффиксы применяются в порядке, заданном в <code>AffixHandler</code>.</p>
+</div></div>
+<div class="col-sidebar">
+<div class="page-menu">
+<div class="tsd-navigation settings">
+<details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>Settings</h3></summary>
+<div class="tsd-accordion-details">
+<div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span>
+<ul id="tsd-filter-options">
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
+<li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div>
+<div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-chevronDown"></use></svg>
+<h3>On This Page</h3></summary>
+<div class="tsd-accordion-details"><a href="#основные-понятия"><span>Основные понятия</span></a>
+<ul>
+<li><a href="#логгер-logger"><span>Логгер (<wbr/>Logger)</span></a></li>
+<li><a href="#уровни-логирования"><span>Уровни логирования</span></a></li>
+<li><a href="#контекст-вызова"><span>Контекст вызова</span></a></li>
+<li><a href="#сервисы"><span>Сервисы</span></a></li>
+<li><a href="#форматтеры"><span>Форматтеры</span></a></li>
+<li><a href="#аффиксы"><span>Аффиксы</span></a></li></ul></div></details></div>
+<div class="site-menu">
+<nav class="tsd-navigation"><a href="../modules.html">fock-logger - v7.0.0</a>
+<ul class="tsd-small-nested-navigation" id="tsd-nav-container">
+<li>Loading...</li></ul></nav></div></div></div><footer>
+<p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer>
+<div class="overlay"></div></body></html>
